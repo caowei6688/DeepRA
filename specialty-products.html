@@ -197,9 +197,9 @@
         }
         
         .section-title {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: bold;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             text-align: center;
             position: relative;
         }
@@ -288,7 +288,7 @@
         
         /* 特产页面样式 */
         .product-hero {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/seafood-hero.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/salmon.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -320,6 +320,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            margin-bottom: 15px;
         }
         
         .product-card:hover {
@@ -328,7 +329,7 @@
         }
         
         .product-img {
-            height: 200px;
+            height: 180px;
             overflow: hidden;
             background-color: #f0f0f0;
             display: flex;
@@ -336,11 +337,38 @@
             justify-content: center;
             color: #666;
             font-weight: bold;
+            position: relative;
         }
         
-        .product-img:before {
+        .product-img img:not([src]), 
+        .product-img img[src=""], 
+        .product-img img[src$="missing.jpg"],
+        .product-img img[onerror] {
+            display: none;
+        }
+        
+        .product-img::before {
             content: attr(data-product);
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            z-index: 1;
+            position: relative;
         }
         
         .product-img-1 {
@@ -367,60 +395,58 @@
             background-color: #ffe6e6;
         }
         
-        .product-img img {
+        .product-img:before {
             display: none;
         }
         
         .product-card:hover .product-img img {
             transform: scale(1.1);
+            transition: transform 0.3s ease;
         }
         
         .product-body {
-            padding: 20px;
+            padding: 15px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
         
         .product-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: var(--text-color);
         }
         
         .product-text {
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             flex-grow: 1;
+            font-size: 0.9rem;
         }
         
         .product-price {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: bold;
             color: var(--primary-color);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .product-features {
             list-style: none;
             padding: 0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .product-features li {
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             display: flex;
             align-items: center;
-        }
-        
-        .product-features i {
-            color: var(--primary-color);
-            margin-right: 8px;
+            font-size: 0.85rem;
         }
         
         .product-footer {
-            padding-top: 15px;
+            padding-top: 10px;
             border-top: 1px solid #eee;
             display: flex;
             justify-content: space-between;
@@ -429,20 +455,21 @@
         
         .category-badge {
             display: inline-block;
-            padding: 5px 10px;
+            padding: 3px 8px;
             background-color: rgba(76, 175, 80, 0.1);
             color: var(--primary-color);
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         
         .btn-cart {
-            padding: 8px 15px;
+            padding: 6px 12px;
             background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 5px;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
         
         .btn-cart:hover {
@@ -453,27 +480,28 @@
         
         .filters {
             background-color: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         
         .filter-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--text-color);
         }
         
         .filter-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .filter-label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 500;
+            font-size: 0.9rem;
         }
         
         /* 移动端适配 */
@@ -856,23 +884,23 @@
             transform: rotate(-2deg);
         }
         
+        .concept-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        
+        .concept-img-container:hover img {
+            transform: scale(1.05);
+        }
+        
         .concept-img-container:before {
-            content: '健康理念';
-            font-size: 2rem;
-            font-weight: bold;
-            color: #4CAF50;
+            display: none;
         }
         
         .concept-img-container:after {
-            content: '';
-            position: absolute;
-            width: 80%;
-            height: 1px;
-            background-color: #4CAF50;
-            bottom: 40%;
-        }
-        
-        .concept-img-container img {
             display: none;
         }
         
@@ -880,25 +908,259 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background-color: #4CAF50;
+            overflow: hidden;
+            margin-right: 15px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .ai-recommendation {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .ai-recommendation:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .ai-recommendation-img-container {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+            border-radius: 8px 8px 0 0;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+        }
+        
+        .ai-recommendation img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .ai-recommendation:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* 图片上的渐变遮罩 */
+        .ai-recommendation-img-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
+            z-index: 2;
+            opacity: 0.7;
+            transition: opacity 0.4s ease;
+        }
+        
+        .ai-recommendation:hover .ai-recommendation-img-container::after {
+            opacity: 0.5;
+        }
+        
+        /* 图片上的标题 */
+        .ai-recommendation-img-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
             color: white;
+            font-weight: bold;
+            z-index: 3;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+        }
+        
+        /* 图片加载中动画 */
+        .ai-recommendation-img-container.loading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #f0f0f0 0%, #f8f8f8 50%, #f0f0f0 100%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            z-index: 0;
+        }
+        
+        @keyframes loading {
+            0% {
+                background-position: 0% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        
+        /* 不同类型的推荐卡片边框和图标颜色 */
+        .ai-recommendation[data-type="heart"] .category-badge {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+        
+        .ai-recommendation[data-type="sleep"] .category-badge {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+        }
+        
+        .ai-recommendation[data-type="immune"] .category-badge {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #198754;
+        }
+        
+        /* 类别标签 */
+        .ai-recommendation .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        /* AI推荐图片加载失败时的样式优化 */
+        .ai-recommendation-img-container::before {
+            content: attr(data-title);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #fff;
             font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 0;
+        }
+        
+        .ai-recommendation[data-type="heart"] .ai-recommendation-img-container::before {
+            background: linear-gradient(135deg, #ff6b6b 0%, #cc0000 100%);
+        }
+        
+        .ai-recommendation[data-type="sleep"] .ai-recommendation-img-container::before {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .ai-recommendation[data-type="immune"] .ai-recommendation-img-container::before {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        /* 内容布局优化 */
+        .ai-recommendation-content {
+            position: relative;
+        }
+        
+        .ai-recommendation-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .ai-recommendation-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-right: 15px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
         }
         
-        .user-avatar-1:before {
-            content: '张';
+        .ai-recommendation:hover .ai-recommendation-icon {
+            transform: scale(1.1) rotate(5deg);
         }
         
-        .user-avatar-2:before {
-            content: '李';
+        .ai-recommendation[data-type="heart"] .ai-recommendation-icon {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
         }
         
-        .user-avatar-3:before {
-            content: '王';
+        .ai-recommendation[data-type="sleep"] .ai-recommendation-icon {
+            background-color: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+        }
+        
+        .ai-recommendation[data-type="immune"] .ai-recommendation-icon {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #198754;
+        }
+        
+        .ai-recommendation-features {
+            margin-bottom: 20px;
+        }
+        
+        .ai-recommendation-footer {
+            margin-top: auto;
+        }
+        
+        .ai-btn-detail {
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ai-btn-detail i {
+            transition: transform 0.3s ease;
+        }
+        
+        .ai-btn-detail:hover i {
+            transform: translateX(3px);
+        }
+        
+        .ai-recommendation[data-type="heart"] .ai-btn-detail {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .ai-recommendation[data-type="heart"] .ai-btn-detail:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .ai-recommendation[data-type="sleep"] .ai-btn-detail {
+            color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        
+        .ai-recommendation[data-type="sleep"] .ai-btn-detail:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+        
+        .ai-recommendation[data-type="immune"] .ai-btn-detail {
+            color: #198754;
+            border-color: #198754;
+        }
+        
+        .ai-recommendation[data-type="immune"] .ai-btn-detail:hover {
+            background-color: #198754;
+            color: white;
         }
     </style>
 </head>
@@ -1119,7 +1381,7 @@
                 </div>
                 <div class="col-lg-6 order-lg-1">
                     <div class="concept-img-container">
-                        <img src="https://cdn.pixabay.com/photo/2017/06/01/18/46/cook-2364221_1280.jpg" alt="健康理念" onerror="this.src='https://via.placeholder.com/600x400?text=健康理念'">
+                        <img src="images/concept/healthy-food.jpg" alt="健康理念" onerror="this.style.display='none';" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -1127,12 +1389,12 @@
     </section>
 
     <!-- 特产主要内容区域 -->
-    <section class="py-5" id="products">
+    <section class="py-4" id="products">
         <div class="container">
             <h2 class="section-title">精选海滨特产</h2>
             
-            <div class="row mb-5">
-                <div class="col-lg-3 col-md-4 mb-4">
+            <div class="row g-3 mb-4">
+                <div class="col-lg-3 col-md-4">
                     <!-- 筛选器 -->
                     <div class="filters">
                         <h3 class="filter-title">筛选条件</h3>
@@ -1198,12 +1460,12 @@
                 </div>
                 
                 <div class="col-lg-9 col-md-8">
-                    <div class="row">
+                    <div class="row g-2">
                         <!-- 产品1 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-4 col-sm-6 mb-3">
                             <div class="product-card">
                                 <div class="product-img product-img-1" data-product="海滨特级干贝">
-                                    <img src="https://cdn.pixabay.com/photo/2016/03/05/19/02/salmon-1238248_1280.jpg" alt="干贝" onerror="this.src='https://via.placeholder.com/300x200?text=干贝'">
+                                    <img src="images/products/dried-scallops.jpg" alt="干贝" onerror="this.style.display='none';" loading="lazy">
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-title">海滨特级干贝</h3>
@@ -1223,10 +1485,10 @@
                         </div>
                         
                         <!-- 产品2 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-4 col-sm-6 mb-3">
                             <div class="product-card">
                                 <div class="product-img product-img-2" data-product="有机海带片">
-                                    <img src="https://cdn.pixabay.com/photo/2018/07/20/14/02/seaweed-3550438_1280.jpg" alt="海带" onerror="this.src='https://via.placeholder.com/300x200?text=海带'">
+                                    <img src="images/products/seaweed.jpg" alt="海带" onerror="this.style.display='none';" loading="lazy">
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-title">有机海带片</h3>
@@ -1246,10 +1508,10 @@
                         </div>
                         
                         <!-- 产品3 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-4 col-sm-6 mb-3">
                             <div class="product-card">
                                 <div class="product-img product-img-3" data-product="深海鱼油胶囊">
-                                    <img src="https://cdn.pixabay.com/photo/2014/12/21/23/28/recipe-575434_1280.png" alt="深海鱼油" onerror="this.src='https://via.placeholder.com/300x200?text=深海鱼油'">
+                                    <img src="images/products/fish-oil.jpg" alt="深海鱼油" onerror="this.style.display='none';" loading="lazy">
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-title">深海鱼油胶囊</h3>
@@ -1269,10 +1531,10 @@
                         </div>
                         
                         <!-- 产品4 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-4 col-sm-6 mb-3">
                             <div class="product-card">
                                 <div class="product-img product-img-4" data-product="海藻矿物面膜">
-                                    <img src="https://cdn.pixabay.com/photo/2016/11/23/18/13/beach-1854072_1280.jpg" alt="海藻面膜" onerror="this.src='https://via.placeholder.com/300x200?text=海藻面膜'">
+                                    <img src="images/products/seaweed-mask.jpg" alt="海藻面膜" onerror="this.style.display='none';" loading="lazy">
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-title">海藻矿物面膜</h3>
@@ -1292,10 +1554,10 @@
                         </div>
                         
                         <!-- 产品5 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-4 col-sm-6 mb-3">
                             <div class="product-card">
                                 <div class="product-img product-img-5" data-product="纯净螺旋藻片">
-                                    <img src="https://cdn.pixabay.com/photo/2019/09/28/05/12/spirulina-4509819_1280.jpg" alt="螺旋藻片" onerror="this.src='https://via.placeholder.com/300x200?text=螺旋藻片'">
+                                    <img src="images/products/spirulina.jpg" alt="螺旋藻片" onerror="this.style.display='none';" loading="lazy">
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-title">纯净螺旋藻片</h3>
@@ -1315,10 +1577,10 @@
                         </div>
                         
                         <!-- 产品6 -->
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-4 col-sm-6 mb-3">
                             <div class="product-card">
                                 <div class="product-img product-img-6" data-product="纯天然牡蛎粉">
-                                    <img src="https://cdn.pixabay.com/photo/2017/07/16/22/22/fresh-2510764_1280.jpg" alt="牡蛎粉" onerror="this.src='https://via.placeholder.com/300x200?text=牡蛎粉'">
+                                    <img src="images/products/oyster-powder.jpg" alt="牡蛎粉" onerror="this.style.display='none';" loading="lazy">
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-title">纯天然牡蛎粉</h3>
@@ -1339,7 +1601,7 @@
                     </div>
                     
                     <!-- 分页导航 -->
-                    <nav aria-label="Page navigation" class="mt-4">
+                    <nav aria-label="Page navigation" class="mt-3">
                         <ul class="pagination justify-content-center">
                             <li class="page-item disabled">
                                 <a class="page-link" href="#" tabindex="-1" aria-disabled="true">上一页</a>
@@ -1358,62 +1620,89 @@
     </section>
     
     <!-- AI推荐产品区域 -->
-    <section class="py-5 bg-light">
+    <section class="py-5 bg-light" id="ai-recommend">
         <div class="container">
             <h2 class="section-title">AI智能推荐</h2>
             <p class="text-center mb-5">根据您的健康数据和体质特点，DeepSeek AI为您推荐最适合的海产品</p>
             
             <div class="row">
                 <div class="col-lg-4 mb-4">
-                    <div class="ai-recommendation p-4 bg-white rounded shadow-sm h-100">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fas fa-heartbeat text-danger fa-2x me-3"></i>
+                    <div class="ai-recommendation p-4 bg-white rounded shadow-sm h-100" data-type="heart" data-title="心脑血管健康">
+                        <div class="ai-recommendation-img-container" data-title="心脑血管健康">
+                            <img src="images/ai-recommend/heart-health.jpg" alt="心脑血管健康食品" onerror="this.style.display='none';" loading="lazy">
+                            <div class="ai-recommendation-img-title">心脑血管健康</div>
+                        </div>
+                        <div class="ai-recommendation-content">
+                            <span class="category-badge">健康关注</span>
+                            <div class="ai-recommendation-header">
+                                <div class="ai-recommendation-icon">
+                                    <i class="fas fa-heartbeat fa-lg"></i>
+                                </div>
                             <h4 class="mb-0">心脑血管健康</h4>
                         </div>
                         <p>您的健康数据显示需要关注心脑血管健康，建议选择：</p>
-                        <ul class="list-unstyled">
+                            <ul class="list-unstyled ai-recommendation-features">
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>深海鱼油胶囊 - 富含Omega-3</li>
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>海带片 - 帮助控制胆固醇</li>
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>紫菜 - 含丰富的维生素B族</li>
                         </ul>
-                        <div class="mt-3">
-                            <a href="#" class="btn btn-outline-primary">查看详情</a>
+                            <div class="ai-recommendation-footer">
+                                <a href="#" class="btn ai-btn-detail">查看详情 <i class="fas fa-arrow-right"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-lg-4 mb-4">
-                    <div class="ai-recommendation p-4 bg-white rounded shadow-sm h-100">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fas fa-moon text-primary fa-2x me-3"></i>
+                    <div class="ai-recommendation p-4 bg-white rounded shadow-sm h-100" data-type="sleep" data-title="睡眠质量改善">
+                        <div class="ai-recommendation-img-container" data-title="睡眠质量改善">
+                            <img src="images/ai-recommend/sleep-aid.jpg" alt="改善睡眠食品" onerror="this.style.display='none';" loading="lazy">
+                            <div class="ai-recommendation-img-title">睡眠质量改善</div>
+                        </div>
+                        <div class="ai-recommendation-content">
+                            <span class="category-badge">睡眠改善</span>
+                            <div class="ai-recommendation-header">
+                                <div class="ai-recommendation-icon">
+                                    <i class="fas fa-moon fa-lg"></i>
+                                </div>
                             <h4 class="mb-0">睡眠质量改善</h4>
                         </div>
                         <p>您的健康数据显示存在睡眠质量问题，建议选择：</p>
-                        <ul class="list-unstyled">
+                            <ul class="list-unstyled ai-recommendation-features">
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>牡蛎粉 - 富含助眠矿物质锌</li>
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>海洋镁油 - 促进身心放松</li>
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>褐藻糖胶 - 帮助深度睡眠</li>
                         </ul>
-                        <div class="mt-3">
-                            <a href="#" class="btn btn-outline-primary">查看详情</a>
+                            <div class="ai-recommendation-footer">
+                                <a href="#" class="btn ai-btn-detail">查看详情 <i class="fas fa-arrow-right"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-lg-4 mb-4">
-                    <div class="ai-recommendation p-4 bg-white rounded shadow-sm h-100">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fas fa-shield-alt text-success fa-2x me-3"></i>
+                    <div class="ai-recommendation p-4 bg-white rounded shadow-sm h-100" data-type="immune" data-title="免疫力提升">
+                        <div class="ai-recommendation-img-container" data-title="免疫力提升">
+                            <img src="images/ai-recommend/immune-boost.jpg" alt="免疫力提升食品" onerror="this.style.display='none';" loading="lazy">
+                            <div class="ai-recommendation-img-title">免疫力提升</div>
+                        </div>
+                        <div class="ai-recommendation-content">
+                            <span class="category-badge">免疫增强</span>
+                            <div class="ai-recommendation-header">
+                                <div class="ai-recommendation-icon">
+                                    <i class="fas fa-shield-alt fa-lg"></i>
+                                </div>
                             <h4 class="mb-0">免疫力提升</h4>
                         </div>
                         <p>您的健康数据显示需要提升免疫力，建议选择：</p>
-                        <ul class="list-unstyled">
+                            <ul class="list-unstyled ai-recommendation-features">
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>螺旋藻片 - 天然免疫增强剂</li>
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>海参粉 - 富含多种免疫调节物质</li>
                             <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>贻贝提取物 - 抗氧化保护</li>
                         </ul>
-                        <div class="mt-3">
-                            <a href="#" class="btn btn-outline-primary">查看详情</a>
+                            <div class="ai-recommendation-footer">
+                                <a href="#" class="btn ai-btn-detail">查看详情 <i class="fas fa-arrow-right"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1430,7 +1719,9 @@
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="review-card p-4 bg-light rounded shadow-sm h-100">
                         <div class="d-flex align-items-center mb-3">
-                            <div class="user-avatar user-avatar-1"></div>
+                            <div class="user-avatar user-avatar-1">
+                                <img src="images/avatars/user1.jpg" alt="用户头像" onerror="this.style.display='none';" loading="lazy">
+                            </div>
                             <div>
                                 <h5 class="mb-0">张先生</h5>
                                 <div class="text-warning">
@@ -1452,7 +1743,9 @@
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="review-card p-4 bg-light rounded shadow-sm h-100">
                         <div class="d-flex align-items-center mb-3">
-                            <div class="user-avatar user-avatar-2"></div>
+                            <div class="user-avatar user-avatar-2">
+                                <img src="images/avatars/user2.jpg" alt="用户头像" onerror="this.style.display='none';" loading="lazy">
+                            </div>
                             <div>
                                 <h5 class="mb-0">李女士</h5>
                                 <div class="text-warning">
@@ -1474,7 +1767,9 @@
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="review-card p-4 bg-light rounded shadow-sm h-100">
                         <div class="d-flex align-items-center mb-3">
-                            <div class="user-avatar user-avatar-3"></div>
+                            <div class="user-avatar user-avatar-3">
+                                <img src="images/avatars/user3.jpg" alt="用户头像" onerror="this.style.display='none';" loading="lazy">
+                            </div>
                             <div>
                                 <h5 class="mb-0">王先生</h5>
                                 <div class="text-warning">
@@ -1496,44 +1791,230 @@
         </div>
     </section>
     
-    <!-- 页脚 -->
-    <footer class="footer">
+    <!-- 页脚区域 -->
+    <footer class="footer py-5 bg-dark text-white">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4">
+                <div class="col-lg-4 mb-4 mb-lg-0">
                     <h5>关于我们</h5>
-                    <p>DeepRA 深算乡野智能养生平台，致力于通过先进技术为游客提供专业的健康管理服务。</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-weixin"></i></a>
-                        <a href="#"><i class="fab fa-weibo"></i></a>
-                        <a href="#"><i class="fab fa-qq"></i></a>
+                    <p>DeepRA深算乡野致力于提供优质海滨特产，将大海的健康和活力带入您的生活。</p>
+                    <div class="social-icons mt-3">
+                        <a href="#" class="me-2"><i class="fab fa-weixin fa-lg"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-weibo fa-lg"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-tiktok fa-lg"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-youtube fa-lg"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-4 mb-4">
+                <div class="col-lg-2 mb-4 mb-lg-0">
                     <h5>快速链接</h5>
                     <ul class="list-unstyled">
-                        <li><a href="index.html">首页</a></li>
-                        <li><a href="health-data.html">健康数据</a></li>
-                        <li><a href="ai-analysis.html">AI分析</a></li>
-                        <li><a href="specialty-products.html">海滨特产</a></li>
+                        <li><a href="#" class="text-white">首页</a></li>
+                        <li><a href="#" class="text-white">特产展示</a></li>
+                        <li><a href="#" class="text-white">健康分析</a></li>
+                        <li><a href="#" class="text-white">农家乐预订</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-4 mb-4">
+                <div class="col-lg-3 mb-4 mb-lg-0">
                     <h5>联系我们</h5>
-                    <p><i class="fas fa-map-marker-alt me-2"></i> 广东省广州市DeepRA 深算乡野村</p>
-                    <p><i class="fas fa-phone me-2"></i> 13398244764</p>
-                    <p><i class="fas fa-envelope me-2"></i> info@deepra.health.com</p>
-                    <p><i class="fas fa-clock me-2"></i> 周一至周日 9:00-18:00</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 浙江省宁波市滨海新区</li>
+                        <li><i class="fas fa-phone me-2"></i> 13398244764</li>
+                        <li><i class="fas fa-envelope me-2"></i> contact@deepra.com</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5>订阅更新</h5>
+                    <p>订阅我们的电子邮件，获取最新特产信息和促销活动。</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="您的邮箱地址" aria-label="您的邮箱地址">
+                        <button class="btn btn-success" type="button">订阅</button>
+            </div>
                 </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2024 DeepRA 深算乡野智能养生. 保留所有权利.</p>
+            <hr class="my-4 bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">© 2024 DeepRA深算乡野. 保留所有权利.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="#" class="text-white">隐私政策</a></li>
+                        <li class="list-inline-item"><a href="#" class="text-white">使用条款</a></li>
+                        <li class="list-inline-item"><a href="#" class="text-white">Cookie政策</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </footer>
 
+    <!-- 回到顶部按钮 -->
+    <button id="back-to-top" class="btn btn-success back-to-top" aria-label="回到顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/nav-animation.js"></script>
+    
+    <!-- 图片加载错误处理脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 处理所有图片加载错误
+            function handleImageErrors() {
+                console.log("开始检查图片加载情况...");
+                
+                // 强制使用本地images目录中的图片
+                function forceUseLocalImages() {
+                    // 产品图片设置
+                    setLocalImageSrc('.product-img[data-product="海滨特级干贝"] img', 'images/products/dried-scallops.jpg');
+                    setLocalImageSrc('.product-img[data-product="有机海带片"] img', 'images/products/seaweed.jpg');
+                    setLocalImageSrc('.product-img[data-product="深海鱼油胶囊"] img', 'images/products/fish-oil.jpg');
+                    setLocalImageSrc('.product-img[data-product="海藻矿物面膜"] img', 'images/products/seaweed-mask.jpg');
+                    setLocalImageSrc('.product-img[data-product="纯净螺旋藻片"] img', 'images/products/spirulina.jpg');
+                    setLocalImageSrc('.product-img[data-product="纯天然牡蛎粉"] img', 'images/products/oyster-powder.jpg');
+                    
+                    // 健康理念图片设置
+                    setLocalImageSrc('.concept-img-container img', 'images/concept/healthy-food.jpg');
+                    
+                    // AI推荐图片设置 - 更新为新的容器结构
+                    setLocalImageSrc('.ai-recommendation[data-type="heart"] .ai-recommendation-img-container img', 'images/ai-recommend/heart-health.jpg');
+                    setLocalImageSrc('.ai-recommendation[data-type="sleep"] .ai-recommendation-img-container img', 'images/ai-recommend/sleep-aid.jpg');
+                    setLocalImageSrc('.ai-recommendation[data-type="immune"] .ai-recommendation-img-container img', 'images/ai-recommend/immune-boost.jpg');
+                    
+                    // 用户头像设置
+                    setLocalImageSrc('.user-avatar-1 img', 'images/avatars/user1.jpg');
+                    setLocalImageSrc('.user-avatar-2 img', 'images/avatars/user2.jpg');
+                    setLocalImageSrc('.user-avatar-3 img', 'images/avatars/user3.jpg');
+                }
+                
+                // 设置本地图片路径
+                function setLocalImageSrc(selector, path) {
+                    const img = document.querySelector(selector);
+                    if (img) {
+                        console.log(`设置图片: ${selector} -> ${path}`);
+                        
+                        // 如果是AI推荐图片，添加加载动画
+                        const parent = img.closest('.ai-recommendation-img-container');
+                        if (parent) {
+                            parent.classList.add('loading');
+                        }
+                        
+                        img.src = path;
+                        img.style.display = 'block';
+                        
+                        // 添加加载事件监听
+                        img.onload = function() {
+                            console.log(`图片加载成功: ${path}`);
+                            this.style.display = 'block';
+                            
+                            // 移除加载动画
+                            if (parent) {
+                                parent.classList.remove('loading');
+                            }
+                            
+                            // 添加渐入动画
+                            this.style.opacity = '0';
+                            setTimeout(() => {
+                                this.style.transition = 'opacity 0.5s ease';
+                                this.style.opacity = '1';
+                            }, 50);
+                        };
+                        
+                        // 添加错误处理
+                        img.onerror = function() {
+                            console.log(`图片加载失败: ${path}`);
+                            this.style.display = 'none';
+                            
+                            // 移除加载动画
+                            if (parent) {
+                                parent.classList.remove('loading');
+                            }
+                            
+                            // 如果有备用图片salmon.jpg，尝试使用它
+                            if (path !== 'images/salmon.jpg') {
+                                console.log(`尝试使用备用图片: images/salmon.jpg`);
+                                this.src = 'images/salmon.jpg';
+                            }
+                        };
+                    } else {
+                        console.warn(`未找到元素: ${selector}`);
+                    }
+                }
+                
+                // 然后处理所有图片的错误
+                function handleAllImageErrors() {
+                    // 产品图片错误处理
+                    document.querySelectorAll('.product-img img').forEach(img => {
+                        watchImage(img, '产品图片');
+                    });
+                    
+                    // AI推荐图片错误处理
+                    document.querySelectorAll('.ai-recommendation-img-container img').forEach(img => {
+                        watchImage(img, 'AI推荐图片');
+                    });
+                    
+                    // 用户头像错误处理
+                    document.querySelectorAll('.user-avatar img').forEach(img => {
+                        watchImage(img, '用户头像');
+                    });
+                    
+                    // 健康理念图片错误处理
+                    document.querySelectorAll('.concept-img-container img').forEach(img => {
+                        watchImage(img, '健康理念图片');
+                    });
+                }
+                
+                // 首先强制使用本地图片
+                forceUseLocalImages();
+                
+                // 然后处理所有图片的错误
+                handleAllImageErrors();
+                
+                // 监视图片加载情况
+                function watchImage(img, category) {
+                    if (img.complete) {
+                        if (img.naturalHeight === 0) {
+                            console.log(`${category} 加载失败: ${img.src}`);
+                            img.style.display = 'none';
+                        } else {
+                            console.log(`${category} 已加载: ${img.src}`);
+                        }
+                    } else {
+                        console.log(`${category} 正在加载: ${img.src}`);
+                    }
+                    
+                    if (!img.hasAttribute('data-error-handled')) {
+                        img.setAttribute('data-error-handled', 'true');
+                        
+                        img.onerror = function() {
+                            console.log(`${category} 加载错误: ${this.src}`);
+                            this.style.display = 'none';
+                        };
+                        
+                        img.onload = function() {
+                            if (this.naturalHeight > 0) {
+                                console.log(`${category} 加载完成: ${this.src}`);
+                                this.style.display = 'block';
+                            } else {
+                                console.log(`${category} 加载无效: ${this.src}`);
+                                this.style.display = 'none';
+                            }
+                        };
+                    }
+                }
+            }
+            
+            // 页面加载完成后检查图片
+            window.addEventListener('load', function() {
+                console.log("页面完全加载完成，再次检查图片");
+                handleImageErrors();
+            });
+            
+            // 立即检查当前已加载的图片
+            handleImageErrors();
+        });
+    </script>
+    
+    <!-- 页面交互脚本 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // 购物车功能
@@ -1988,6 +2469,189 @@
                 document.body.style.webkitOverflowScrolling = 'touch';
             }
         });
+    </script>
+    <!-- 临时调试脚本 -->
+    <script>
+        // 在控制台中显示所有使用到的背景图片URL
+        document.addEventListener('DOMContentLoaded', function() {
+            // 创建一个按钮来显示调试信息
+            /* 删除调试按钮代码
+            const debugButton = document.createElement('button');
+            debugButton.textContent = '检查图片';
+            debugButton.style.position = 'fixed';
+            debugButton.style.top = '100px';
+            debugButton.style.right = '20px';
+            debugButton.style.zIndex = '9999';
+            debugButton.style.padding = '8px 15px';
+            debugButton.style.backgroundColor = '#ff5722';
+            debugButton.style.color = 'white';
+            debugButton.style.border = 'none';
+            debugButton.style.borderRadius = '4px';
+            debugButton.style.cursor = 'pointer';
+            
+            debugButton.addEventListener('click', function() {
+                checkAllImages();
+            });
+            
+            document.body.appendChild(debugButton);
+            
+            // 创建刷新AI推荐图片的按钮
+            const refreshAiButton = document.createElement('button');
+            refreshAiButton.textContent = '刷新AI推荐图片';
+            refreshAiButton.style.position = 'fixed';
+            refreshAiButton.style.top = '150px';
+            refreshAiButton.style.right = '20px';
+            refreshAiButton.style.zIndex = '9999';
+            refreshAiButton.style.padding = '8px 15px';
+            refreshAiButton.style.backgroundColor = '#4CAF50';
+            refreshAiButton.style.color = 'white';
+            refreshAiButton.style.border = 'none';
+            refreshAiButton.style.borderRadius = '4px';
+            refreshAiButton.style.cursor = 'pointer';
+            
+            refreshAiButton.addEventListener('click', function() {
+                this.disabled = true;
+                this.textContent = '正在刷新...';
+                
+                // 重新加载AI推荐区域的图片
+                const images = [
+                    {selector: '.ai-recommendation[data-type="heart"] .ai-recommendation-img-container img', src: 'images/ai-recommend/heart-health.jpg'},
+                    {selector: '.ai-recommendation[data-type="sleep"] .ai-recommendation-img-container img', src: 'images/ai-recommend/sleep-aid.jpg'},
+                    {selector: '.ai-recommendation[data-type="immune"] .ai-recommendation-img-container img', src: 'images/ai-recommend/immune-boost.jpg'}
+                ];
+                
+                // 先移除所有图片
+                images.forEach(item => {
+                    const img = document.querySelector(item.selector);
+                    if(img) {
+                        img.style.display = 'none';
+                        const container = img.closest('.ai-recommendation-img-container');
+                        if(container) {
+                            container.classList.add('loading');
+                        }
+                    }
+                });
+                
+                // 延迟后重新加载
+                setTimeout(() => {
+                    images.forEach(item => {
+                        setLocalImageSrc(item.selector, item.src);
+                    });
+                    
+                    // 恢复按钮状态
+                    setTimeout(() => {
+                        refreshAiButton.disabled = false;
+                        refreshAiButton.textContent = '刷新AI推荐图片';
+                    }, 1000);
+                }, 1000);
+            });
+            
+            document.body.appendChild(refreshAiButton);
+            */
+            
+            function checkAllImages() {
+                console.clear();
+                console.log('===== 图片加载状态检查 =====');
+                
+                // 获取所有图片元素
+                const imgElements = document.querySelectorAll('img');
+                console.log(`页面上有 ${imgElements.length} 个<img>元素`);
+                
+                // 检查所有img元素
+                imgElements.forEach((img, index) => {
+                    const status = img.complete ? 
+                        (img.naturalHeight === 0 ? '❌ 加载失败' : '✅ 已加载') : 
+                        '⏳ 加载中';
+                    
+                    console.log(`IMG ${index+1}: ${status} - ${img.src}`);
+                });
+                
+                // 检查所有CSS背景图片
+                const elementsWithBg = [];
+                const allElements = document.querySelectorAll('*');
+                
+                console.log('\n===== CSS背景图片检查 =====');
+                allElements.forEach(el => {
+                    const style = window.getComputedStyle(el);
+                    const bgImage = style.backgroundImage;
+                    
+                    if (bgImage && bgImage !== 'none' && bgImage.includes('url')) {
+                        const url = bgImage.match(/url\(['"]?([^'"]+)['"]?\)/)?.[1];
+                        if (url) {
+                            elementsWithBg.push({element: el, url: url});
+                            console.log(`背景图: ${url} - ${el.tagName}${el.className ? '.' + el.className.replace(/\s+/g, '.') : ''}`);
+                        }
+                    }
+                });
+                
+                console.log(`\n找到 ${elementsWithBg.length} 个元素使用了背景图片`);
+                
+                // 特别检查hero背景图
+                const heroSections = document.querySelectorAll('.ibm-hero, .product-hero');
+                console.log('\n===== 英雄区背景图检查 =====');
+                heroSections.forEach((section, idx) => {
+                    const style = window.getComputedStyle(section);
+                    const bgImage = style.backgroundImage;
+                    console.log(`英雄区 ${idx+1}: ${bgImage}`);
+                });
+                
+                // 创建一个检查特定图片是否存在的函数
+                function checkImageExists(url) {
+                    return new Promise((resolve) => {
+                        const img = new Image();
+                        img.onload = () => resolve(true);
+                        img.onerror = () => resolve(false);
+                        img.src = url;
+                    });
+                }
+                
+                // 检查指定的图片是否存在
+                const imagesToCheck = [
+                    'images/seafood-hero.jpg',
+                    'images/salmon.jpg'
+                ];
+                
+                console.log('\n===== 特定图片检查 =====');
+                Promise.all(imagesToCheck.map(url => 
+                    checkImageExists(url).then(exists => 
+                        console.log(`${url}: ${exists ? '✅ 存在' : '❌ 不存在'}`)
+                    )
+                ));
+            }
+            
+            // 将salmon.jpg设置为seafood-hero.jpg的替代品
+            function fixHeroBackground() {
+                const styleElement = document.createElement('style');
+                styleElement.textContent = `
+                    .product-hero {
+                        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/salmon.jpg') !important;
+                    }
+                `;
+                document.head.appendChild(styleElement);
+                console.log('已将salmon.jpg设置为英雄区背景');
+            }
+            
+            // 修复英雄区背景
+            checkImageExists('images/seafood-hero.jpg')
+                .then(exists => {
+                    if (!exists) {
+                        console.log('seafood-hero.jpg不存在，使用salmon.jpg作为替代');
+                        fixHeroBackground();
+                    }
+                });
+            
+            // 自动触发检查
+            // setTimeout(checkAllImages, 2000); // 注释掉自动检查
+        });
+        
+        function checkImageExists(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+            });
+        }
     </script>
 </body>
 </html> 
