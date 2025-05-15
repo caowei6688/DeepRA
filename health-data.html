@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>DeepRA 深算乡野 - 健康数据</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 添加Anime.js库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --text-color: #333333;
+            --light-bg: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding-top: 76px;
+        }
+        
+        .navbar {
+            background-color: #000000;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff !important;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .navbar-brand:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar-brand i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+        
+        .navbar-brand:hover i {
+            transform: rotate(15deg) scale(1.2);
+        }
+        
+        .nav-item {
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .nav-link {
+            color: #ffffff !important;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.6s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-link.active {
+            color: #ffffff !important;
+            background-color: var(--primary-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
+        
+        .nav-link.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.6);
+        }
+        
+        .nav-link i {
+            color: #ffffff;
+            font-size: 1.2rem;
+            transition: transform 0.4s ease;
+        }
+        
+        .nav-link:hover i {
+            transform: translateY(-2px) scale(1.2);
+            color: var(--primary-color);
+        }
+        
+        .nav-link.active i {
+            color: #ffffff;
+            transform: translateY(0);
+        }
+        
+        /* Perspective Split Text Menu Animation 相关样式 */
+        .nav-text-container {
+            position: relative;
+            display: inline-block;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        
+        .nav-text {
+            display: block;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        .nav-text.static {
+            transform-origin: bottom;
+            opacity: 1;
+        }
+        
+        .nav-text.dynamic {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transform: rotateX(-90deg);
+            opacity: 0;
+            color: var(--primary-color);
+        }
+        
+        .nav-link.perspective-active .nav-text.static {
+            transform: rotateX(90deg);
+            opacity: 0;
+        }
+        
+        .nav-link.perspective-active .nav-text.dynamic {
+            transform: rotateX(0);
+            opacity: 1;
+        }
+        
+        .nav-link.perspective-active i {
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        /* IBM风格的英雄区域样式 */
+        .hero {
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+        
+        .hero-content {
+            width: 100%;
+        }
+        
+        .hero-text {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 5rem;
+            color: white;
+            max-width: 80%;
+        }
+        
+        .hero-text .highlight {
+            color: var(--primary-color);
+            display: block;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            max-width: 70%;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            margin-top: 5rem;
+        }
+        
+        .hero-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+        }
+        
+        .hero-btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            margin-left: 1rem;
+        }
+        
+        .hero-btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        /* IBM风格的装饰元素 */
+        .hero-decoration {
+            position: absolute;
+            bottom: 5%;
+            right: 10%;
+            width: 15%;
+            height: 15%;
+            border: 2px solid var(--primary-color);
+            opacity: 0.3;
+        }
+        
+        .hero-arrow {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        /* IBM风格的网格背景 */
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            pointer-events: none;
+            opacity: 0.05;
+        }
+        
+        .hero-grid-line {
+            height: 100%;
+            width: 1px;
+            background-color: white;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-grid-horizontal {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background-color: white;
+        }
+        
+        .data-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .data-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .data-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .data-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .data-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .data-text {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+        
+        .footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 60px 0 20px;
+        }
+        
+        .footer h5 {
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .footer p {
+            color: #cccccc;
+            line-height: 1.8;
+        }
+        
+        .footer a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: var(--primary-color);
+            background-color: rgba(76, 175, 80, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #999999;
+        }
+        
+        /* 打字机效果样式 */
+        .typewriter-text {
+            display: inline-block;
+            color: inherit; /* 确保继承父元素的颜色 */
+        }
+        
+        .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--primary-color);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        /* 按钮淡入动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .navbar {
+                padding: 0.5rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+            
+            .navbar-brand i {
+                font-size: 1.2rem;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 6px 10px;
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: none;
+            }
+            
+            .navbar-toggler-icon {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+            
+            .navbar-collapse {
+                margin-top: 10px;
+            }
+            
+            .navbar-nav {
+                background-color: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 10px;
+            }
+            
+            .nav-item {
+                margin: 5px 0;
+                width: 100%;
+            }
+            
+            .nav-link {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .dual-text-large {
+                font-size: 2.5rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.5rem;
+            }
+            
+            .hero-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .data-card {
+                margin-bottom: 20px;
+                padding: 15px;
+            }
+            
+            .data-value {
+                font-size: 2.5rem;
+            }
+            
+            .chart-container {
+                padding: 15px;
+                margin-bottom: 20px;
+                overflow-x: auto;
+            }
+            
+            .data-tabs .btn {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .sync-button {
+                width: 100%;
+                margin-top: 10px;
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .footer {
+                padding: 40px 0 20px;
+            }
+            
+            .footer h5 {
+                margin-bottom: 1rem;
+            }
+            
+            /* 优化表单输入 */
+            input, select, textarea {
+                font-size: 16px !important; /* 防止iOS自动缩放 */
+            }
+            
+            /* 优化触摸反馈 */
+            .nav-link:active {
+                transform: scale(0.95);
+            }
+            
+            /* 禁用部分动画效果以提高性能 */
+            .nav-link::before {
+                display: none;
+            }
+            
+            .navbar-brand:hover,
+            .nav-link:hover {
+                transform: none;
+            }
+        }
+        
+        /* 小屏幕手机优化 */
+        @media (max-width: 576px) {
+            .dual-text-large {
+                font-size: 2rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero {
+                padding: 20px 0;
+                min-height: 80vh;
+            }
+            
+            .data-card-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .data-value {
+                font-size: 2rem;
+            }
+            
+            .data-label {
+                font-size: 0.9rem;
+            }
+            
+            .data-unit {
+                font-size: 0.8rem;
+            }
+            
+            .data-trend {
+                font-size: 0.8rem;
+            }
+            
+            .data-tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .data-tabs .btn {
+                margin-bottom: 5px;
+            }
+        }
+        
+        /* 添加触摸反馈样式 */
+        .touch-feedback {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .touch-feedback:active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: inherit;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-leaf"></i>
+                DeepRA 深算乡野
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-home"></i> 首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="health-data.html"><i class="fas fa-chart-line"></i> 健康数据</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ai-analysis.html"><i class="fas fa-brain"></i> AI分析</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="specialty-products.html"><i class="fas fa-shopping-basket"></i> 海滨特产</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="hero-content">
+                        <h1 class="hero-text">
+                            <span class="typewriter-text" id="text1">DeepRA 深算乡野健康数据</span>
+                            <span class="typewriter-text" id="text2">一目了然</span>
+                            <span class="highlight typewriter-text" id="text3">让数据说话，</span>
+                        </h1>
+                        <p class="hero-subtitle typewriter-text" id="text4">为健康护航，用科学方法读懂您的身体状况。</p>
+                        <div class="hero-buttons" id="heroButtons" style="opacity: 0;">
+                            <a href="#smart-band-intro" class="btn hero-btn hero-btn-primary">智能手环检测</a>
+                            <a href="#data-overview" class="btn hero-btn hero-btn-secondary">查看数据概览</a>
+                            <a href="#trend-analysis" class="btn hero-btn hero-btn-secondary">趋势分析</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-decoration"></div>
+        <div class="hero-arrow">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <!-- 在hero section内添加网格背景 -->
+        <div class="hero-grid">
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-horizontal"></div>
+        </div>
+    </section>
+
+    <!-- 智能手环检测介绍 -->
+    <section id="smart-band-intro" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">智能手环健康检测</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="p-4 bg-white rounded-3 shadow-sm">
+                        <h3 class="mb-4 text-primary"><i class="fas fa-heartbeat me-2"></i>全面健康监测</h3>
+                        <p class="lead mb-4">我们的智能手环采用先进的传感器技术，全天候监测您的健康指标，助您实时了解身体状况。</p>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                                        <i class="fas fa-heart text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1">心率监测</h5>
+                                        <p class="small text-muted mb-0">实时监测心率变化</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-info bg-opacity-10 p-3 rounded-circle me-3">
+                                        <i class="fas fa-tint text-info"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1">血氧饱和度</h5>
+                                        <p class="small text-muted mb-0">监测血液含氧量</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-warning bg-opacity-10 p-3 rounded-circle me-3">
+                                        <i class="fas fa-running text-warning"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1">运动追踪</h5>
+                                        <p class="small text-muted mb-0">记录步数和消耗卡路里</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                                        <i class="fas fa-moon text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1">睡眠监测</h5>
+                                        <p class="small text-muted mb-0">分析睡眠质量和周期</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="p-4 bg-white rounded-3 shadow-sm">
+                        <h3 class="mb-4 text-primary"><i class="fas fa-microchip me-2"></i>先进技术与应用</h3>
+                        <p>我们的智能手环采用最新的光电容积脉搏波描记法(PPG)技术，通过发射特定波长的光线照射皮肤，然后测量反射光的变化来监测血流变化，从而实现心率、血氧等指标的精确监测。</p>
+                        
+                        <h5 class="mt-4 mb-3"><i class="fas fa-sync-alt me-2 text-success"></i>实时数据同步</h5>
+                        <p>智能手环可通过蓝牙技术与手机应用实时同步数据，让您随时查看健康指标，并根据历史数据分析健康趋势。</p>
+                        
+                        <h5 class="mt-4 mb-3"><i class="fas fa-bell me-2 text-warning"></i>健康预警功能</h5>
+                        <p>当检测到异常健康指标时，手环会及时提醒您注意，并提供相应的健康建议，帮助您及早发现潜在健康问题。</p>
+                        
+                        <div class="mt-4 text-center">
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#syncModal">
+                                <i class="fas fa-sync-alt me-2"></i>立即同步手环数据
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DeepSeek健康数据分析 -->
+    <section id="deepseek-analysis" class="py-5">
+        <div class="container">
+            <h2 class="section-title">DeepSeek健康数据分析</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="p-4 bg-white rounded-3 shadow-sm h-100">
+                        <h3 class="mb-4 text-primary"><i class="fas fa-robot me-2"></i>人工智能健康分析</h3>
+                        <p class="lead">借助DeepSeek大型语言模型，我们能够对您的健康数据进行深度分析，发现潜在的健康风险。</p>
+                        
+                        <div class="d-flex align-items-start mt-4">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-3 me-3">
+                                <i class="fas fa-chart-line text-primary fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5>多维度数据整合</h5>
+                                <p>DeepSeek能够整合多种健康指标数据，如心率、血压、血氧、睡眠质量等，通过多维度分析，为您提供全面的健康状况评估。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-start mt-4">
+                            <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
+                                <i class="fas fa-heartbeat text-success fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5>健康风险预测</h5>
+                                <p>基于历史数据和最新医学研究，DeepSeek能够预测潜在的健康风险，并提供针对性的预防建议，让您未雨绸缪。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-start mt-4">
+                            <div class="bg-info bg-opacity-10 p-3 rounded-3 me-3">
+                                <i class="fas fa-user-md text-info fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5>个性化健康建议</h5>
+                                <p>DeepSeek会根据您的个人健康数据和生活习惯，提供个性化的健康管理建议，帮助您保持最佳健康状态。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="p-4 bg-white rounded-3 shadow-sm h-100">
+                        <h3 class="mb-4 text-primary"><i class="fas fa-brain me-2"></i>DeepSeek技术优势</h3>
+                        <p>DeepSeek是一款领先的大型语言模型，在健康医疗领域具有深厚的知识储备和分析能力。</p>
+                        
+                        <div class="card mb-3 border-0 bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-database text-warning me-2"></i>海量医学知识库</h5>
+                                <p class="card-text">DeepSeek模型经过数百万篇医学文献、临床案例的训练，拥有丰富的医学知识储备，能够提供专业的健康分析和建议。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-3 border-0 bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-shield-alt text-danger me-2"></i>隐私保护</h5>
+                                <p class="card-text">我们高度重视用户隐私，所有健康数据采用端到端加密技术，并严格遵守相关隐私法规，确保您的健康数据安全。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-3 border-0 bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-sync-alt text-success me-2"></i>实时分析</h5>
+                                <p class="card-text">DeepSeek能够实时分析您的健康数据，及时发现异常变化，并提供快速反馈，让您随时掌握自己的健康状况。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary" id="analyzeBtn">
+                                <i class="fas fa-search-plus me-2"></i>开始DeepSeek分析
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 手环同步模态框 -->
+    <div class="modal fade" id="syncModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-sync-alt me-2 text-success"></i>同步智能手环数据</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-bluetooth-b fa-3x text-primary mb-3"></i>
+                        <p>请确保您的手环已开启并处于蓝牙配对状态，然后点击"开始同步"按钮。</p>
+                    </div>
+                    <div class="d-flex justify-content-around mb-3">
+                        <div class="text-center">
+                            <div class="bg-light rounded-circle p-3 mb-2 mx-auto" style="width: 60px; height: 60px;">
+                                <i class="fas fa-heart fa-2x text-danger"></i>
+                            </div>
+                            <p class="small">心率数据</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-light rounded-circle p-3 mb-2 mx-auto" style="width: 60px; height: 60px;">
+                                <i class="fas fa-walking fa-2x text-success"></i>
+                            </div>
+                            <p class="small">运动数据</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-light rounded-circle p-3 mb-2 mx-auto" style="width: 60px; height: 60px;">
+                                <i class="fas fa-moon fa-2x text-primary"></i>
+                            </div>
+                            <p class="small">睡眠数据</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success">开始同步</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据概览 -->
+    <section id="data-overview" class="py-5">
+        <div class="container">
+            <h2 class="section-title">数据概览</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="data-card">
+                        <i class="fas fa-heartbeat data-icon"></i>
+                        <h3 class="data-title">心率</h3>
+                        <div class="data-value">75</div>
+                        <p class="data-text">次/分钟</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="data-card">
+                        <i class="fas fa-tint data-icon"></i>
+                        <h3 class="data-title">血压</h3>
+                        <div class="data-value">120/80</div>
+                        <p class="data-text">mmHg</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="data-card">
+                        <i class="fas fa-walking data-icon"></i>
+                        <h3 class="data-title">步数</h3>
+                        <div class="data-value">8,532</div>
+                        <p class="data-text">步</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="data-card">
+                        <i class="fas fa-moon data-icon"></i>
+                        <h3 class="data-title">睡眠</h3>
+                        <div class="data-value">7.5</div>
+                        <p class="data-text">小时</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 趋势分析 -->
+    <section id="trend-analysis" class="py-5">
+        <div class="container">
+            <h2 class="section-title">趋势分析</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h3 class="chart-title">心率趋势</h3>
+                        <canvas id="heartRateChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h3 class="chart-title">血压趋势</h3>
+                        <canvas id="bloodPressureChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h3 class="chart-title">步数趋势</h3>
+                        <canvas id="stepsChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h3 class="chart-title">睡眠趋势</h3>
+                        <canvas id="sleepChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>DeepRA 深算乡野智能养生平台，致力于通过先进技术为村民提供专业的健康管理服务。</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="health-data.html">健康数据</a></li>
+                        <li><a href="ai-analysis.html">AI分析</a></li>
+                        <li><a href="specialty-products.html">海滨特产</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> 广东省广州市DeepRA 深算乡野村</p>
+                    <p><i class="fas fa-phone me-2"></i> 13398244764</p>
+                    <p><i class="fas fa-envelope me-2"></i> info@deepra.health.com</p>
+                    <p><i class="fas fa-clock me-2"></i> 周一至周日 9:00-18:00</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 DeepRA 深算乡野智能养生. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/nav-animation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 使用Anime.js创建动画
+            
+            // 初始化动画
+            function initAnimations() {
+                // 标题动画
+                const heroTextElements = [
+                    document.getElementById('text1'),
+                    document.getElementById('text2'),
+                    document.getElementById('text3'),
+                    document.getElementById('text4')
+                ];
+                
+                const heroButtons = document.getElementById('heroButtons');
+                
+                // 打字机效果实现（替换原来的淡入效果）
+                function animateTexts() {
+                    startTyping(heroTextElements[0], 500, function() {
+                        startTyping(heroTextElements[1], 200, function() {
+                            startTyping(heroTextElements[2], 400, function() {
+                                startTyping(heroTextElements[3], 200, function() {
+                                    // 所有文本显示完后，显示按钮
+                                    setTimeout(() => {
+                                        heroButtons.style.opacity = 1;
+                                        anime({
+                                            targets: heroButtons,
+                                            translateY: [20, 0],
+                                            easing: 'easeOutExpo',
+                                            duration: 800
+                                        });
+                                    }, 300);
+                                });
+                            });
+                        });
+                    });
+                }
+                
+                // 启动打字机效果
+                animateTexts();
+                
+                // 添加滚动指示器
+                const heroSection = document.querySelector('.hero');
+                if(heroSection) {
+                    const scrollIndicator = document.createElement('div');
+                    scrollIndicator.className = 'scroll-indicator';
+                    scrollIndicator.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                    scrollIndicator.style.position = 'absolute';
+                    scrollIndicator.style.bottom = '30px';
+                    scrollIndicator.style.left = '50%';
+                    scrollIndicator.style.transform = 'translateX(-50%)';
+                    scrollIndicator.style.color = 'white';
+                    scrollIndicator.style.fontSize = '24px';
+                    scrollIndicator.style.cursor = 'pointer';
+                    scrollIndicator.style.opacity = '0';
+                    scrollIndicator.style.zIndex = '10';
+                    
+                    heroSection.appendChild(scrollIndicator);
+                    
+                    // 箭头动画
+                    anime({
+                        targets: scrollIndicator,
+                        opacity: [0, 1],
+                        translateY: [-10, 0],
+                        delay: 2500,
+                        duration: 800,
+                        easing: 'easeOutExpo',
+                        complete: function() {
+                            anime({
+                                targets: scrollIndicator,
+                                translateY: [0, 10],
+                                direction: 'alternate',
+                                loop: true,
+                                easing: 'easeInOutSine',
+                                duration: 1000
+                            });
+                        }
+                    });
+                    
+                    // 点击箭头滚动到下一部分
+                    scrollIndicator.addEventListener('click', function() {
+                        document.getElementById('smart-band-intro').scrollIntoView({ 
+                            behavior: 'smooth' 
+                        });
+                    });
+                }
+                
+                // 数据卡片动画
+                const dataCards = document.querySelectorAll('.data-card');
+                dataCards.forEach(card => {
+                    card.style.opacity = 0;
+                    card.style.transform = 'translateY(30px)';
+                });
+                
+                // 图表容器动画
+                const chartContainers = document.querySelectorAll('.chart-container');
+                chartContainers.forEach(container => {
+                    container.style.opacity = 0;
+                    container.style.transform = 'translateY(30px)';
+                });
+                
+                // 智能手环介绍动画
+                const bandIntroElements = document.querySelectorAll('#smart-band-intro .col-lg-6 > div');
+                bandIntroElements.forEach(el => {
+                    el.style.opacity = 0;
+                    el.style.transform = 'translateY(30px)';
+                });
+                
+                // DeepSeek分析部分动画
+                const deepseekElements = document.querySelectorAll('#deepseek-analysis .col-lg-6 > div');
+                deepseekElements.forEach(el => {
+                    el.style.opacity = 0;
+                    el.style.transform = 'translateY(30px)';
+                });
+                
+                // 监听滚动事件，触发动画
+                window.addEventListener('scroll', function() {
+                    // 数据卡片动画
+                    dataCards.forEach((card, index) => {
+                        if(isElementInViewport(card) && card.style.opacity == 0) {
+                            anime({
+                                targets: card,
+                                opacity: [0, 1],
+                                translateY: [30, 0],
+                                easing: 'easeOutExpo',
+                                duration: 800,
+                                delay: index * 100
+                            });
+                        }
+                    });
+                    
+                    // 图表容器动画
+                    chartContainers.forEach((container, index) => {
+                        if(isElementInViewport(container) && container.style.opacity == 0) {
+                            anime({
+                                targets: container,
+                                opacity: [0, 1],
+                                translateY: [30, 0],
+                                easing: 'easeOutExpo',
+                                duration: 800,
+                                delay: index * 150,
+                                complete: function() {
+                                    // 图表绘制动画
+                                    const canvas = container.querySelector('canvas');
+                                    if(canvas) {
+                                        anime({
+                                            targets: canvas,
+                                            scale: [0.9, 1],
+                                            easing: 'spring(1, 80, 10, 0)',
+                                            duration: 1000
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    
+                    // 智能手环介绍动画
+                    bandIntroElements.forEach((el, index) => {
+                        if(isElementInViewport(el) && el.style.opacity == 0) {
+                            anime({
+                                targets: el,
+                                opacity: [0, 1],
+                                translateY: [30, 0],
+                                easing: 'easeOutExpo',
+                                duration: 800,
+                                delay: index * 200
+                            });
+                        }
+                    });
+                    
+                    // DeepSeek分析部分动画
+                    deepseekElements.forEach((el, index) => {
+                        if(isElementInViewport(el) && el.style.opacity == 0) {
+                            anime({
+                                targets: el,
+                                opacity: [0, 1],
+                                translateY: [30, 0],
+                                easing: 'easeOutExpo',
+                                duration: 800,
+                                delay: index * 200
+                            });
+                        }
+                    });
+                });
+                
+                // 触发初始滚动检查
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('scroll'));
+                }, 100);
+            }
+            
+            // 判断元素是否在视口中
+            function isElementInViewport(el) {
+                const rect = el.getBoundingClientRect();
+                return (
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85 &&
+                    rect.bottom >= 0
+                );
+            }
+            
+            // 为同步按钮添加点击动画
+            const syncButton = document.querySelector('#syncModal .btn-success');
+            if(syncButton) {
+                syncButton.addEventListener('click', function() {
+                    // 创建加载动画
+                    const loadingOverlay = document.createElement('div');
+                    loadingOverlay.style.position = 'absolute';
+                    loadingOverlay.style.top = '0';
+                    loadingOverlay.style.left = '0';
+                    loadingOverlay.style.width = '100%';
+                    loadingOverlay.style.height = '100%';
+                    loadingOverlay.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+                    loadingOverlay.style.display = 'flex';
+                    loadingOverlay.style.justifyContent = 'center';
+                    loadingOverlay.style.alignItems = 'center';
+                    loadingOverlay.style.zIndex = '9999';
+                    
+                    const loadingSpinner = document.createElement('div');
+                    loadingSpinner.innerHTML = '<i class="fas fa-sync fa-spin" style="font-size: 3rem; color: #4CAF50;"></i>';
+                    loadingOverlay.appendChild(loadingSpinner);
+                    
+                    this.closest('.modal-content').style.position = 'relative';
+                    this.closest('.modal-content').appendChild(loadingOverlay);
+                    
+                    const successMessage = document.createElement('div');
+                    successMessage.style.position = 'absolute';
+                    successMessage.style.top = '50%';
+                    successMessage.style.left = '50%';
+                    successMessage.style.transform = 'translate(-50%, -50%)';
+                    successMessage.style.backgroundColor = 'white';
+                    successMessage.style.padding = '20px';
+                    successMessage.style.borderRadius = '10px';
+                    successMessage.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+                    successMessage.style.textAlign = 'center';
+                    successMessage.style.opacity = '0';
+                    successMessage.style.zIndex = '10000';
+                    successMessage.innerHTML = '<i class="fas fa-check-circle" style="font-size: 3rem; color: #4CAF50; margin-bottom: 15px;"></i><h5>同步成功</h5><p>您的健康数据已成功同步</p>';
+                    
+                    this.closest('.modal-content').appendChild(successMessage);
+                    
+                    // 模拟同步过程
+                    setTimeout(() => {
+                        loadingOverlay.remove();
+                        
+                        anime({
+                            targets: successMessage,
+                            opacity: [0, 1],
+                            scale: [0.8, 1],
+                            easing: 'easeOutExpo',
+                            duration: 600
+                        });
+                        
+                        // 3秒后关闭模态框
+                        setTimeout(() => {
+                            const modalInstance = bootstrap.Modal.getInstance(document.getElementById('syncModal'));
+                            if(modalInstance) {
+                                modalInstance.hide();
+                                successMessage.remove();
+                                
+                                // 更新图表，模拟刷新效果
+                                const charts = document.querySelectorAll('canvas');
+                                charts.forEach(chart => {
+                                    anime({
+                                        targets: chart,
+                                        opacity: [0.5, 1],
+                                        easing: 'easeOutExpo',
+                                        duration: 500
+                                    });
+                                });
+                            }
+                        }, 2000);
+                    }, 3000);
+                });
+            }
+            
+            // 为DeepSeek分析按钮添加动画
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            if(analyzeBtn) {
+                analyzeBtn.addEventListener('click', function() {
+                    // 按钮点击动画
+                    anime({
+                        targets: this,
+                        scale: [1, 0.9, 1],
+                        easing: 'easeInOutQuad',
+                        duration: 300
+                    });
+                    
+                    // 创建分析中提示
+                    const analysisToast = document.createElement('div');
+                    analysisToast.className = 'toast';
+                    analysisToast.style.position = 'fixed';
+                    analysisToast.style.bottom = '20px';
+                    analysisToast.style.right = '20px';
+                    analysisToast.style.backgroundColor = 'white';
+                    analysisToast.style.padding = '15px 20px';
+                    analysisToast.style.borderRadius = '10px';
+                    analysisToast.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+                    analysisToast.style.zIndex = '9999';
+                    analysisToast.style.display = 'flex';
+                    analysisToast.style.alignItems = 'center';
+                    analysisToast.style.gap = '10px';
+                    analysisToast.style.opacity = '0';
+                    analysisToast.style.transform = 'translateY(20px)';
+                    
+                    analysisToast.innerHTML = '<i class="fas fa-brain text-primary"></i><div><strong>分析中</strong><p class="mb-0 small">DeepSeek正在分析您的健康数据</p></div>';
+                    
+                    document.body.appendChild(analysisToast);
+                    
+                    anime({
+                        targets: analysisToast,
+                        opacity: [0, 1],
+                        translateY: [20, 0],
+                        easing: 'easeOutExpo',
+                        duration: 600
+                    });
+                    
+                    // 3秒后自动隐藏
+                    setTimeout(() => {
+                        anime({
+                            targets: analysisToast,
+                            opacity: [1, 0],
+                            translateY: [0, 20],
+                            easing: 'easeInExpo',
+                            duration: 600,
+                            complete: function() {
+                                analysisToast.remove();
+                                
+                                // 页面跳转到AI分析页面
+                                window.location.href = 'ai-analysis.html';
+                            }
+                        });
+                    }, 3000);
+                });
+            }
+            
+            // 立即初始化所有动画
+            initAnimations();
+            
+            // 全新的打字机效果实现
+            function startTyping(element, delay, callback) {
+                if (!element) return;
+                
+                // 保存原始文本
+                const originalText = element.textContent || element.innerText;
+                
+                // 清空文本内容
+                element.textContent = '';
+                
+                // 创建光标元素
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor';
+                element.appendChild(cursor);
+                
+                // 字符索引
+                let charIndex = 0;
+                
+                // 延迟后开始打字
+                setTimeout(() => {
+                    // 创建打字间隔
+                    const typingInterval = setInterval(() => {
+                        if (charIndex < originalText.length) {
+                            // 在光标前插入新字符
+                            element.insertBefore(
+                                document.createTextNode(originalText.charAt(charIndex)),
+                                cursor
+                            );
+                            charIndex++;
+                        } else {
+                            // 打字完成，清除间隔
+                            clearInterval(typingInterval);
+                            
+                            // 移除光标
+                            if (element.contains(cursor)) {
+                                element.removeChild(cursor);
+                            }
+                            
+                            // 执行回调
+                            if (callback) callback();
+                        }
+                    }, 50); // 每个字符的打字速度
+                }, delay);
+            }
+            
+            // 心率趋势图
+            const heartRateCtx = document.getElementById('heartRateChart').getContext('2d');
+            new Chart(heartRateCtx, {
+                type: 'line',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '心率',
+                        data: [72, 75, 73, 76, 74, 78, 75],
+                        borderColor: '#4CAF50',
+                        tension: 0.4,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // 血压趋势图
+            const bloodPressureCtx = document.getElementById('bloodPressureChart').getContext('2d');
+            new Chart(bloodPressureCtx, {
+                type: 'line',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '收缩压',
+                        data: [120, 118, 122, 119, 121, 123, 120],
+                        borderColor: '#4CAF50',
+                        tension: 0.4,
+                        fill: false
+                    }, {
+                        label: '舒张压',
+                        data: [80, 78, 82, 79, 81, 83, 80],
+                        borderColor: '#2E7D32',
+                        tension: 0.4,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+
+            // 步数趋势图
+            const stepsCtx = document.getElementById('stepsChart').getContext('2d');
+            new Chart(stepsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '步数',
+                        data: [7532, 8231, 7890, 8456, 8123, 9234, 8532],
+                        backgroundColor: '#4CAF50',
+                        borderColor: '#4CAF50',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // 睡眠趋势图
+            const sleepCtx = document.getElementById('sleepChart').getContext('2d');
+            new Chart(sleepCtx, {
+                type: 'line',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '睡眠时长',
+                        data: [7.2, 7.5, 7.0, 7.8, 7.3, 8.0, 7.5],
+                        borderColor: '#4CAF50',
+                        tension: 0.4,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // 添加触摸事件支持
+            const clickableElements = document.querySelectorAll('a, button, .nav-link');
+            clickableElements.forEach(element => {
+                element.classList.add('touch-feedback');
+            });
+            
+            // 优化移动端滚动性能
+            if ('ontouchstart' in window) {
+                document.body.style.webkitOverflowScrolling = 'touch';
+            }
+            
+            // 优化表单输入
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    setTimeout(() => {
+                        window.scrollTo(0, this.getBoundingClientRect().top + window.scrollY - 100);
+                    }, 100);
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

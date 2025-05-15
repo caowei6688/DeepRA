@@ -1,0 +1,3114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepRA 深算乡野 - AI分析</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 添加高德地图API -->
+    <script type="text/javascript">
+        // 高德地图API加载错误处理
+        window.AMapLoadError = function() {
+            console.error('高德地图API加载失败，使用备用地图');
+            document.querySelectorAll('.amap-container').forEach(function(container) {
+                container.innerHTML = '<div class="backup-map"><i class="fas fa-map-marked-alt"></i><span>地图加载中...</span></div>';
+            });
+        };
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=79c2b24211df1e70db069ce4e5a92c2a&callback=initMaps" onerror="AMapLoadError()"></script>
+    <!-- 添加Anime.js库 -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <!-- DeepSeek API集成 -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --text-color: #333333;
+            --light-bg: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding-top: 76px;
+        }
+        
+        .navbar {
+            background-color: #000000;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff !important;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .navbar-brand:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar-brand i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+        
+        .navbar-brand:hover i {
+            transform: rotate(15deg) scale(1.2);
+        }
+        
+        .nav-item {
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .nav-link {
+            color: #ffffff !important;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.6s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-link.active {
+            color: #ffffff !important;
+            background-color: var(--primary-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
+        
+        .nav-link.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.6);
+        }
+        
+        .nav-link i {
+            color: #ffffff;
+            font-size: 1.2rem;
+            transition: transform 0.4s ease;
+        }
+        
+        .nav-link:hover i {
+            transform: translateY(-2px) scale(1.2);
+            color: var(--primary-color);
+        }
+        
+        .nav-link.active i {
+            color: #ffffff;
+            transform: translateY(0);
+        }
+        
+        /* Perspective Split Text Menu Animation 相关样式 */
+        .nav-text-container {
+            position: relative;
+            display: inline-block;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        
+        .nav-text {
+            display: block;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        .nav-text.static {
+            transform-origin: bottom;
+            opacity: 1;
+        }
+        
+        .nav-text.dynamic {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transform: rotateX(-90deg);
+            opacity: 0;
+            color: var(--primary-color);
+        }
+        
+        .nav-link.perspective-active .nav-text.static {
+            transform: rotateX(90deg);
+            opacity: 0;
+        }
+        
+        .nav-link.perspective-active .nav-text.dynamic {
+            transform: rotateX(0);
+            opacity: 1;
+        }
+        
+        .nav-link.perspective-active i {
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .hero {
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+        
+        .hero-content {
+            width: 100%;
+        }
+        
+        .hero-text {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 5rem;
+            color: white;
+            max-width: 80%;
+        }
+        
+        .hero-text .highlight {
+            color: var(--primary-color);
+            display: block;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            max-width: 70%;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            margin-top: 5rem;
+        }
+        
+        .hero-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+        }
+        
+        .hero-btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            margin-left: 1rem;
+        }
+        
+        .hero-btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        /* IBM风格的装饰元素 */
+        .hero-decoration {
+            position: absolute;
+            bottom: 5%;
+            right: 10%;
+            width: 15%;
+            height: 15%;
+            border: 2px solid var(--primary-color);
+            opacity: 0.3;
+        }
+        
+        .hero-arrow {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        /* IBM风格的网格背景 */
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            pointer-events: none;
+            opacity: 0.05;
+        }
+        
+        .hero-grid-line {
+            height: 100%;
+            width: 1px;
+            background-color: white;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-grid-horizontal {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background-color: white;
+        }
+        
+        .analysis-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .analysis-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .analysis-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .analysis-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .analysis-text {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 60px 0 20px;
+        }
+        
+        .footer h5 {
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .footer p {
+            color: #cccccc;
+            line-height: 1.8;
+        }
+        
+        .footer a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #999999;
+        }
+        
+        /* 问答界面样式 */
+        .chat-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: 650px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: rgba(76, 175, 80, 0.05);
+            border-radius: 10px;
+            max-height: 550px;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            max-width: 85%;
+        }
+        
+        .message-user {
+            margin-left: auto;
+        }
+        
+        .message-ai {
+            margin-right: auto;
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .message-header i {
+            color: var(--primary-color);
+        }
+        
+        .message-content {
+            padding: 15px;
+            border-radius: 10px;
+            background-color: white;
+            margin-top: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            white-space: pre-line;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            overflow: visible;
+        }
+        
+        .message-time {
+            font-size: 12px;
+            opacity: 0.7;
+            text-align: right;
+            color: #666;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-input textarea {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 12px 15px;
+            font-size: 16px;
+            resize: none;
+            min-height: 50px;
+        }
+        
+        .chat-input textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .chat-input button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .chat-input button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .suggestion-chip {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .suggestion-chip:hover {
+            background-color: rgba(76, 175, 80, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .suggestion-chip i {
+            color: var(--primary-color);
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* 打字机效果样式 */
+        .typewriter-text {
+            display: inline-block;
+            color: inherit; /* 确保继承父元素的颜色 */
+        }
+        
+        .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--primary-color);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        /* 按钮淡入动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        /* 新增SVG地图相关样式 */
+        .svg-map-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .svg-map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .route-path {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 10, 5;
+            animation: dash 30s linear infinite;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+        }
+        
+        .route-path.heart-route {
+            stroke: #4CAF50;
+        }
+        
+        .route-path.sleep-route {
+            stroke: #2196F3;
+        }
+        
+        .route-path.food-route {
+            stroke: #FF9800;
+        }
+        
+        .map-marker {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .map-marker:hover {
+            transform: scale(1.2);
+        }
+        
+        .map-marker circle {
+            fill: white;
+            stroke-width: 2;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+        }
+        
+        .map-marker.forest circle {
+            stroke: #4CAF50;
+        }
+        
+        .map-marker.water circle {
+            stroke: #2196F3;
+        }
+        
+        .map-marker.food circle {
+            stroke: #FF9800;
+        }
+        
+        .map-marker text {
+            font-size: 10px;
+            text-anchor: middle;
+            alignment-baseline: middle;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        
+        .map-tooltip {
+            position: absolute;
+            background: white;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        
+        .map-controls {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .map-control-btn {
+            width: 30px;
+            height: 30px;
+            background: white;
+            border: none;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .map-control-btn:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+        }
+        
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            /* 路线轮播移动端适配 */
+            .route-card .row {
+                min-height: auto;
+                flex-direction: column;
+            }
+            
+            .carousel-item .route-amap-container {
+                height: 200px;
+                min-height: auto;
+                max-height: none;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .carousel-item .amap-container {
+                height: 200px;
+                border-radius: 15px 15px 0 0;
+            }
+            
+            .carousel-item .card-body {
+                max-height: none;
+                padding: 1rem;
+            }
+            
+            #routeCarousel .carousel-control-prev,
+            #routeCarousel .carousel-control-next {
+                width: 40px;
+                height: 40px;
+            }
+            
+            #routeCarousel .carousel-control-prev {
+                left: 10px;
+            }
+            
+            #routeCarousel .carousel-control-next {
+                right: 10px;
+            }
+            
+            .navbar {
+                padding: 0.5rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+            
+            .navbar-brand i {
+                font-size: 1.2rem;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 6px 10px;
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: none;
+            }
+            
+            .navbar-toggler-icon {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+            
+            .navbar-collapse {
+                margin-top: 10px;
+            }
+            
+            .navbar-nav {
+                background-color: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 10px;
+            }
+            
+            .nav-item {
+                margin: 5px 0;
+                width: 100%;
+            }
+            
+            .nav-link {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .dual-text-large {
+                font-size: 2.5rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.5rem;
+            }
+            
+            .hero-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .chat-container {
+                border-radius: 10px;
+                padding: 15px;
+                height: auto;
+                max-height: 80vh;
+            }
+            
+            .chat-messages {
+                max-height: 400px;
+                padding: 10px;
+            }
+            
+            .message {
+                padding: 10px;
+                margin-bottom: 10px;
+                max-width: 95%;
+            }
+            
+            .message-header {
+                padding: 8px 10px;
+            }
+            
+            .message-text {
+                font-size: 0.9rem;
+            }
+            
+            .suggestion-chips {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .suggestion-chip {
+                margin-bottom: 8px;
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
+            
+            .chat-input {
+                padding: 8px;
+            }
+            
+            .chat-input textarea {
+                font-size: 0.9rem;
+            }
+            
+            .route-card {
+                margin-bottom: 20px;
+            }
+            
+            .map-tooltip {
+                font-size: 0.8rem;
+            }
+            
+            .route-features span {
+                display: inline-block;
+                margin-bottom: 5px;
+                font-size: 0.8rem;
+            }
+            
+            .route-stats {
+                flex-wrap: wrap;
+                font-size: 0.8rem;
+            }
+            
+            .route-card .btn {
+                width: 100%;
+                padding: 8px 15px;
+            }
+            
+            .footer {
+                padding: 40px 0 20px;
+            }
+            
+            .footer h5 {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* 小屏幕手机优化 */
+        @media (max-width: 576px) {
+            .dual-text-large {
+                font-size: 2rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero {
+                padding: 20px 0;
+                min-height: 80vh;
+            }
+            
+            .svg-map-container {
+                height: 180px;
+            }
+            
+            .map-controls {
+                bottom: 5px;
+                right: 5px;
+            }
+            
+            .map-control-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+            
+            .travel-intro h3 {
+                font-size: 1.4rem;
+            }
+            
+            .travel-intro p {
+                font-size: 0.9rem;
+            }
+            
+            .route-tags {
+                flex-wrap: wrap;
+            }
+            
+            .route-tags .badge {
+                margin-bottom: 5px;
+                font-size: 0.7rem;
+            }
+        }
+        
+        .message-chart-container {
+            width: 100%;
+            height: 220px;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        .message-chart-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        @media (max-width: 576px) {
+            .message-chart-container {
+                height: 180px;
+            }
+        }
+        
+        .message-chart-container {
+            height: 180px;
+        }
+        
+        /* 高德地图相关样式 */
+        .amap-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .route-amap-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px 0 0 8px;
+            overflow: hidden;
+        }
+        
+        /* 轮播中的地图容器高度需要100% */
+        .carousel-item .route-amap-container {
+            height: 100%;
+            min-height: 480px;
+            max-height: 500px;
+            border-radius: 15px 0 0 15px;
+        }
+        
+        .carousel-item .amap-container {
+            height: 100%;
+            border-radius: 15px 0 0 15px;
+        }
+        
+        .route-info-window {
+            width: 250px;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            background: rgba(255,255,255,0.95);
+        }
+        
+        .route-info-window h5 {
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: #4CAF50;
+            border-bottom: 1px solid rgba(76, 175, 80, 0.2);
+            padding-bottom: 5px;
+        }
+        
+        .route-info-window p {
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .route-info-window .small {
+            font-size: 11px;
+            color: #888;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 5px;
+        }
+        
+        .amap-icon {
+            width: 25px;
+            height: 34px;
+            display: block;
+            position: absolute;
+            left: -12px;
+            top: -34px;
+        }
+        
+        .pulse {
+            border-radius: 50%;
+            box-shadow: 0 0 0 rgba(76, 175, 80, 0.4);
+            animation: pulse 2s infinite;
+        }
+        
+        /* 备用地图样式 */
+        .backup-map {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #4CAF50;
+            font-size: 1.2rem;
+            border-radius: 8px;
+        }
+        
+        .backup-map i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .backup-route-heart {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e8f5e9 0%, #4CAF50 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .backup-route-sleep {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e3f2fd 0%, #2196F3 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .backup-route-food {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fff3e0 0%, #FF9800 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .backup-route-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        
+        .backup-route-title {
+            position: relative;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+            z-index: 10;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+            }
+        }
+        
+        /* 健康旅游路线轮播样式 */
+        .route-card {
+            overflow: hidden;
+            border-radius: 15px;
+        }
+        
+        .route-card .row {
+            min-height: 480px;
+        }
+        
+        #routeCarousel .carousel-control-prev,
+        #routeCarousel .carousel-control-next {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(76, 175, 80, 0.7);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.9;
+        }
+        
+        #routeCarousel .carousel-control-prev {
+            left: -25px;
+        }
+        
+        #routeCarousel .carousel-control-next {
+            right: -25px;
+        }
+        
+        #routeCarousel .carousel-control-prev:hover,
+        #routeCarousel .carousel-control-next:hover {
+            background-color: var(--primary-color);
+            opacity: 1;
+        }
+        
+        #routeCarousel .carousel-indicators {
+            bottom: -40px;
+        }
+        
+        #routeCarousel .carousel-indicators button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            margin: 0 5px;
+        }
+        
+        #routeCarousel .carousel-indicators button.active {
+            background-color: var(--primary-color);
+        }
+        
+        .health-benefits li {
+            margin-bottom: 0.25rem;
+        }
+        
+        /* 地图信息的容器设置紧凑一些 */
+        .carousel-item .card-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+        
+        .route-features {
+            margin-bottom: 1rem !important;
+        }
+        
+        .health-benefits {
+            margin-bottom: 1.5rem !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-leaf"></i>
+                DeepRA 深算乡野
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-home"></i> 首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="health-data.html"><i class="fas fa-chart-line"></i> 健康数据</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="ai-analysis.html"><i class="fas fa-brain"></i> AI分析</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="specialty-products.html"><i class="fas fa-shopping-basket"></i> 海滨特产</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="hero-content">
+                        <h1 class="hero-text">
+                            <span class="typewriter-text" id="text1">AI智能分析，</span>
+                            <span class="typewriter-text" id="text2">健康管理专家。</span>
+                            <span class="highlight typewriter-text" id="text3">数据驱动决策，</span>
+                        </h1>
+                        <p class="hero-subtitle typewriter-text" id="text4">智慧守护健康，让人工智能成为您的私人健康顾问。</p>
+                        <div class="hero-buttons" id="heroButtons" style="opacity: 0;">
+                            <a href="#qa" class="btn hero-btn hero-btn-primary">健康问答</a>
+                            <a href="#qa" class="btn hero-btn hero-btn-secondary">开始咨询</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-decoration"></div>
+        <div class="hero-arrow">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <!-- 在hero section内添加网格背景 -->
+        <div class="hero-grid">
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-horizontal"></div>
+        </div>
+    </section>
+
+    <!-- AI分析 -->
+    <section id="qa" class="py-5">
+        <div class="container">
+            <h2 class="section-title">AI健康问答</h2>
+            <div class="row">
+                <div class="col-lg-12 mx-auto">
+                    <div class="chat-container">
+                        <div id="chatMessages" class="chat-messages">
+                            <!-- AI欢迎消息 -->
+                            <div class="message message-ai">
+                                <div class="message-header">
+                                    <i class="fas fa-brain"></i>
+                                    <span>AI健康助手</span>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-text">
+                                        您好！我是您的AI健康助手。我可以基于您的健康数据提供分析和建议。您可以询问我关于您的睡眠、步数、心率、压力和体重等方面的问题。
+                                    </div>
+                                    <div class="message-time">刚刚</div>
+                                    <div class="suggestion-chips">
+                                        <div class="suggestion-chip" data-question="我的睡眠质量如何？">
+                                            <i class="fas fa-moon"></i>
+                                            <span>我的睡眠质量如何？</span>
+                                        </div>
+                                        <div class="suggestion-chip" data-question="我的步数达标了吗？">
+                                            <i class="fas fa-walking"></i>
+                                            <span>我的步数达标了吗？</span>
+                                        </div>
+                                        <div class="suggestion-chip" data-question="我的心率正常吗？">
+                                            <i class="fas fa-heartbeat"></i>
+                                            <span>我的心率正常吗？</span>
+                                        </div>
+                                        <div class="suggestion-chip" data-question="我的压力水平如何？">
+                                            <i class="fas fa-brain"></i>
+                                            <span>我的压力水平如何？</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <textarea id="userInput" placeholder="输入您的问题..." rows="1"></textarea>
+                            <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                        <div class="text-end mt-2">
+                            <button id="configButton" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-cog"></i> 设置
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DeepSeek API配置模态框 -->
+    <div class="modal fade" id="apiConfigModal" tabindex="-1" aria-labelledby="apiConfigModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="apiConfigModalLabel">DeepSeek API 配置</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="apiConfigForm">
+                        <div class="mb-3">
+                            <label for="apiKey" class="form-label">DeepSeek API 密钥</label>
+                            <input type="password" class="form-control" id="apiKey" placeholder="输入您的DeepSeek API密钥">
+                            <div class="form-text">密钥将安全地存储在您的浏览器中，不会发送到服务器。</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apiEndpoint" class="form-label">API 端点 (可选)</label>
+                            <input type="text" class="form-control" id="apiEndpoint" placeholder="https://api.deepseek.com/v1/chat" value="https://api.deepseek.com/v1/chat">
+                        </div>
+                        <div class="mb-3">
+                            <label for="apiModel" class="form-label">模型选择</label>
+                            <select class="form-select" id="apiModel">
+                                <option value="deepseek-chat">DeepSeek Chat</option>
+                                <option value="deepseek-coder">DeepSeek Coder</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="saveApiConfig">保存配置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 智能推荐旅游路线 -->
+    <section id="travel-routes" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">健康旅游路线推荐</h2>
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="travel-intro p-4 bg-white rounded shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-route fs-1 text-primary me-3"></i>
+                            <h3 class="mb-0">基于您的健康数据智能规划旅游路线</h3>
+                        </div>
+                        <p class="lead">我们根据您的健康数据和需求，为您推荐最适合的旅游路线，既能欣赏美景，又能改善健康状况。</p>
+                        <div class="route-tags d-flex flex-wrap gap-2 mt-3">
+                            <span class="badge bg-success rounded-pill"><i class="fas fa-heart me-1"></i> 心脏健康</span>
+                            <span class="badge bg-info rounded-pill"><i class="fas fa-moon me-1"></i> 改善睡眠</span>
+                            <span class="badge bg-warning rounded-pill"><i class="fas fa-utensils me-1"></i> 健康饮食</span>
+                            <span class="badge bg-danger rounded-pill"><i class="fas fa-walking me-1"></i> 低强度运动</span>
+                            <span class="badge bg-primary rounded-pill"><i class="fas fa-mountain me-1"></i> 森林疗法</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 路线轮播 -->
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div id="routeCarousel" class="carousel slide" data-bs-interval="false">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#routeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="心脏健康路线"></button>
+                            <button type="button" data-bs-target="#routeCarousel" data-bs-slide-to="1" aria-label="改善睡眠路线"></button>
+                            <button type="button" data-bs-target="#routeCarousel" data-bs-slide-to="2" aria-label="健康饮食路线"></button>
+                            </div>
+                        
+                        <div class="carousel-inner">
+                            <!-- 心脏健康路线 -->
+                            <div class="carousel-item active">
+                                <div class="card route-card border-0 shadow-sm">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <div class="route-amap-container h-100">
+                                                <div id="heart-route-map" class="amap-container h-100">
+                                                    <!-- 备用方案 -->
+                                                    <div class="backup-route-heart" style="display: flex;">
+                                                        <div class="backup-route-overlay"></div>
+                                                        <div class="backup-route-title">心脏健康路线</div>
+                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <h3 class="card-title mb-0">心脏健康路线</h3>
+                                <span class="badge bg-success rounded-pill">推荐</span>
+                            </div>
+                                                <p class="card-text fw-light text-muted mb-4">
+                                                    <i class="fas fa-ruler me-1"></i> 3.5公里 · 
+                                                    <i class="fas fa-clock ms-2 me-1"></i> 约1.5小时 · 
+                                                    <i class="fas fa-mountain ms-2 me-1"></i> 坡度适中
+                                                </p>
+                                                <div class="card-text mb-4">
+                                                    <p>根据您的心率数据定制，包含缓坡步道和森林氧吧区域，有助于改善心血管健康。沿途设有多个休息站点，可根据您的健康状况随时调整运动强度。</p>
+                                                    <p>该路线穿越海岸松林区，空气中富含负氧离子，有助于降低血压和心率。沿途的森林环境能有效减轻压力，同时适度的坡度能够提高心肺功能。我们根据您的健康数据，特别设计了三处冥想驻点，可在景色优美处稍作休息，聆听大自然的声音。</p>
+                            </div>
+                                                <div class="route-features mb-4">
+                                                    <h5 class="text-muted fs-6">路线特色</h5>
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-tree text-success me-1"></i> 森林疗法</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-tint text-primary me-1"></i> 负氧离子区</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-sun text-warning me-1"></i> 光照适宜</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-heartbeat text-danger me-1"></i> 心率监测</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-leaf text-success me-1"></i> 松林环绕</span>
+                            </div>
+                        </div>
+                                                <div class="health-benefits mb-4">
+                                                    <h5 class="text-muted fs-6">健康益处</h5>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <ul class="list-unstyled">
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>降低安静心率</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>改善心肺功能</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>降低血压水平</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <ul class="list-unstyled">
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>增强心血管弹性</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>减轻身心压力</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>提高免疫力</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-success w-100" data-route-id="heart-route">查看详情</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                    </div>
+                </div>
+                
+                            <!-- 改善睡眠路线 -->
+                            <div class="carousel-item">
+                                <div class="card route-card border-0 shadow-sm">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <div class="route-amap-container h-100">
+                                                <div id="sleep-route-map" class="amap-container h-100">
+                                                    <!-- 备用方案 -->
+                                                    <div class="backup-route-sleep" style="display: flex;">
+                                                        <div class="backup-route-overlay"></div>
+                                                        <div class="backup-route-title">改善睡眠路线</div>
+                            </div>
+                        </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <h3 class="card-title mb-0">改善睡眠路线</h3>
+                                <span class="badge bg-info rounded-pill">热门</span>
+                            </div>
+                                                <p class="card-text fw-light text-muted mb-4">
+                                                    <i class="fas fa-ruler me-1"></i> 2.8公里 · 
+                                                    <i class="fas fa-clock ms-2 me-1"></i> 约1小时 · 
+                                                    <i class="fas fa-mountain ms-2 me-1"></i> 平缓
+                                                </p>
+                                                <div class="card-text mb-4">
+                                                    <p>根据您的睡眠数据量身定制，通过平缓的海滨薰衣草园和水景区，帮助放松身心，改善睡眠质量。全程保持平缓坡度，避免过度运动影响夜间休息。</p>
+                                                    <p>路线经过专门培育的薰衣草园，自然芳香有助于缓解焦虑和压力。沿途水景区的流水声能够促进身心放松，为夜间睡眠创造良好条件。傍晚时段行走此路线效果最佳，海风和日落景色有助于调节生物钟。路线终点设有专门的光疗区，通过合理光照帮助重置生物节律。</p>
+                            </div>
+                                                <div class="route-features mb-4">
+                                                    <h5 class="text-muted fs-6">路线特色</h5>
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-water text-info me-1"></i> 溪流环绕</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-leaf text-success me-1"></i> 薰衣草园</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-moon text-secondary me-1"></i> 助眠环境</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-sun text-warning me-1"></i> 光照疗法</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-wind text-primary me-1"></i> 海风舒缓</span>
+                            </div>
+                        </div>
+                                                <div class="health-benefits mb-4">
+                                                    <h5 class="text-muted fs-6">健康益处</h5>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <ul class="list-unstyled">
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>改善入睡时间</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>提高睡眠质量</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>减少夜间醒来</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <ul class="list-unstyled">
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>降低焦虑水平</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>调节生物节律</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>改善昼夜周期</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-info text-white w-100" data-route-id="sleep-route">查看详情</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                    </div>
+                </div>
+                
+                            <!-- 健康饮食路线 -->
+                            <div class="carousel-item">
+                                <div class="card route-card border-0 shadow-sm">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <div class="route-amap-container h-100">
+                                                <div id="food-route-map" class="amap-container h-100">
+                                                    <!-- 备用方案 -->
+                                                    <div class="backup-route-food" style="display: flex;">
+                                                        <div class="backup-route-overlay"></div>
+                                                        <div class="backup-route-title">健康饮食路线</div>
+                            </div>
+                        </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <h3 class="card-title mb-0">健康饮食路线</h3>
+                                <span class="badge bg-warning text-dark rounded-pill">新增</span>
+                            </div>
+                                                <p class="card-text fw-light text-muted mb-4">
+                                                    <i class="fas fa-ruler me-1"></i> 4.2公里 · 
+                                                    <i class="fas fa-clock ms-2 me-1"></i> 约2小时 · 
+                                                    <i class="fas fa-mountain ms-2 me-1"></i> 起伏小
+                                                </p>
+                                                <div class="card-text mb-4">
+                                                    <p>结合您的饮食习惯和健康数据，规划沿途经过有机农场和健康餐厅的美食之旅，体验健康饮食文化，学习健康烹饪技巧。</p>
+                                                    <p>路线从有机果蔬采摘园出发，您可以亲手采摘时令水果和蔬菜，了解无公害种植技术。途中经过海滨渔村，渔民会向您展示当季海鲜的挑选方法，以及地道的低盐低油烹饪方式。行程包含三处富含不同营养元素的特色餐厅，每家餐厅都提供符合您健康需求的定制餐单，和烹饪示范活动。</p>
+                            </div>
+                                                <div class="route-features mb-4">
+                                                    <h5 class="text-muted fs-6">路线特色</h5>
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-carrot text-warning me-1"></i> 有机农场</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-utensils text-danger me-1"></i> 健康餐厅</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-seedling text-success me-1"></i> 采摘体验</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-fish text-primary me-1"></i> 海鲜市场</span>
+                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-mortar-pestle text-secondary me-1"></i> 烹饪课程</span>
+                            </div>
+                        </div>
+                                                <div class="health-benefits mb-4">
+                                                    <h5 class="text-muted fs-6">健康益处</h5>
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <ul class="list-unstyled">
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>获取营养知识</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>学习健康烹饪</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>提升饮食质量</li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <ul class="list-unstyled">
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>培养良好食习惯</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>接触地域食材</li>
+                                                                <li><i class="fas fa-check-circle text-success me-2"></i>改善消化功能</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-warning text-dark w-100" data-route-id="food-route">查看详情</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="carousel-control-prev" type="button" data-bs-target="#routeCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">上一个</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#routeCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">下一个</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <button class="btn btn-outline-primary btn-lg px-5">
+                        <i class="fas fa-map-marked-alt me-2"></i>查看更多路线
+                    </button>
+                    <div class="mt-3 text-muted">
+                        <small><i class="fas fa-info-circle me-1"></i> 路线每周根据您的健康数据动态更新</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 旅游路线详情模态框 -->
+    <div class="modal fade" id="routeDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" id="routeDetailTitle">路线详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img id="routeDetailImage" src="" class="img-fluid rounded mb-3" alt="路线图片" style="display: none;">
+                            <div class="route-amap-container mb-3" style="height: 250px;">
+                                <div id="detailRouteMap" class="amap-container" style="height: 250px;">
+                                    <!-- 备用方案 -->
+                                    <div id="backup-detail-map" style="height: 100%; border-radius: 8px; position: relative; display: flex;" class="backup-route-heart">
+                                        <div class="backup-route-overlay"></div>
+                                        <div class="backup-route-title">路线详情地图</div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="mb-3" id="routeDetailName"></h5>
+                            <div class="mb-3">
+                                <h6 class="text-muted">路线描述</h6>
+                                <p id="routeDetailDesc"></p>
+                            </div>
+                            <div class="mb-3">
+                                <h6 class="text-muted">路线信息</h6>
+                            <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="fas fa-ruler me-2 text-primary"></i>距离：</span>
+                                    <span id="routeDetailDistance" class="fw-bold"></span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="fas fa-clock me-2 text-warning"></i>预计时间：</span>
+                                    <span id="routeDetailTime" class="fw-bold"></span>
+                            </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="fas fa-mountain me-2 text-success"></i>坡度：</span>
+                                    <span id="routeDetailSlope" class="fw-bold"></span>
+                        </div>
+                        </div>
+                            <div class="mb-3" id="routeDetailActivities">
+                                <h6 class="text-muted">推荐活动</h6>
+                                <ul class="list-group list-group-flush" id="routeActivitiesList">
+                                    <!-- 活动列表由JavaScript动态生成 -->
+                                </ul>
+                            </div>
+                            <div class="mt-4">
+                                <a href="#" class="btn btn-primary w-100" id="routeNavigateBtn">
+                                    <i class="fas fa-directions me-2"></i>开始导航
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="fas fa-calendar-plus me-2"></i>添加到我的行程
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>DeepRA 深算乡野平台，致力于通过先进技术为用户提供专业的健康管理服务。</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="health-data.html">健康数据</a></li>
+                        <li><a href="ai-analysis.html">AI分析</a></li>
+                        <li><a href="specialty-products.html">海滨特产</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> 广东省广州市DeepRA 深算乡野村</p>
+                    <p><i class="fas fa-phone me-2"></i> 13398244764</p>
+                    <p><i class="fas fa-envelope me-2"></i> info@deepra.health.com</p>
+                    <p><i class="fas fa-clock me-2"></i> 周一至周日 9:00-18:00</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 DeepRA 深算乡野. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/nav-animation.js"></script>
+    
+    <!-- DeepSeek健康问答集成 -->
+    <script>
+        // 健康问答聊天功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const suggestionChips = document.querySelectorAll('.suggestion-chip');
+            const configButton = document.getElementById('configButton');
+            const apiConfigModal = new bootstrap.Modal(document.getElementById('apiConfigModal'));
+            const saveApiConfigButton = document.getElementById('saveApiConfig');
+            
+            // DeepSeek API 配置
+            let apiConfig = {
+                apiKey: '',
+                apiEndpoint: 'https://api.deepseek.com/v1/chat',
+                apiModel: 'deepseek-chat'
+            };
+            
+            // 从本地存储加载API配置
+            function loadApiConfig() {
+                const savedConfig = localStorage.getItem('deepseekApiConfig');
+                if (savedConfig) {
+                    try {
+                        apiConfig = JSON.parse(savedConfig);
+                        // 填充表单
+                        document.getElementById('apiKey').value = apiConfig.apiKey || '';
+                        document.getElementById('apiEndpoint').value = apiConfig.apiEndpoint || 'https://api.deepseek.com/v1/chat';
+                        document.getElementById('apiModel').value = apiConfig.apiModel || 'deepseek-chat';
+                    } catch (e) {
+                        console.error('加载API配置失败:', e);
+                    }
+                }
+            }
+            
+            // 保存API配置到本地存储
+            function saveApiConfig() {
+                apiConfig.apiKey = document.getElementById('apiKey').value;
+                apiConfig.apiEndpoint = document.getElementById('apiEndpoint').value;
+                apiConfig.apiModel = document.getElementById('apiModel').value;
+                
+                localStorage.setItem('deepseekApiConfig', JSON.stringify(apiConfig));
+                
+                // 关闭模态框
+                apiConfigModal.hide();
+                
+                // 显示保存成功提示
+                const toast = `
+                <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
+                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">设置已保存</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            DeepSeek API配置已成功保存。
+                        </div>
+                    </div>
+                </div>`;
+                
+                const toastContainer = document.createElement('div');
+                toastContainer.innerHTML = toast;
+                document.body.appendChild(toastContainer);
+                
+                // 3秒后自动消失
+                setTimeout(() => {
+                    document.body.removeChild(toastContainer);
+                }, 3000);
+            }
+            
+            // 打开配置模态框
+            configButton.addEventListener('click', function() {
+                loadApiConfig();
+                apiConfigModal.show();
+            });
+            
+            // 保存配置
+            saveApiConfigButton.addEventListener('click', saveApiConfig);
+            
+            // 初始加载配置
+            loadApiConfig();
+            
+            // 自动配置密钥
+            function autoConfigureApiKey() {
+                // 设置DeepSeek API密钥
+                apiConfig.apiKey = "sk-bb38b61a66d44929aed948cad529d1f2";
+                apiConfig.apiEndpoint = "https://api.deepseek.com/v1/chat";
+                apiConfig.apiModel = "deepseek-chat";
+                
+                // 保存到本地存储
+                localStorage.setItem('deepseekApiConfig', JSON.stringify(apiConfig));
+                
+                // 显示通知
+                const toast = `
+                <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
+                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header bg-success text-white">
+                            <strong class="me-auto">密钥已配置</strong>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            DeepSeek API密钥已成功配置，现在可以开始使用AI健康问答功能了。
+                        </div>
+                    </div>
+                </div>`;
+                
+                const toastContainer = document.createElement('div');
+                toastContainer.innerHTML = toast;
+                document.body.appendChild(toastContainer);
+                
+                // 5秒后自动消失
+                setTimeout(() => {
+                    document.body.removeChild(toastContainer);
+                }, 5000);
+            }
+            
+            // 页面加载完成后自动配置密钥
+            autoConfigureApiKey();
+            
+            // 保存聊天历史
+            let chatHistory = [{
+                role: 'assistant', 
+                content: '您好！我是您的AI健康助手。我可以基于您的健康数据提供分析和建议。您可以询问我关于您的睡眠、步数、心率、压力和体重等方面的问题。'
+            }];
+            
+            // 健康数据样本 - 在实际应用中，这些数据应该从用户的健康监测设备或数据库中获取
+            const healthData = {
+                sleep: {
+                    averageDuration: 7.2, // 小时
+                    deepSleepPercentage: 28, // 百分比
+                    remSleepPercentage: 22, // 百分比
+                    wakeupCount: 3, // 次数
+                    sleepQualityScore: 68 // 0-100分
+                },
+                steps: {
+                    daily: 8750, // 步数
+                    weeklyAverage: 7980, // 步数
+                    goal: 10000, // 目标步数
+                    achievementRate: 87.5 // 百分比
+                },
+                heartRate: {
+                    resting: 68, // 次/分钟
+                    average: 72, // 次/分钟
+                    max: 132, // 次/分钟
+                    min: 58 // 次/分钟
+                },
+                stress: {
+                    score: 42, // 0-100分，越高压力越大
+                    weeklyTrend: "下降", // 趋势
+                    recommendedRelaxTime: 20 // 分钟
+                },
+                weight: {
+                    current: 65.5, // 公斤
+                    bmi: 23.2, // BMI指数
+                    bodyFatPercentage: 22.5, // 体脂率
+                    trend: "稳定" // 趋势
+                }
+            };
+            
+            // 将健康数据转换为上下文提示
+            function getHealthDataContext() {
+                return JSON.stringify(healthData);
+            }
+            
+            // 处理用户发送消息
+            function handleSendMessage() {
+                const message = userInput.value.trim();
+                if (message === '') return;
+                
+                // 添加用户消息到聊天界面
+                addMessageToChat('user', message);
+                    
+                    // 清空输入框
+                    userInput.value = '';
+                    
+                // 显示正在输入指示器
+                    showTypingIndicator();
+                    
+                // 发送请求到DeepSeek
+                sendToDeepSeek(message);
+            }
+            
+            // 显示正在输入提示
+            function showTypingIndicator() {
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'message message-ai';
+                typingIndicator.id = 'typingIndicator';
+                typingIndicator.innerHTML = `
+                    <div class="message-header">
+                        <i class="fas fa-brain"></i>
+                        <span>AI健康助手</span>
+                    </div>
+                    <div class="message-content">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                `;
+                chatMessages.appendChild(typingIndicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // 隐藏正在输入提示
+            function hideTypingIndicator() {
+                const indicator = document.getElementById('typingIndicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+            
+            // 将消息添加到聊天界面
+            function addMessageToChat(sender, content, additionalHTML = '') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message message-${sender}`;
+                
+                const currentTime = new Date();
+                const timeString = currentTime.getHours() + ':' + 
+                    (currentTime.getMinutes() < 10 ? '0' : '') + currentTime.getMinutes();
+                
+                if (sender === 'user') {
+                    messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <span>您</span>
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="message-content">
+                            <div class="message-text">${content}</div>
+                            <div class="message-time">${timeString}</div>
+                    </div>
+                `;
+                
+                    // 添加到聊天历史
+                    chatHistory.push({
+                        role: 'user',
+                        content: content
+                    });
+                } else {
+                    messageDiv.innerHTML = `
+                        <div class="message-header">
+                            <i class="fas fa-brain"></i>
+                            <span>AI健康助手</span>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">${content}</div>
+                            <div class="message-time">${timeString}</div>
+                            ${additionalHTML}
+                        </div>
+                    `;
+                    
+                    // 添加到聊天历史
+                    chatHistory.push({
+                        role: 'assistant',
+                        content: content
+                    });
+                }
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // 发送消息到DeepSeek API
+            async function sendToDeepSeek(message) {
+                try {
+                    // 检查是否配置了API密钥
+                    if (apiConfig.apiKey) {
+                        // 真实调用DeepSeek API
+                        try {
+                            const response = await axios.post(apiConfig.apiEndpoint, {
+                                model: apiConfig.apiModel,
+                                messages: chatHistory,
+                                temperature: 0.7,
+                                max_tokens: 2000,
+                                context: getHealthDataContext()
+                            }, {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${apiConfig.apiKey}`
+                                }
+                            });
+                            
+                            // 移除输入指示器
+                            hideTypingIndicator();
+                            
+                            // 处理API响应
+                            if (response.data && response.data.choices && response.data.choices.length > 0) {
+                                const aiResponse = response.data.choices[0].message.content;
+                                addMessageToChat('ai', aiResponse);
+                                
+                                // 重新绑定新增的建议选项事件
+                                setTimeout(bindSuggestionChips, 100);
+                            } else {
+                                throw new Error('无效的API响应');
+                            }
+                            
+                            return;
+                        } catch (apiError) {
+                            console.error('DeepSeek API调用失败:', apiError);
+                            // 如果API调用失败，回退到模拟响应
+                        }
+                    }
+                    
+                    // 如果没有API密钥或API调用失败，使用模拟响应
+                    
+                    // 模拟API延迟
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // 移除输入指示器
+                    hideTypingIndicator();
+                    
+                    // 模拟回答
+                    let aiResponse = '';
+                    let additionalHTML = '';
+                    
+                    // 简单的问答模拟
+                    if (message.includes('睡眠')) {
+                        aiResponse = `您的睡眠数据显示，平均睡眠时长为${healthData.sleep.averageDuration}小时，深度睡眠占比${healthData.sleep.deepSleepPercentage}%，快速眼动睡眠占比${healthData.sleep.remSleepPercentage}%。睡眠质量评分为${healthData.sleep.sleepQualityScore}分。
+
+您的睡眠时长略低于推荐的7.5-8小时，深度睡眠比例适中。建议您可以：
+1. 尝试每晚固定时间入睡
+2. 睡前1小时避免使用电子设备
+3. 确保睡眠环境舒适、安静且黑暗`;
+
+                        // 添加睡眠数据图表
+                        additionalHTML = `
+                            <div class="message-chart-container">
+                                <div class="message-chart-title">本周睡眠质量趋势</div>
+                                <canvas id="sleepChart"></canvas>
+                            </div>
+                        `;
+                        
+                        // 延迟添加图表
+                        setTimeout(() => {
+                            const ctx = document.getElementById('sleepChart').getContext('2d');
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                                    datasets: [{
+                                        label: '睡眠时长(小时)',
+                                        data: [7.1, 6.8, 7.3, 7.5, 6.9, 7.8, 7.2],
+                                        borderColor: '#4CAF50',
+                                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                                        tension: 0.4,
+                                        fill: true
+                                    }, {
+                                        label: '深度睡眠比例(%)',
+                                        data: [25, 22, 27, 30, 26, 31, 28],
+                                        borderColor: '#2196F3',
+                                        backgroundColor: 'transparent',
+                                        tension: 0.4
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            position: 'top',
+                                            labels: {
+                                                boxWidth: 10,
+                                                font: {
+                                                    size: 10
+                                                }
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: false,
+                                            ticks: {
+                                                font: {
+                                                    size: 10
+                                                }
+                                            }
+                                        },
+                                        x: {
+                                            ticks: {
+                                                font: {
+                                                    size: 10
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }, 100);
+                    } else if (message.includes('步数')) {
+                        aiResponse = `您的步数数据显示，今日步数为${healthData.steps.daily}步，周平均步数为${healthData.steps.weeklyAverage}步，目标达成率为${healthData.steps.achievementRate}%。
+
+相比推荐的每日10,000步目标，您的步行活动略有不足。建议：
+1. 尝试在日常生活中增加步行机会，例如步行上下班或购物
+2. 每工作1小时起身活动5-10分钟
+3. 考虑参加我们的心肺强化路线活动，以更有趣的方式增加步数`;
+
+                        // 添加步数数据图表
+                        additionalHTML = `
+                            <div class="message-chart-container">
+                                <div class="message-chart-title">本周步数统计</div>
+                                <canvas id="stepsChart"></canvas>
+                            </div>
+                        `;
+                        
+                        // 延迟添加图表
+                        setTimeout(() => {
+                            const ctx = document.getElementById('stepsChart').getContext('2d');
+                            new Chart(ctx, {
+                                type: 'bar',
+                    data: {
+                                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                        datasets: [{
+                                        label: '步数',
+                                        data: [8250, 7830, 6950, 8120, 7650, 9150, 8750],
+                                        backgroundColor: '#4CAF50',
+                                        borderWidth: 0,
+                                        borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                                        }
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                font: {
+                                                    size: 10
+                                                }
+                                            }
+                                        },
+                                        x: {
+                                            ticks: {
+                                                font: {
+                                                    size: 10
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }, 100);
+                    } else if (message.includes('心率')) {
+                        aiResponse = `您的心率数据显示，安静心率为${healthData.heartRate.resting}次/分钟，平均心率为${healthData.heartRate.average}次/分钟，最高心率${healthData.heartRate.max}次/分钟，最低心率${healthData.heartRate.min}次/分钟。
+
+您的安静心率处于健康范围内（60-100次/分钟）。建议：
+1. 继续保持规律的有氧运动，有助于降低静息心率
+2. 关注高心率出现的时段，了解诱因
+3. 考虑参加我们的心脏健康路线活动，科学锻炼心肺功能`;
+
+                        // 添加心率数据图表
+                        additionalHTML = `
+                            <div class="message-chart-container">
+                                <div class="message-chart-title">今日心率变化</div>
+                                <canvas id="heartRateChart"></canvas>
+                            </div>
+                        `;
+                        
+                        // 延迟添加图表
+                        setTimeout(() => {
+                            const ctx = document.getElementById('heartRateChart').getContext('2d');
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['0:00', '3:00', '6:00', '9:00', '12:00', '15:00', '18:00', '21:00'],
+                                    datasets: [{
+                                        label: '心率(次/分)',
+                                        data: [62, 58, 60, 85, 92, 78, 95, 72],
+                                        borderColor: '#FF5252',
+                                        backgroundColor: 'rgba(255, 82, 82, 0.1)',
+                                        tension: 0.4,
+                                        fill: true
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                            beginAtZero: false,
+                                ticks: {
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                            },
+                            x: {
+                                            ticks: {
+                                                font: {
+                                                    size: 10
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }, 100);
+                    } else if (message.includes('压力')) {
+                        aiResponse = `您的压力水平评分为${healthData.stress.score}分（满分100分），处于中度压力水平。近期压力趋势为${healthData.stress.weeklyTrend}，建议每日放松时间${healthData.stress.recommendedRelaxTime}分钟。
+
+为降低压力水平，建议：
+1. 尝试冥想或深呼吸练习
+2. 保证充足的睡眠时间
+3. 参加我们的改善睡眠路线活动，体验专业的压力释放方法`;
+
+                        // 添加压力数据图表
+                        additionalHTML = `
+                            <div class="message-chart-container">
+                                <div class="message-chart-title">本周压力水平变化</div>
+                                <canvas id="stressChart"></canvas>
+                            </div>
+                        `;
+                        
+                        // 延迟添加图表
+                        setTimeout(() => {
+                            const ctx = document.getElementById('stressChart').getContext('2d');
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                                    datasets: [{
+                                        label: '压力指数',
+                                        data: [58, 62, 55, 50, 48, 42, 40],
+                                        borderColor: '#9C27B0',
+                                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                                        tension: 0.4,
+                                        fill: true
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                    display: false
+                                        }
+                                },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: false,
+                                ticks: {
+                                    font: {
+                                        size: 10
+                                    }
+                                }
+                                        },
+                                        x: {
+                                            ticks: {
+                                                font: {
+                                                    size: 10
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }, 100);
+                    } else if (message.includes('路线') || message.includes('旅游')) {
+                        aiResponse = `基于您的健康数据分析，我为您推荐以下路线：
+
+1. 心脏健康路线：您的心率数据显示，适当的有氧运动将有助于提高心肺功能和心血管健康。
+2. 改善睡眠路线：鉴于您的睡眠质量略低于理想水平，这条路线的薰衣草园和水景区可帮助放松身心。
+
+以上路线您可以在下方的"健康旅游路线推荐"部分查看详细信息，您更倾向于哪一条路线？`;
+                    } else if (message.includes('童子湾')) {
+                        aiResponse = `童子湾村位于广东省广州市，是一处环境优美的海滨村落，拥有：
+
+1. 95%的绿色植被覆盖率
+2. 丰富的负氧离子含量
+3. 独特的海岸线和松林景观
+4. 多样化的健康养生资源
+
+村内设有多条健康主题路线，结合您的健康数据，我推荐您可以体验我们的海滨心肺强化路线或改善睡眠路线，这些路线都经过精心设计，能够针对性地改善您的健康状况。`;
+                    } else {
+                        aiResponse = `感谢您的提问。基于您的健康数据，我发现：
+
+- 您的睡眠时长略低于理想水平
+- 日均步数达成率为87.5%
+- 心率处于健康范围内
+- 压力水平呈下降趋势
+
+您有任何特定的健康方面的问题吗？我可以为您提供关于睡眠、步数、心率、压力管理等方面的详细分析和建议。或者，您想了解我们为您推荐的健康旅游路线吗？`;
+
+                        // 添加更多建议选项
+                        additionalHTML = `
+                            <div class="suggestion-chips">
+                                <div class="suggestion-chip" data-question="我应该如何改善睡眠质量？">
+                                    <i class="fas fa-moon"></i>
+                                    <span>如何改善睡眠质量？</span>
+                    </div>
+                                <div class="suggestion-chip" data-question="推荐的童子湾健康活动有哪些？">
+                                    <i class="fas fa-hiking"></i>
+                                    <span>推荐的健康活动</span>
+                        </div>
+                    </div>
+                `;
+                    }
+                    
+                    // 添加AI回复到聊天界面
+                    addMessageToChat('ai', aiResponse, additionalHTML);
+                    
+                    // 重新绑定新增的建议选项事件
+                    bindSuggestionChips();
+                    
+                } catch (error) {
+                    console.error('DeepSeek API调用失败:', error);
+                    
+                    // 隐藏输入指示器
+                    hideTypingIndicator();
+                    
+                    // 显示错误信息
+                    addMessageToChat('ai', '抱歉，我暂时无法回答您的问题。请稍后再试。');
+                }
+            }
+            
+            // 绑定建议选项点击事件
+            function bindSuggestionChips() {
+                document.querySelectorAll('.suggestion-chip').forEach(chip => {
+                    chip.addEventListener('click', function() {
+                        const question = this.getAttribute('data-question');
+                        if (question) {
+                            userInput.value = question;
+                            handleSendMessage();
+                        }
+                    });
+                });
+            }
+            
+            // 初始绑定事件
+            sendButton.addEventListener('click', handleSendMessage);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                }
+            });
+            bindSuggestionChips();
+            
+            // 自动调整文本域高度
+            userInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+        });
+    </script>
+    
+    <script>
+        // 全局变量存储地图实例
+        let heartRouteMap = null;
+        let sleepRouteMap = null;
+        let foodRouteMap = null;
+        let detailRouteMap = null;
+        let mapsInitialized = false;
+        
+        // 设置备用地图图片背景
+        function setupBackupMaps() {
+            // 设置详情页面的备用地图
+            document.getElementById('routeDetailModal').addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget || document.querySelector('[data-route-id].active');
+                if (!button) return;
+                
+                const routeId = button.getAttribute('data-route-id');
+                const backupDetailMap = document.getElementById('backup-detail-map');
+                
+                // 根据路线类型设置不同的背景
+                if (routeId === 'heart-route') {
+                    backupDetailMap.className = 'backup-route-heart';
+                } else if (routeId === 'sleep-route') {
+                    backupDetailMap.className = 'backup-route-sleep';
+                } else if (routeId === 'food-route') {
+                    backupDetailMap.className = 'backup-route-food';
+                }
+            });
+        }
+        
+        // 初始化所有地图
+        function initMaps() {
+            // 防止重复初始化
+            if (mapsInitialized) return;
+            mapsInitialized = true;
+            
+            try {
+                console.log("开始初始化地图...");
+                
+                // 隐藏备用地图
+                document.querySelectorAll('.backup-route-heart, .backup-route-sleep, .backup-route-food').forEach(function(element) {
+                    element.style.display = 'none';
+                });
+                
+                // 检查高德地图API是否正确加载
+                if (typeof AMap === 'undefined') {
+                    throw new Error('高德地图API未成功加载');
+                }
+                
+                console.log("高德地图API已成功加载");
+                
+                // 定义路线数据
+                const routesData = {
+                    'heart-route': {
+                        name: '心肺强化路线',
+                        desc: '沿着异木棉花大道和小叶紫薇花村道行走，空气中富含负氧离子，有助于心肺功能强化。根据您的心率数据，我们定制了缓坡和休息点分布，确保锻炼效果的同时不会过度疲劳。',
+                        distance: '3.5公里',
+                        time: '约1.5小时',
+                        slope: '坡度适中',
+                        color: '#4CAF50',
+                        activities: [
+                            { name: '经典四小园', desc: '在园林环境中进行10分钟冥想，聆听自然声音' },
+                            { name: '异木棉花大道', desc: '在花海和树木之间进行深呼吸练习' },
+                            { name: '文化中心', desc: '设有专业设备监测运动心率，调整步行速度' }
+                        ],
+                        // 路径坐标（保持原有坐标，更改注释）
+                        path: [
+                            [116.397428, 39.90923], // 起点 - 经典四小园
+                            [116.398428, 39.90823],
+                            [116.399428, 39.90723],
+                            [116.399928, 39.90623],
+                            [116.400428, 39.90523], // 小叶紫薇花村道
+                            [116.401428, 39.90523],
+                            [116.402428, 39.90523],
+                            [116.403428, 39.90523],
+                            [116.404428, 39.90523], // 异木棉花大道
+                            [116.404928, 39.90623],
+                            [116.405428, 39.90723],
+                            [116.405928, 39.90823],
+                            [116.405928, 39.90923]  // 文化中心（终点）
+                        ],
+                        // 路线上的标记点
+                        markers: [
+                            { 
+                                position: [116.397428, 39.90923], 
+                                title: '起点 - 经典四小园', 
+                                icon: 'start',
+                                desc: '路线起点，园林环境优美，负氧离子含量高。这里可以测量您的基础心率，作为后续对比的参考。四个主题小园分别展示不同植物，有助于放松心情。',
+                                time: '15分钟'
+                            },
+                            { 
+                                position: [116.400428, 39.90523], 
+                                title: '小叶紫薇花村道', 
+                                icon: 'point',
+                                type: 'rest',
+                                desc: '两侧种满小叶紫薇花的村道，空气清新，景色宜人。建议在此放慢脚步，欣赏花景，并进行缓和的呼吸练习，帮助调节心率和血压。',
+                                time: '20分钟'
+                            },
+                            { 
+                                position: [116.404428, 39.90523], 
+                                title: '异木棉花大道', 
+                                icon: 'point',
+                                type: 'activity',
+                                desc: '种植异木棉花的林荫大道，色彩鲜艳，空气中富含植物芳香。建议在此进行深呼吸练习，每次吸气5秒，屏息2秒，呼气7秒，共重复10次。',
+                                time: '20分钟'
+                            },
+                            { 
+                                position: [116.405928, 39.90923], 
+                                title: '文化中心 - 终点', 
+                                icon: 'end',
+                                desc: '路线终点，文化中心内设有健康监测区，配备专业心率监测设备，可以记录运动后心率数据，并提供专业分析。还有休息区和健康茶饮供应。',
+                                time: '15分钟'
+                            }
+                        ],
+                        // 路线标注
+                        labels: [
+                            { 
+                                position: [116.399428, 39.90823], 
+                                text: '花景观赏区' 
+                            },
+                            { 
+                                position: [116.402928, 39.90523], 
+                                text: '林荫步道' 
+                            },
+                            { 
+                                position: [116.405428, 39.90823], 
+                                text: '文化观景台' 
+                            }
+                        ]
+                    },
+                    'sleep-route': {
+                        name: '安神助眠路线',
+                        desc: '专为改善睡眠质量设计的路线。沿途经过古庙、渔港和音乐轻吧，结合自然声音和文化体验，帮助放松身心，为晚间优质睡眠做准备。',
+                        distance: '2.8公里',
+                        time: '约1小时',
+                        slope: '平缓',
+                        color: '#2196F3',
+                        activities: [
+                            { name: '古庙参观', desc: '庙宇环境宁静，有助于心灵放松' },
+                            { name: '渔港观景', desc: '聆听海浪和渔船声，有助于深度睡眠' },
+                            { name: '音乐轻吧', desc: '在轻柔音乐中进行放松冥想练习' }
+                        ],
+                        // 路径坐标（保持原有坐标，更改注释）
+                        path: [
+                            [116.407428, 39.91323], // 起点 - 古庙
+                            [116.407428, 39.91223],
+                            [116.407428, 39.91123],
+                            [116.407428, 39.91023],
+                            [116.407428, 39.90923],
+                            [116.407428, 39.90823],
+                            [116.407428, 39.90723], // 渔港
+                            [116.408428, 39.90723],
+                            [116.409428, 39.90723],
+                            [116.410428, 39.90723],
+                            [116.411428, 39.90723],
+                            [116.412428, 39.90723],
+                            [116.413428, 39.90723],
+                            [116.414428, 39.90723],
+                            [116.415428, 39.90723], // 海景民宿
+                            [116.415428, 39.90823],
+                            [116.415428, 39.90923],
+                            [116.415428, 39.91023],
+                            [116.415428, 39.91123],
+                            [116.415428, 39.91223],
+                            [116.415428, 39.91323]  // 音乐轻吧（终点）
+                        ],
+                        // 路线上的标记点
+                        markers: [
+                            { 
+                                position: [116.407428, 39.91323], 
+                                title: '起点 - 古庙', 
+                                icon: 'start',
+                                desc: '路线起始点，古庙环境宁静祥和，历史悠久。在此可以体验传统的冥想和静心方法，帮助您放松身心，为睡眠之旅做准备。庙内提供健康茶饮。',
+                                time: '20分钟'
+                            },
+                            { 
+                                position: [116.407428, 39.90723], 
+                                title: '渔港观景', 
+                                icon: 'point',
+                                type: 'activity',
+                                desc: '传统渔港，可以观赏渔船和捕鱼活动，聆听海浪和船只的声音。研究表明，这类自然声音能够有效降低焦虑水平，促进深度睡眠。设有舒适的观景座椅。',
+                                time: '25分钟'
+                            },
+                            { 
+                                position: [116.415428, 39.90723], 
+                                title: '海景民宿', 
+                                icon: 'point',
+                                type: 'rest',
+                                desc: '面朝大海的精品民宿，提供短暂休息和茶点服务。这里的露台视野开阔，可以看到海景，听着潮汐声放松。民宿内有专门的休息区和阅读角。',
+                                time: '20分钟'
+                            },
+                            { 
+                                position: [116.415428, 39.91323], 
+                                title: '音乐轻吧 - 终点', 
+                                icon: 'end',
+                                desc: '路线终点，一家专注于助眠音乐和放松体验的轻音乐吧。环境舒适，播放的是经科学证明有助于改善睡眠的音乐频率。专业指导员会教授"4-7-8"呼吸法。',
+                                time: '30分钟'
+                            }
+                        ],
+                        // 路线标注
+                        labels: [
+                            { 
+                                position: [116.407428, 39.91023], 
+                                text: '古道石阶' 
+                            },
+                            { 
+                                position: [116.411428, 39.90723], 
+                                text: '滨海小路' 
+                            },
+                            { 
+                                position: [116.415428, 39.91023], 
+                                text: '观景平台' 
+                            }
+                        ]
+                    },
+                    'food-route': {
+                        name: '养生饮食路线',
+                        desc: '结合您的饮食习惯和健康数据定制的美食之旅。沿途经过渔港、海边餐饮和文旅周边店铺，品尝新鲜营养的海产品，了解健康饮食知识。',
+                        distance: '4.2公里',
+                        time: '约2小时',
+                        slope: '起伏小',
+                        color: '#FF9800',
+                        activities: [
+                            { name: '渔港选鲜', desc: '了解新鲜海产品的挑选与营养价值' },
+                            { name: '海边餐饮', desc: '品尝低油低盐的健康海鲜料理' },
+                            { name: '文旅店铺', desc: '选购特色健康食材和手工制品' }
+                        ],
+                        // 路径坐标（保持原有坐标，更改注释）
+                        path: [
+                            [116.417428, 39.91723], // 起点 - 渔港
+                            [116.417428, 39.91623],
+                            [116.417428, 39.91523],
+                            [116.417428, 39.91423],
+                            [116.417428, 39.91323],
+                            [116.417428, 39.91223],
+                            [116.417428, 39.91121], // 垂钓台
+                            [116.418428, 39.91121],
+                            [116.419428, 39.91121],
+                            [116.420428, 39.91121],
+                            [116.421428, 39.91121],
+                            [116.422428, 39.91121],
+                            [116.423428, 39.91121],
+                            [116.424428, 39.91121],
+                            [116.425428, 39.91121], // 海边餐饮
+                            [116.425428, 39.91221],
+                            [116.425428, 39.91321],
+                            [116.425428, 39.91421],
+                            [116.425428, 39.91521],
+                            [116.425428, 39.91621],
+                            [116.425428, 39.91723]  // 文旅周边店铺（终点）
+                        ],
+                        // 路线上的标记点
+                        markers: [
+                            { 
+                                position: [116.417428, 39.91723], 
+                                title: '起点 - 渔港', 
+                                icon: 'start',
+                                desc: '路线起点，这里有当地渔民的鱼获直销，可以了解各种海鲜的挑选方法和最佳食用时节。现场有营养师讲解各类海鲜的营养价值和健康吃法。',
+                                time: '25分钟'
+                            },
+                            { 
+                                position: [116.417428, 39.91121], 
+                                title: '垂钓台', 
+                                icon: 'point',
+                                type: 'activity',
+                                desc: '设有专业垂钓设施的观景平台，可以亲自体验钓鱼乐趣。这里提供简易的钓具和指导，让您在放松心情的同时，体验"从海洋到餐桌"的过程。',
+                                time: '30分钟'
+                            },
+                            { 
+                                position: [116.425428, 39.91121], 
+                                title: '海边餐饮', 
+                                icon: 'point',
+                                type: 'food',
+                                desc: '临海特色餐厅，专注健康烹饪理念。厨师会现场示范如何用少油少盐的方式烹制鲜美海鲜。餐厅提供根据您健康数据定制的个性化菜单，兼顾美味与健康。',
+                                time: '45分钟'
+                            },
+                            { 
+                                position: [116.425428, 39.91723], 
+                                title: '文旅周边店铺 - 终点', 
+                                icon: 'end',
+                                desc: '路线终点，一条集合了多家文创和特产店铺的特色街区。这里可以购买到当地特色健康食材、手工制品和文创产品，是体验当地文化和选购纪念品的理想场所。',
+                                time: '30分钟'
+                            }
+                        ],
+                        // 路线标注
+                        labels: [
+                            { 
+                                position: [116.417428, 39.91423], 
+                                text: '滨海步道' 
+                            },
+                            { 
+                                position: [116.421428, 39.91121], 
+                                text: '美食街区' 
+                            },
+                            { 
+                                position: [116.425428, 39.91421], 
+                                text: '文创区域' 
+                            }
+                        ]
+                    }
+                };
+                
+                // 初始化各路线地图
+                try {
+                    console.log("初始化心脏健康路线地图...");
+                    heartRouteMap = initRouteMap('heart-route-map', 'heart-route', routesData);
+                } catch (e) {
+                    console.error('心脏健康路线地图初始化失败', e);
+                    document.querySelector('#heart-route-map .backup-route-heart').style.display = 'flex';
+                }
+                
+                try {
+                    console.log("初始化改善睡眠路线地图...");
+                    sleepRouteMap = initRouteMap('sleep-route-map', 'sleep-route', routesData);
+                } catch (e) {
+                    console.error('改善睡眠路线地图初始化失败', e);
+                    document.querySelector('#sleep-route-map .backup-route-sleep').style.display = 'flex';
+                }
+                
+                try {
+                    console.log("初始化健康饮食路线地图...");
+                    foodRouteMap = initRouteMap('food-route-map', 'food-route', routesData);
+                } catch (e) {
+                    console.error('健康饮食路线地图初始化失败', e);
+                    document.querySelector('#food-route-map .backup-route-food').style.display = 'flex';
+                }
+                
+                // 设置路线详情按钮点击事件
+                document.querySelectorAll('[data-route-id]').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const routeId = this.getAttribute('data-route-id');
+                        const routeData = routesData[routeId];
+                        
+                        // 设置模态框内容
+                        document.getElementById('routeDetailTitle').textContent = '路线详情';
+                        document.getElementById('routeDetailName').textContent = routeData.name;
+                        document.getElementById('routeDetailDesc').textContent = routeData.desc;
+                        document.getElementById('routeDetailDistance').textContent = routeData.distance;
+                        document.getElementById('routeDetailTime').textContent = routeData.time;
+                        document.getElementById('routeDetailSlope').textContent = routeData.slope;
+                        
+                        // 设置详情地图背景类
+                        const backupDetailMap = document.getElementById('backup-detail-map');
+                        backupDetailMap.className = routeId === 'heart-route' ? 'backup-route-heart' : 
+                                                  routeId === 'sleep-route' ? 'backup-route-sleep' : 'backup-route-food';
+                        
+                        // 生成活动列表
+                        const activitiesList = document.getElementById('routeActivitiesList');
+                        activitiesList.innerHTML = '';
+                        
+                        routeData.activities.forEach(activity => {
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item border-0 px-0';
+                            li.innerHTML = `
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <div class="bg-light rounded-circle p-2">
+                                            <i class="fas fa-map-pin text-primary"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">${activity.name}</h6>
+                                        <p class="mb-0 text-muted small">${activity.desc}</p>
+                                    </div>
+                                </div>
+                            `;
+                            activitiesList.appendChild(li);
+                        });
+                        
+                        // 显示模态框
+                        const modal = new bootstrap.Modal(document.getElementById('routeDetailModal'));
+                        modal.show();
+                        
+                        // 模态框显示后初始化地图
+                        document.getElementById('routeDetailModal').addEventListener('shown.bs.modal', function() {
+                            try {
+                                console.log("初始化详情地图...");
+                                // 如果地图已经初始化，销毁它
+                                if (detailRouteMap) {
+                                    detailRouteMap.destroy();
+                                }
+                                
+                                // 初始化详情地图
+                                backupDetailMap.style.display = 'none';
+                                detailRouteMap = initRouteMap('detailRouteMap', routeId, routesData);
+                            } catch (e) {
+                                console.error('详情地图初始化失败', e);
+                                backupDetailMap.style.display = 'flex';
+                            }
+                        }, { once: true });
+                        
+                        // 设置导航按钮行为
+                        document.getElementById('routeNavigateBtn').onclick = function(e) {
+                            e.preventDefault();
+                            // 这里可以添加导航功能，例如打开高德导航应用
+                            const startPoint = routeData.path[0].join(',');
+                            const endPoint = routeData.path[routeData.path.length - 1].join(',');
+                            const navigationUrl = `https://uri.amap.com/navigation?from=${startPoint}&to=${endPoint}&mode=walk&policy=1&src=mypage&callnative=0`;
+                            window.open(navigationUrl, '_blank');
+                        };
+                    });
+                });
+            } catch (error) {
+                console.error('地图初始化总错误：', error);
+                // 显示备用地图
+                showBackupMaps();
+            }
+        }
+        
+        // 显示备用地图
+        function showBackupMaps() {
+            console.log("使用备用地图...");
+            document.querySelectorAll('.backup-route-heart, .backup-route-sleep, .backup-route-food').forEach(function(element) {
+                element.style.display = 'flex';
+            });
+            document.getElementById('backup-detail-map').style.display = 'flex';
+        }
+        
+        // 初始化地图
+        function initRouteMap(containerId, routeId, routesData) {
+            if (typeof AMap === 'undefined') {
+                throw new Error('高德地图API未加载');
+            }
+            
+            const container = document.getElementById(containerId);
+            if (!container) {
+                throw new Error(`找不到地图容器: ${containerId}`);
+            }
+            
+            const routeData = routesData[routeId];
+            if (!routeData) {
+                throw new Error(`找不到路线数据: ${routeId}`);
+            }
+            
+            // 创建地图实例
+            const map = new AMap.Map(containerId, {
+                zoom: 14,
+                viewMode: '2D',
+                resizeEnable: true,
+                pitch: 0,  // 俯仰角度
+                mapStyle: 'amap://styles/fresh'
+            });
+            
+            // 创建折线实例
+            const polyline = new AMap.Polyline({
+                path: routeData.path,
+                strokeColor: routeData.color,
+                strokeWeight: 8,  // 增加线条粗细
+                strokeOpacity: 0.8,
+                strokeStyle: 'solid',
+                lineJoin: 'round',
+                lineCap: 'round',
+                zIndex: 50,
+                showDir: true,
+                dirColor: 'white', // 方向箭头颜色
+                isOutline: true,  // 是否描边
+                outlineColor: 'white', // 描边颜色
+                borderWeight: 1  // 描边宽度
+            });
+            
+            // 路线装饰效果
+            const routeEffect = new AMap.Polyline({
+                path: routeData.path,
+                strokeColor: routeData.color,
+                strokeWeight: 2,
+                strokeOpacity: 0.8,
+                strokeStyle: 'dashed',
+                strokeDasharray: [5, 5],
+                zIndex: 49,
+                lineJoin: 'round',
+                lineCap: 'round'
+            });
+            
+            // 将折线添加到地图
+            map.add([routeEffect, polyline]);
+            
+            // 添加起点和路径点标记
+            let markers = [];
+            
+            routeData.markers.forEach(markerData => {
+                let icon;
+                
+                if (markerData.icon === 'start') {
+                    icon = new AMap.Icon({
+                        size: new AMap.Size(32, 44),
+                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
+                        imageSize: new AMap.Size(32, 44),
+                        imageOffset: new AMap.Pixel(0, 0)
+                    });
+                } else if (markerData.icon === 'end') {
+                    icon = new AMap.Icon({
+                        size: new AMap.Size(32, 44),
+                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
+                        imageSize: new AMap.Size(32, 44),
+                        imageOffset: new AMap.Pixel(0, 0)
+                    });
+                } else {
+                    // 不同类型的标记使用不同颜色
+                    let iconColor = routeData.color;
+                    if (markerData.type === 'food') {
+                        iconColor = '#FF9800';
+                    } else if (markerData.type === 'rest') {
+                        iconColor = '#2196F3';
+                    } else if (markerData.type === 'activity') {
+                        iconColor = '#9C27B0';
+                    }
+                    
+                    icon = new AMap.Icon({
+                        size: new AMap.Size(28, 34),
+                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_' + iconColor.replace('#', '') + '.png',
+                        imageSize: new AMap.Size(28, 34),
+                        imageOffset: new AMap.Pixel(0, 0)
+                    });
+                }
+                
+                const marker = new AMap.Marker({
+                    position: markerData.position,
+                    title: markerData.title,
+                    icon: icon,
+                    offset: new AMap.Pixel(-14, -34),
+                    animation: 'AMAP_ANIMATION_DROP',
+                    zIndex: 100
+                });
+                
+                // 创建标记的信息窗体
+                const content = `
+                    <div class="route-info-window">
+                        <h5>${markerData.title}</h5>
+                        <p class="mb-1">${markerData.desc || '点击查看详情'}</p>
+                        ${markerData.image ? `<img src="${markerData.image}" class="img-fluid rounded mb-2" style="max-height:80px;" alt="${markerData.title}">` : ''}
+                        ${markerData.time ? `<p class="mb-0 small"><i class="fas fa-clock text-muted me-1"></i> 建议停留: ${markerData.time}</p>` : ''}
+                    </div>
+                `;
+                
+                const infoWindow = new AMap.InfoWindow({
+                    isCustom: true,
+                    content: content,
+                    offset: new AMap.Pixel(0, -35),
+                    autoMove: true,
+                    closeWhenClickMap: true
+                });
+                
+                // 点击标记时打开信息窗体
+                marker.on('click', function() {
+                    infoWindow.open(map, marker.getPosition());
+                });
+                
+                markers.push(marker);
+            });
+            
+            // 添加路线上的标注文字
+            if (routeData.labels) {
+                routeData.labels.forEach(label => {
+                    const textMarker = new AMap.Text({
+                        text: label.text,
+                        position: label.position,
+                        anchor: 'center',
+                        style: {
+                            'padding': '5px 10px',
+                            'background-color': 'rgba(255,255,255,0.8)',
+                            'border-radius': '5px',
+                            'border-width': '1px',
+                            'border-color': routeData.color,
+                            'border-style': 'solid',
+                            'color': routeData.color,
+                            'font-size': '12px',
+                            'font-weight': 'bold',
+                            'box-shadow': '0 2px 5px rgba(0,0,0,0.1)'
+                        },
+                        zIndex: 90
+                    });
+                    markers.push(textMarker);
+                });
+            }
+            
+            // 将所有标记添加到地图
+            map.add(markers);
+            
+            // 添加比例尺和指南针
+            map.plugin(['AMap.Scale', 'AMap.ToolBar'], function() {
+                map.addControl(new AMap.Scale());
+                map.addControl(new AMap.ToolBar({
+                    position: 'RB'
+                }));
+            });
+            
+            // 调整视图以适应路线
+            map.setFitView([polyline, ...markers], {
+                padding: [50, 50, 50, 50] // 上、右、下、左 内边距
+            });
+            
+            return map;
+        }
+        
+        // 确保文档加载完成后设置备用地图
+        document.addEventListener('DOMContentLoaded', function() {
+            setupBackupMaps();
+            
+            // 添加手动初始化按钮（调试用）
+            // const debugBtn = document.createElement('button');
+            // debugBtn.innerText = '手动初始化地图';
+            // debugBtn.style.position = 'fixed';
+            // debugBtn.style.bottom = '20px';
+            // debugBtn.style.left = '20px';
+            // debugBtn.style.zIndex = '9999';
+            // debugBtn.onclick = function() {
+            //     mapsInitialized = false;
+            //     initMaps();
+            // };
+            // document.body.appendChild(debugBtn);
+            
+            // 如果高德地图API加载失败，30秒后自动显示备用地图
+            setTimeout(function() {
+                if (typeof AMap === 'undefined' || !mapsInitialized) {
+                    console.warn('高德地图API加载超时，使用备用地图');
+                    showBackupMaps();
+                }
+            }, 30000);
+        });
+        
+        // 如果地图API加载失败，window.AMapLoadError会被调用
+        window.AMapLoadError = function() {
+            console.error('高德地图API加载失败，使用备用地图');
+            showBackupMaps();
+        };
+        
+        // 如果地图API加载成功但回调函数不执行，这里手动尝试初始化
+        window.setTimeout(function() {
+            if (!mapsInitialized && typeof AMap !== 'undefined') {
+                console.log('检测到高德地图API已加载但未初始化，手动初始化...');
+                initMaps();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

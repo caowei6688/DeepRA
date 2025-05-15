@@ -1,0 +1,2138 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>健康小㘵 - 首页</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --text-color: #333333;
+            --light-bg: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding-top: 76px;
+        }
+        
+        .navbar {
+            background-color: #000000;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff !important;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .navbar-brand:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar-brand i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+        
+        .navbar-brand:hover i {
+            transform: rotate(15deg) scale(1.2);
+        }
+        
+        .nav-item {
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .nav-link {
+            color: #ffffff !important;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.6s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-link.active {
+            color: #ffffff !important;
+            background-color: var(--primary-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
+        
+        .nav-link.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.6);
+        }
+        
+        .nav-link i {
+            color: #ffffff;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link:hover i {
+            transform: translateY(-2px);
+            color: var(--primary-color);
+        }
+        
+        .nav-link.perspective-active i {
+            transform: translateY(-2px);
+            color: var(--primary-color);
+        }
+        
+        /* Perspective Split Text Menu Animation 相关样式 */
+        .nav-text-container {
+            position: relative;
+            display: inline-block;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        
+        .nav-text {
+            display: block;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        .nav-text.static {
+            transform-origin: bottom;
+            opacity: 1;
+        }
+        
+        .nav-text.dynamic {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transform: rotateX(-90deg);
+            opacity: 0;
+            color: var(--primary-color);
+        }
+        
+        .nav-link.perspective-active .nav-text.static {
+            transform: rotateX(90deg);
+            opacity: 0;
+        }
+        
+        .nav-link.perspective-active .nav-text.dynamic {
+            transform: rotateX(0);
+            opacity: 1;
+        }
+        
+        .nav-link.perspective-active i {
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .hero {
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .dual-text {
+            margin-bottom: 2rem;
+        }
+        
+        .dual-text-large {
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+        
+        .dual-text-small {
+            font-size: 2rem;
+            color: var(--primary-color);
+            line-height: 1.3;
+        }
+        
+        .hero-buttons {
+            margin-top: 3rem;
+        }
+        
+        .hero-button {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 0;
+            transition: var(--transition);
+        }
+        
+        .hero-button-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .hero-button-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .hero-button-secondary {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        
+        .hero-button-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .feature-text {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .about-section {
+            background: white;
+            padding: 100px 0;
+        }
+        
+        .about-image {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            transition: var(--transition);
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .about-content {
+            padding-left: 50px;
+        }
+        
+        .about-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+        
+        .about-text {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 60px 0 20px;
+        }
+        
+        .footer h5 {
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .footer p {
+            color: #cccccc;
+            line-height: 1.8;
+        }
+        
+        .footer a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: var(--primary-color);
+            background-color: rgba(76, 175, 80, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #999999;
+        }
+        
+        /* 智能手环部分样式 */
+        .wearable-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .wearable-image:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .wearable-content h3 {
+            color: var(--text-color);
+            font-weight: bold;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .wearable-content h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .feature-icon-small {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        
+        .feature-item:hover .feature-icon-small {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        /* 数据分析部分样式 */
+        .analysis-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .analysis-image:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .analysis-content h3 {
+            color: var(--text-color);
+            font-weight: bold;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .analysis-content h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .analysis-feature {
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .analysis-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .analysis-feature i {
+            font-size: 1.5rem;
+            display: block;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+        
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        
+        /* 图表样式 */
+        .chart-container {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            transition: var(--transition);
+        }
+        
+        .chart-container:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .data-tabs .btn-group {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        
+        .data-tabs .btn {
+            padding: 10px 20px;
+            border-radius: 0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-color: #e5e5e5;
+        }
+        
+        .data-tabs .btn:first-child {
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+        }
+        
+        .data-tabs .btn:last-child {
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
+        }
+        
+        .data-tabs .btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.2);
+        }
+        
+        .data-tabs .btn:hover:not(.active) {
+            background-color: rgba(76, 175, 80, 0.05);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        /* 个性化旅游路线样式 */
+        .custom-route-content h3 {
+            color: var(--text-color);
+            font-weight: bold;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .custom-route-content h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .route-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .route-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .route-card-header {
+            padding: 25px 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: rgba(76, 175, 80, 0.03);
+        }
+        
+        .route-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .route-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        
+        .route-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+        
+        .route-card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .route-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .route-features li {
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+        }
+        
+        .route-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .route-features li i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .route-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .ai-explanation {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .ai-explanation h4 {
+            color: var(--text-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .ai-explanation p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .tech-tag {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .tech-tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .btn-lg {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+        }
+        
+        /* 打字机效果样式 */
+        .typewriter-text {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0;
+            border-right: 3px solid var(--primary-color);
+            animation: blinkCursor 0.8s step-end infinite;
+            opacity: 0;
+        }
+        
+        .typewriter-text.typing {
+            animation: typing 0.5s steps(40, end) forwards, blinkCursor 0.8s step-end infinite;
+        }
+        
+        .typewriter-text.typing-done {
+            width: 100%;
+            border-right: none;
+            animation: none;
+            opacity: 1;
+        }
+        
+        @keyframes typing {
+            from { 
+                width: 0;
+                opacity: 1;
+            }
+            to { 
+                width: 100%;
+                opacity: 1;
+            }
+        }
+        
+        @keyframes blinkCursor {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary-color) }
+        }
+        
+        /* 按钮淡入动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        /* 地图相关样式 */
+        .route-map-container {
+            position: relative;
+            height: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .route-map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .route-map-controls {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .map-btn {
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .map-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .map-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .map-btn i {
+            font-size: 16px;
+        }
+        
+        .route-cards-container {
+            height: 500px;
+            overflow: hidden;
+        }
+        
+        .route-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        
+        .route-card.active {
+            display: flex;
+        }
+        
+        .route-stats {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .route-stats span {
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .route-stats i {
+            color: var(--primary-color);
+        }
+        
+        /* 地图标记点样式 */
+        .amap-marker-label {
+            border: none;
+            background-color: white;
+            border-radius: 4px;
+            padding: 6px 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            font-size: 13px;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .navbar {
+                padding: 0.5rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+            
+            .navbar-brand i {
+                font-size: 1.2rem;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 6px 10px;
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: none;
+            }
+            
+            .navbar-toggler-icon {
+                width: 1.2rem;
+                height: 1.2rem;
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            }
+            
+            .navbar-collapse {
+                margin-top: 10px;
+            }
+            
+            .navbar-nav {
+                background-color: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 10px;
+            }
+            
+            .nav-item {
+                margin: 5px 0;
+                width: 100%;
+            }
+            
+            .nav-link {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .dual-text-large {
+                font-size: 2.5rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.5rem;
+            }
+            
+            .hero-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .service-card {
+                margin-bottom: 20px;
+            }
+            
+            .service-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+            
+            .expert-card {
+                margin-bottom: 20px;
+            }
+            
+            .feature-card {
+                margin-bottom: 20px;
+                padding: 1.5rem;
+            }
+            
+            .testimonial-card {
+                margin-bottom: 20px;
+                padding: 1.5rem;
+            }
+            
+            .cta-section {
+                padding: 40px 0;
+            }
+            
+            .footer {
+                padding: 40px 0 20px;
+            }
+            
+            .footer h5 {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* 小屏幕手机优化 */
+        @media (max-width: 576px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .dual-text-large {
+                font-size: 1.8rem;
+                line-height: 1.2;
+                margin-bottom: 0.3rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.1rem;
+                line-height: 1.2;
+            }
+            
+            .dual-text {
+                margin-bottom: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+                margin-bottom: 1rem;
+            }
+            
+            .py-5 {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+            
+            .hero {
+                padding: 15px 0;
+                min-height: 70vh;
+            }
+            
+            .hero-buttons {
+                margin-top: 1.5rem !important;
+            }
+            
+            .hero-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+            
+            .service-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            .card-title {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .card-text {
+                font-size: 0.85rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .feature-card {
+                margin-bottom: 15px;
+                padding: 1.2rem;
+            }
+            
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 10px;
+            }
+            
+            .feature-title {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .feature-text {
+                font-size: 0.85rem;
+                margin-bottom: 0;
+            }
+            
+            .mb-4 {
+                margin-bottom: 1rem !important;
+            }
+            
+            .mb-5 {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .p-4 {
+                padding: 1rem !important;
+            }
+            
+            h3 {
+                font-size: 1.4rem;
+                margin-bottom: 0.8rem !important;
+            }
+            
+            p {
+                margin-bottom: 0.8rem !important;
+            }
+            
+            .lead {
+                font-size: 1rem;
+            }
+            
+            .expert-img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .testimonial-avatar {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .testimonial-name {
+                font-size: 1rem;
+            }
+            
+            .testimonial-position {
+                font-size: 0.75rem;
+            }
+            
+            .testimonial-text {
+                font-size: 0.85rem;
+            }
+            
+            .cta-heading {
+                font-size: 1.5rem;
+            }
+            
+            .cta-subheading {
+                font-size: 0.9rem;
+            }
+            
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            .row {
+                margin-left: -5px;
+                margin-right: -5px;
+            }
+            
+            .col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, 
+            .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, 
+            .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, 
+            .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, 
+            .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, 
+            .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, 
+            .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, 
+            .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, 
+            .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, 
+            .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        
+        /* 添加触摸反馈样式 */
+        .touch-feedback {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .touch-feedback:active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: inherit;
+        }
+    </style>
+    <!-- 引入高德地图API -->
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode:'7d8cee528c5c30e361a3e53c8dafec1d',
+        }
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=e5833a8566aa5af279b519ed63a0a4df"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-leaf"></i>
+                健康小㘵
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html"><i class="fas fa-home"></i> 首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="health-data.html"><i class="fas fa-chart-line"></i> 健康数据</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ai-analysis.html"><i class="fas fa-brain"></i> AI分析</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="dual-text">
+                        <div class="dual-text-large typewriter-text" id="text1">健康养生是我们的基础，</div>
+                        <div class="dual-text-small typewriter-text" id="text2">始终如此。</div>
+                    </div>
+                    <div class="dual-text">
+                        <div class="dual-text-large typewriter-text" id="text3">现在比以往任何时候都更</div>
+                        <div class="dual-text-small typewriter-text" id="text4">重要。</div>
+                    </div>
+                    <div class="hero-buttons mt-5" id="heroButtons" style="opacity: 0;">
+                        <a href="health-data.html" class="btn hero-button hero-button-primary">查看健康数据</a>
+                        <a href="ai-analysis.html" class="btn hero-button hero-button-secondary">AI智能分析</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 选择我们 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">选择我们</h2>
+            <p class="text-center mb-5">DeepRA将传统中医养生智慧与现代科技完美融合，为您提供全方位的健康管理体验</p>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h3 class="feature-title">科技赋能</h3>
+                        <p class="feature-text">结合先进的DeepSeek人工智能和可穿戴设备，实时监测健康数据，提供精准分析。</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="feature-title">个性化服务</h3>
+                        <p class="feature-text">根据您的健康数据和体质特点，量身定制旅游路线和养生方案，满足个性化需求。</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h3 class="feature-title">童子湾风光</h3>
+                        <p class="feature-text">童子湾坐落于海滨环抱之中，绿色植被覆盖率达95%，负氧离子含量高，是天然的养生氧吧。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="p-4 bg-white rounded-3 shadow-sm">
+                            <h4 class="mb-3"><i class="fas fa-quote-left text-primary me-2"></i>我们的承诺<i class="fas fa-quote-right text-primary ms-2"></i></h4>
+                            <p class="lead mb-0">让每一位游客不仅收获美好旅行记忆，更能带走健康生活方式，这是DeepRA对您的承诺。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 智能手环检测 -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <h2 class="section-title">智能手环健康检测</h2>
+            <div class="row">
+                <div class="col-12">
+                    <div class="wearable-content">
+                        <h3 class="mb-4">24小时全方位健康监测</h3>
+                        <p class="mb-4">我们的智能手环采用先进的传感技术，可以实时监测您的各项健康指标，包括心率、血压、血氧、体温、睡眠质量等关键数据。让您随时掌握自己的健康状况。</p>
+                        
+                        <div class="row">
+                            <div class="col-md-3 mb-4">
+                                <div class="feature-item text-center p-3">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="feature-icon-small">
+                                            <i class="fas fa-heartbeat text-primary fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="mb-2">心率监测</h5>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-4">
+                                <div class="feature-item text-center p-3">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="feature-icon-small">
+                                            <i class="fas fa-tint text-primary fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="mb-2">血压血氧</h5>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-4">
+                                <div class="feature-item text-center p-3">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="feature-icon-small">
+                                            <i class="fas fa-moon text-primary fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="mb-2">睡眠监测</h5>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-4">
+                                <div class="feature-item text-center p-3">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="feature-icon-small">
+                                            <i class="fas fa-walking text-primary fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="mb-2">活动追踪</h5>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- DeepSeek健康数据分析 -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="bg-light p-4 rounded-3">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="fas fa-brain text-primary fa-2x me-3"></i>
+                                        <h4 class="mb-0">DeepSeek健康数据分析</h4>
+                                    </div>
+                                    <p>DeepSeek深度学习模型会分析您的健康数据中的模式和趋势，结合中医养生理论和现代医学知识，为您推荐最适合的活动、食物和环境，形成完全个性化的健康小㘵旅游体验。</p>
+                                    <div class="text-center mt-3">
+                                        <a href="health-data.html" class="btn btn-primary">了解更多</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 一千个人眼中有一千个小㘵 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">一千个人眼中有一千个童子湾</h2>
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="custom-route-content text-center mb-4">
+                        <h3 class="mb-3">基于健康数据的个性化旅游路线</h3>
+                        <p class="lead mb-4">我们利用DeepSeek深度学习技术分析您的健康数据，为您量身定制最适合的童子湾旅游路线，让旅游也成为养生的一部分。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-7 mb-4">
+                    <!-- 地图容器 -->
+                    <div class="route-map-container">
+                        <div id="routeMap" class="route-map"></div>
+                        <div class="route-map-controls">
+                            <button class="map-btn" data-route="heart" id="heartBtn"><i class="fas fa-heart"></i> 心肺强化路线</button>
+                            <button class="map-btn" data-route="sleep" id="sleepBtn"><i class="fas fa-moon"></i> 安神助眠路线</button>
+                            <button class="map-btn" data-route="food" id="foodBtn"><i class="fas fa-utensils"></i> 养生饮食路线</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-5 mb-4">
+                    <div class="route-cards-container">
+                        <!-- 路线卡片切换视图 -->
+                        <div class="route-card active" id="heart-route">
+                            <div class="route-card-header">
+                                <i class="fas fa-heart route-icon"></i>
+                                <h4 class="route-title">心肺强化路线</h4>
+                                <span class="route-tag">适合需要提升心肺功能人群</span>
+                            </div>
+                            <div class="route-card-body">
+                                <ul class="route-features">
+                                    <li><i class="fas fa-mountain"></i> 健康小㘵山道徒步</li>
+                                    <li><i class="fas fa-tree"></i> 森林氧吧呼吸</li>
+                                    <li><i class="fas fa-water"></i> 山泉水浴</li>
+                                    <li><i class="fas fa-leaf"></i> 草药采集体验</li>
+                                </ul>
+                                <p class="route-desc">根据您的心率、血压数据，我们会定制适合的运动强度和海拔高度，确保锻炼效果的同时保障安全。</p>
+                                <div class="route-stats">
+                                    <span><i class="fas fa-route"></i> 全程约: 5.8公里</span>
+                                    <span><i class="fas fa-clock"></i> 耗时约: 3小时</span>
+                                    <span><i class="fas fa-mountain"></i> 海拔增: 320米</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="route-card" id="sleep-route" style="display: none;">
+                            <div class="route-card-header">
+                                <i class="fas fa-moon route-icon"></i>
+                                <h4 class="route-title">安神助眠路线</h4>
+                                <span class="route-tag">适合睡眠质量不佳人群</span>
+                            </div>
+                            <div class="route-card-body">
+                                <ul class="route-features">
+                                    <li><i class="fas fa-spa"></i> 健康小㘵药浴体验</li>
+                                    <li><i class="fas fa-fish"></i> 湖畔钓鱼冥想</li>
+                                    <li><i class="fas fa-music"></i> 传统竹笛疗法</li>
+                                    <li><i class="fas fa-mug-hot"></i> 安神茶品鉴</li>
+                                </ul>
+                                <p class="route-desc">分析您的睡眠数据和压力指数，选择最能帮助您放松的活动组合，改善睡眠质量。</p>
+                                <div class="route-stats">
+                                    <span><i class="fas fa-route"></i> 全程约: 3.2公里</span>
+                                    <span><i class="fas fa-clock"></i> 耗时约: 5小时</span>
+                                    <span><i class="fas fa-water"></i> 水边活动: 2小时</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="route-card" id="food-route" style="display: none;">
+                            <div class="route-card-header">
+                                <i class="fas fa-utensils route-icon"></i>
+                                <h4 class="route-title">养生饮食路线</h4>
+                                <span class="route-tag">适合需要调理体质人群</span>
+                            </div>
+                            <div class="route-card-body">
+                                <ul class="route-features">
+                                    <li><i class="fas fa-seedling"></i> 有机农场采摘</li>
+                                    <li><i class="fas fa-mortar-pestle"></i> 传统药膳制作</li>
+                                    <li><i class="fas fa-pepper-hot"></i> 食材认知课程</li>
+                                    <li><i class="fas fa-apple-alt"></i> 个性化膳食规划</li>
+                                </ul>
+                                <p class="route-desc">根据您的血糖、血脂等健康指标，DeepSeek会推荐最适合您体质的当季食材和烹饪方式。</p>
+                                <div class="route-stats">
+                                    <span><i class="fas fa-route"></i> 全程约: 4.5公里</span>
+                                    <span><i class="fas fa-clock"></i> 耗时约: 4小时</span>
+                                    <span><i class="fas fa-utensils"></i> 烹饪课程: 2小时</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <a href="ai-analysis.html" class="btn btn-primary btn-lg">获取专属旅游路线</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 智能养生民宿 -->
+    <section id="homestay" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">智能养生民宿</h2>
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="homestay-intro p-4 bg-white rounded shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-home fs-1 text-primary me-3"></i>
+                            <h3 class="mb-0">平价养生住宿，健康实惠两不误</h3>
+                        </div>
+                        <p class="lead">我们的养生民宿注重物美价廉，为普通家庭提供实惠的健康住宿选择。每个房间都有基础健康设施，清新的自然环境，让您在不增加太多预算的情况下，也能享受健康生活方式。</p>
+                        <div class="homestay-tags d-flex flex-wrap gap-2 mt-3">
+                            <span class="badge bg-success rounded-pill"><i class="fas fa-leaf me-1"></i> 绿色环保</span>
+                            <span class="badge bg-info rounded-pill"><i class="fas fa-heartbeat me-1"></i> 健康监测</span>
+                            <span class="badge bg-warning rounded-pill"><i class="fas fa-utensils me-1"></i> 平价膳食</span>
+                            <span class="badge bg-danger rounded-pill"><i class="fas fa-spa me-1"></i> 公共设施</span>
+                            <span class="badge bg-primary rounded-pill"><i class="fas fa-money-bill-wave me-1"></i> 超值优惠</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <!-- 森林静养套房 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card homestay-card h-100 border-0 shadow-sm">
+                        <div class="card-img-wrapper">
+                            <img src="images/forest-cabin.jpg" class="card-img-top" alt="森林静养套房">
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h4 class="card-title mb-0">森林静养套房</h4>
+                                <span class="badge bg-success rounded-pill">性价比高</span>
+                            </div>
+                            <p class="card-text">临近小㘵森林区，空气清新，配备基础睡眠监测设备和香薰器，帮助改善睡眠质量，性价比超高的养生选择。</p>
+                            <div class="homestay-stats d-flex justify-content-between text-muted mb-3">
+                                <small><i class="fas fa-ruler-combined me-1"></i> 35-40㎡</small>
+                                <small><i class="fas fa-user-friends me-1"></i> 1-2人</small>
+                                <small><i class="fas fa-bed me-1"></i> 大床房</small>
+                            </div>
+                            <div class="homestay-features mb-3">
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-tree text-success me-1"></i> 森林景观</span>
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-moon text-primary me-1"></i> 睡眠监测</span>
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-spa text-info me-1"></i> 香薰助眠</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="price-tag">
+                                    <span class="fs-5 fw-bold text-primary">¥298</span>
+                                    <small class="text-muted">/晚起</small>
+                                </div>
+                                <button class="btn btn-outline-success">查看详情</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <button class="btn btn-outline-primary btn-lg px-5">
+                        <i class="fas fa-calendar-alt me-2"></i>立即预订
+                    </button>
+                    <div class="mt-3 text-muted">
+                        <small><i class="fas fa-info-circle me-1"></i> 享受会员价可再享9折优惠，春节/国庆等节假日价格略有浮动</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 健康设施与服务 -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h3 class="text-center mb-4">我们的健康设施与服务</h3>
+                    <p class="text-center mb-4">每个房型都配备了精心设计的健康设施，为您提供全方位的养生体验</p>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="health-feature-card p-4 bg-white rounded shadow-sm h-100">
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="feature-icon-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(76, 175, 80, 0.1); border-radius: 50%;">
+                                <i class="fas fa-bed fs-2 text-primary"></i>
+                            </div>
+                        </div>
+                        <h4 class="mb-3 text-center">舒适睡眠系统</h4>
+                        <p>专业级睡眠监测设备，记录您的睡眠质量，根据数据提供个性化改善方案。配合可调节床垫硬度的床铺和精选香薰助眠设备，帮助您获得更佳睡眠体验。</p>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>睡眠质量监测</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>可调节床垫</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>香薰助眠</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="health-feature-card p-4 bg-white rounded shadow-sm h-100">
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="feature-icon-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(220, 53, 69, 0.1); border-radius: 50%;">
+                                <i class="fas fa-heartbeat fs-2 text-danger"></i>
+                            </div>
+                        </div>
+                        <h4 class="mb-3 text-center">健康监测中心</h4>
+                        <p>每个房间都配备基础健康监测设备，实时监测您的心率、血压等指标，数据自动同步至健康小㘵系统，并由DeepSeek AI分析，及时提供健康建议。</p>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>实时健康数据监测</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>AI健康分析</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>24小时健康顾问服务</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="health-feature-card p-4 bg-white rounded shadow-sm h-100">
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="feature-icon-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(255, 193, 7, 0.1); border-radius: 50%;">
+                                <i class="fas fa-utensils fs-2 text-warning"></i>
+                            </div>
+                        </div>
+                        <h4 class="mb-3 text-center">营养膳食服务</h4>
+                        <p>根据您的体质特点和健康数据，定制个性化营养餐单，所有食材均来自小㘵村有机农场，确保新鲜健康。提供中医营养师一对一咨询，制定适合您的养生膳食方案。</p>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>个性化膳食方案</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>本地有机食材</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>中医营养指导</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 入住体验 -->
+            <div class="row mt-5">
+                <div class="col-lg-6 mb-4">
+                    <div class="experience-card p-4 bg-white rounded shadow-sm h-100">
+                        <h4 class="mb-3"><i class="fas fa-calendar-check text-primary me-2"></i>健康入住流程</h4>
+                        <div class="mt-4">
+                            <div class="d-flex mb-4">
+                                <div class="step-number d-flex align-items-center justify-content-center me-3" style="min-width: 36px; height: 36px; background-color: var(--primary-color); color: white; border-radius: 50%; font-weight: bold;">1</div>
+                                <div>
+                                    <h5 class="mb-1">健康评估</h5>
+                                    <p class="mb-0">入住当天，您可选择进行简单的健康状况评估，包括基础体检和体质测定</p>
+                                </div>
+                            </div>
+                            <div class="d-flex mb-4">
+                                <div class="step-number d-flex align-items-center justify-content-center me-3" style="min-width: 36px; height: 36px; background-color: var(--primary-color); color: white; border-radius: 50%; font-weight: bold;">2</div>
+                                <div>
+                                    <h5 class="mb-1">个性化设置</h5>
+                                    <p class="mb-0">根据您的健康评估结果，我们的工作人员将为您的房间进行个性化设置</p>
+                                </div>
+                            </div>
+                            <div class="d-flex mb-4">
+                                <div class="step-number d-flex align-items-center justify-content-center me-3" style="min-width: 36px; height: 36px; background-color: var(--primary-color); color: white; border-radius: 50%; font-weight: bold;">3</div>
+                                <div>
+                                    <h5 class="mb-1">健康规划</h5>
+                                    <p class="mb-0">健康顾问为您量身定制在小㘵村的健康活动和养生方案</p>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="step-number d-flex align-items-center justify-content-center me-3" style="min-width: 36px; height: 36px; background-color: var(--primary-color); color: white; border-radius: 50%; font-weight: bold;">4</div>
+                                <div>
+                                    <h5 class="mb-1">全程监测</h5>
+                                    <p class="mb-0">在您入住期间，我们的系统将持续监测您的健康数据，提供实时建议</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4">
+                    <div class="testimonial-card p-4 bg-white rounded shadow-sm h-100">
+                        <h4 class="mb-4"><i class="fas fa-quote-left text-primary me-2"></i>客户评价</h4>
+                        <div class="testimonial-item mb-4 pb-4 border-bottom">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="testimonial-avatar me-3">
+                                    <i class="fas fa-user-circle fs-1 text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">张先生，42岁</h5>
+                                    <div class="rating text-warning">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0">"睡眠质量一直是我的困扰，在森林静养套房住了三天，通过他们的睡眠监测系统和调整，我的睡眠质量明显提高，现在我每季度都会来住几天。"</p>
+                        </div>
+                        
+                        <div class="testimonial-item">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="testimonial-avatar me-3">
+                                    <i class="fas fa-user-circle fs-1 text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">李女士，35岁</h5>
+                                    <div class="rating text-warning">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mb-0">"带着孩子来的亲子房，不仅环境好，最让我惊喜的是他们的健康监测系统，发现我有轻微血压异常，并给了很专业的饮食建议，真的很贴心。"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>健康小㘵智能养生平台，致力于通过先进技术为村民提供专业的健康管理服务。</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="health-data.html">健康数据</a></li>
+                        <li><a href="ai-analysis.html">AI分析</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> 广东省广州市DeepRA 深算乡野村</p>
+                    <p><i class="fas fa-phone me-2"></i> 13398244764</p>
+                    <p><i class="fas fa-envelope me-2"></i> info@deepra.health.com</p>
+                    <p><i class="fas fa-clock me-2"></i> 周一至周日 9:00-18:00</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 健康小㘵智能养生. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="js/nav-animation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 打字机效果
+            const text1 = document.getElementById('text1');
+            const text2 = document.getElementById('text2');
+            const text3 = document.getElementById('text3');
+            const text4 = document.getElementById('text4');
+            const heroButtons = document.getElementById('heroButtons');
+            
+            function startTyping(element, delay, callback) {
+                setTimeout(() => {
+                    element.classList.add('typing');
+                    
+                    // 计算动画完成时间（基于文本长度）
+                    const textLength = element.textContent.length;
+                    const typingDuration = textLength * 100; // 每个字符约100ms
+                    
+                    setTimeout(() => {
+                        element.classList.remove('typing');
+                        element.classList.add('typing-done');
+                        if (callback) callback();
+                    }, typingDuration);
+                }, delay);
+            }
+            
+            // 依次启动打字动画
+            startTyping(text1, 500, function() {
+                startTyping(text2, 200, function() {
+                    startTyping(text3, 400, function() {
+                        startTyping(text4, 200, function() {
+                            // 所有文本显示完后，显示按钮
+                            setTimeout(() => {
+                                heroButtons.classList.add('fade-in');
+                            }, 300);
+                        });
+                    });
+                });
+            });
+            
+            // 地图功能实现
+            let routeMap = null;
+            let routeMarkers = [];
+            let routePolyline = null;
+            let routeInfoWindow = null;
+            
+            // 路线数据
+            const routeData = {
+                heart: {
+                    path: [
+                        [113.330, 23.140],
+                        [113.335, 23.143],
+                        [113.337, 23.148],
+                        [113.341, 23.152],
+                        [113.346, 23.155],
+                        [113.350, 23.158],
+                        [113.348, 23.162]
+                    ],
+                    color: '#FF4500',
+                    title: '心肺强化路线',
+                    description: '此路线专为提升心肺功能设计，海拔变化适中，沿途氧气充足，适合锻炼心肺功能。',
+                    points: [
+                        {
+                            position: [113.330, 23.140],
+                            title: '起点: 健康小㘵游客中心',
+                            content: '这里是行程的起点，有专业教练为您讲解路线要点和注意事项。',
+                            type: 'start'
+                        },
+                        {
+                            position: [113.337, 23.148],
+                            title: '第一站: 森林氧吧',
+                            content: '这里空气中负氧离子含量高，是提升肺活量的理想场所。',
+                            type: 'mid'
+                        },
+                        {
+                            position: [113.346, 23.155],
+                            title: '第二站: 山间步道',
+                            content: '坡度适中的山间步道，可以有效锻炼心肺功能和下肢肌肉。',
+                            type: 'mid'
+                        },
+                        {
+                            position: [113.348, 23.162],
+                            title: '终点: 山顶草药采集点',
+                            content: '在这里您可以采集新鲜草药，专业人员会讲解各种草药的功效。',
+                            type: 'end'
+                        }
+                    ]
+                },
+                sleep: {
+                    path: [
+                        [113.325, 23.135],
+                        [113.320, 23.132],
+                        [113.316, 23.130],
+                        [113.312, 23.128],
+                        [113.308, 23.125],
+                        [113.305, 23.122]
+                    ],
+                    color: '#4169E1',
+                    title: '安神助眠路线',
+                    description: '此路线以放松心情为主，沿湖而行，环境宁静，有助于改善睡眠质量。',
+                    points: [
+                        {
+                            position: [113.325, 23.135],
+                            title: '起点: 健康小㘵游客中心',
+                            content: '行程起点，这里会为您准备安神茶饮，开始放松之旅。',
+                            type: 'start'
+                        },
+                        {
+                            position: [113.316, 23.130],
+                            title: '第一站: 竹笛演奏区',
+                            content: '聆听传统竹笛演奏，音乐疗法可有效缓解压力，改善睡眠。',
+                            type: 'mid'
+                        },
+                        {
+                            position: [113.312, 23.128],
+                            title: '第二站: 湖畔钓鱼冥想区',
+                            content: '在湖边进行轻度钓鱼活动和冥想训练，帮助放空思绪。',
+                            type: 'mid'
+                        },
+                        {
+                            position: [113.305, 23.122],
+                            title: '终点: 传统药浴体验馆',
+                            content: '使用当地草药制作的药浴，帮助放松肌肉，改善睡眠质量。',
+                            type: 'end'
+                        }
+                    ]
+                },
+                food: {
+                    path: [
+                        [113.325, 23.135],
+                        [113.330, 23.130],
+                        [113.335, 23.128],
+                        [113.338, 23.125],
+                        [113.342, 23.123]
+                    ],
+                    color: '#32CD32',
+                    title: '养生饮食路线',
+                    description: '此路线串联多个养生食材产地，让您了解食材从种植到餐桌的全过程。',
+                    points: [
+                        {
+                            position: [113.325, 23.135],
+                            title: '起点: 健康小㘵游客中心',
+                            content: '行程起点，这里将介绍中医食疗的基本理念和本次行程的养生主题。',
+                            type: 'start'
+                        },
+                        {
+                            position: [113.330, 23.130],
+                            title: '第一站: 四季药膳园',
+                            content: '了解不同季节适合的药膳原料，专家会根据您的体质推荐合适的食材。',
+                            type: 'mid'
+                        },
+                        {
+                            position: [113.335, 23.128],
+                            title: '第二站: 有机农场采摘区',
+                            content: '亲手采摘新鲜有机蔬果，了解不同蔬果的养生功效和适用人群。',
+                            type: 'mid'
+                        },
+                        {
+                            position: [113.342, 23.123],
+                            title: '终点: 传统药膳工坊',
+                            content: '跟随中医药膳师学习制作适合您体质的养生膳食，并品尝成果。',
+                            type: 'end'
+                        }
+                    ]
+                }
+            };
+            
+            // 初始化地图
+            function initializeMap() {
+                console.log("开始初始化地图...");
+                
+                try {
+                    // 创建地图实例
+                    routeMap = new AMap.Map('routeMap', {
+                        zoom: 14,
+                        center: [113.325, 23.135], // 广州市中心坐标
+                        viewMode: '2D',
+                        resizeEnable: true
+                    });
+                    
+                    // 添加地图控件
+                    routeMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+                        routeMap.addControl(new AMap.ToolBar());
+                        routeMap.addControl(new AMap.Scale());
+                    });
+                    
+                    console.log("地图创建成功，默认显示心肺强化路线");
+                    
+                    // 确保地图元素存在
+                    setTimeout(() => {
+                        // 默认显示心肺强化路线
+                        showRoute('heart');
+                        
+                        // 绑定按钮点击事件
+                        const heartBtn = document.getElementById('heartBtn');
+                        const sleepBtn = document.getElementById('sleepBtn');
+                        const foodBtn = document.getElementById('foodBtn');
+                        
+                        if(heartBtn) {
+                            heartBtn.addEventListener('click', function() {
+                                showRoute('heart');
+                            });
+                        }
+                        
+                        if(sleepBtn) {
+                            sleepBtn.addEventListener('click', function() {
+                                showRoute('sleep');
+                            });
+                        }
+                        
+                        if(foodBtn) {
+                            foodBtn.addEventListener('click', function() {
+                                showRoute('food');
+                            });
+                        }
+                    }, 500);
+                } catch (error) {
+                    console.error("地图初始化失败:", error);
+                }
+            }
+            
+            // 显示指定路线
+            function showRoute(routeType) {
+                if(!routeMap) {
+                    console.error("地图未初始化");
+                    return;
+                }
+                
+                console.log("切换到路线:", routeType);
+                
+                // 清除地图上现有的标记和线路
+                clearMap();
+                
+                // 获取路线数据
+                const route = routeData[routeType];
+                
+                // 更新按钮状态
+                document.querySelectorAll('.map-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                const activeBtn = document.getElementById(routeType + 'Btn');
+                if(activeBtn) {
+                    activeBtn.classList.add('active');
+                }
+                
+                // 更新路线卡片显示
+                document.querySelectorAll('.route-card').forEach(card => {
+                    card.style.display = 'none';
+                });
+                
+                const activeCard = document.getElementById(routeType + '-route');
+                if(activeCard) {
+                    activeCard.style.display = 'flex';
+                }
+                
+                // 创建并添加路线
+                routePolyline = new AMap.Polyline({
+                    path: route.path,
+                    strokeColor: route.color,
+                    strokeWeight: 6,
+                    strokeOpacity: 0.8,
+                    strokeStyle: 'solid',
+                    strokeDasharray: [10, 5],
+                    lineJoin: 'round'
+                });
+                
+                routeMap.add(routePolyline);
+                
+                // 添加标记点
+                route.points.forEach(point => {
+                    addMarker(point);
+                });
+                
+                // 添加路线信息窗体
+                routeInfoWindow = new AMap.InfoWindow({
+                    content: `<div style="padding:10px;background:#fff;border-radius:5px;">
+                        <h4 style="margin:0 0 5px;color:${route.color};font-weight:bold;">${route.title}</h4>
+                        <p style="margin:0;font-size:12px;line-height:1.5;">${route.description}</p>
+                    </div>`,
+                    position: route.path[Math.floor(route.path.length / 2)],
+                    offset: new AMap.Pixel(0, -30)
+                });
+                
+                routeInfoWindow.open(routeMap);
+                
+                // 调整地图视野以包含所有点
+                routeMap.setFitView();
+            }
+            
+            // 添加标记点
+            function addMarker(point) {
+                // 根据类型设置不同的图标
+                let icon;
+                
+                if (point.type === 'start') {
+                    icon = 'https://webapi.amap.com/theme/v1.3/markers/n/start.png';
+                } else if (point.type === 'end') {
+                    icon = 'https://webapi.amap.com/theme/v1.3/markers/n/end.png';
+                } else {
+                    icon = 'https://webapi.amap.com/theme/v1.3/markers/n/mid.png';
+                }
+                
+                // 创建标记
+                const marker = new AMap.Marker({
+                    position: point.position,
+                    title: point.title,
+                    icon: new AMap.Icon({
+                        size: new AMap.Size(25, 34),
+                        image: icon,
+                        imageSize: new AMap.Size(25, 34)
+                    }),
+                    animation: 'AMAP_ANIMATION_DROP',
+                    label: {
+                        content: point.title,
+                        direction: 'top'
+                    }
+                });
+                
+                // 创建信息窗体
+                const infoWindow = new AMap.InfoWindow({
+                    content: `<div style="padding:10px;max-width:200px;">
+                        <h4 style="margin:0 0 5px;color:#333;font-weight:bold;">${point.title}</h4>
+                        <p style="margin:0;font-size:12px;line-height:1.5;">${point.content}</p>
+                    </div>`,
+                    offset: new AMap.Pixel(0, -30)
+                });
+                
+                // 绑定点击事件
+                marker.on('click', function() {
+                    infoWindow.open(routeMap, marker.getPosition());
+                });
+                
+                // 添加到地图
+                routeMap.add(marker);
+                routeMarkers.push(marker);
+            }
+            
+            // 清除地图上的所有覆盖物
+            function clearMap() {
+                if(!routeMap) return;
+                
+                if (routePolyline) {
+                    routeMap.remove(routePolyline);
+                }
+                
+                if (routeMarkers.length > 0) {
+                    routeMap.remove(routeMarkers);
+                    routeMarkers = [];
+                }
+                
+                if (routeInfoWindow) {
+                    routeInfoWindow.close();
+                }
+            }
+            
+            // 确保地图API加载完成后初始化地图
+            window.addEventListener('load', function() {
+                // 检查AMap是否已加载
+                if (typeof AMap !== 'undefined') {
+                    console.log("AMap已加载，初始化地图");
+                    // 确保地图容器存在
+                    if(document.getElementById('routeMap')) {
+                        initializeMap();
+                    } else {
+                        console.log("地图容器不存在");
+                    }
+                } else {
+                    console.log("AMap未加载，等待加载");
+                    // 如果AMap未加载，设置一个轮询检查
+                    const checkInterval = setInterval(function() {
+                        if (typeof AMap !== 'undefined') {
+                            console.log("AMap加载完成，初始化地图");
+                            clearInterval(checkInterval);
+                            // 确保地图容器存在
+                            if(document.getElementById('routeMap')) {
+                                initializeMap();
+                            } else {
+                                console.log("地图容器不存在");
+                            }
+                        }
+                    }, 500);
+                    
+                    // 设置超时，防止无限等待
+                    setTimeout(function() {
+                        clearInterval(checkInterval);
+                        console.log("地图加载超时，请刷新页面重试");
+                    }, 10000);
+                }
+            });
+        });
+        
+        // 添加触摸事件支持
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有可点击元素添加触摸反馈类
+            const clickableElements = document.querySelectorAll('a, button, .nav-link');
+            clickableElements.forEach(element => {
+                element.classList.add('touch-feedback');
+            });
+            
+            // 优化移动端滚动性能
+            if ('ontouchstart' in window) {
+                document.body.style.webkitOverflowScrolling = 'touch';
+            }
+        });
+    </script>
+</body>
+</html> 

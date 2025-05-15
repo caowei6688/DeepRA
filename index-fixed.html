@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>DeepRA 深算乡野 - 首页</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 使用Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --text-color: #333333;
+            --light-bg: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding-top: 76px;
+        }
+        
+        .navbar {
+            background-color: #000000;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff !important;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .navbar-brand:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar-brand i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+        
+        .navbar-brand:hover i {
+            transform: rotate(15deg) scale(1.2);
+        }
+        
+        .nav-item {
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .nav-link {
+            color: #ffffff !important;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.6s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-link.active {
+            color: #ffffff !important;
+            background-color: var(--primary-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
+        
+        .nav-link.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.6);
+        }
+        
+        .nav-link i {
+            color: #ffffff;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link:hover i {
+            transform: translateY(-2px);
+            color: var(--primary-color);
+        }
+        
+        .nav-link.perspective-active i {
+            transform: translateY(-2px);
+            color: var(--primary-color);
+        }
+        
+        /* Perspective Split Text Menu Animation �����ʽ */
+        .nav-text-container {
+            position: relative;
+            display: inline-block;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        
+        .nav-text {
+            display: block;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        .nav-text.static {
+            transform-origin: bottom;
+            opacity: 1;
+        }
+        
+        .nav-text.dynamic {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transform: rotateX(-90deg);
+            opacity: 0;
+            color: var(--primary-color);
+        }
+        
+        .nav-link.perspective-active .nav-text.static {
+            transform: rotateX(90deg);
+            opacity: 0;
+        }
+        
+        .nav-link.perspective-active .nav-text.dynamic {
+            transform: rotateX(0);
+            opacity: 1;
+        }
+        
+        .nav-link.perspective-active i {
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        /* IBM����Ӣ��������ʽ */
+        .hero {
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+        
+        .hero-content {
+            width: 100%;
+        }
+        
+        .hero-text {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 5rem;
+            color: white;
+            max-width: 80%;
+        }
+        
+        .hero-text .highlight {
+            color: var(--primary-color);
+            display: block;
+        }
+        
+        .hero-buttons {
+            margin-top: 5rem;
+        }
+        
+        .hero-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+        }
+        
+        .hero-btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            margin-left: 1rem;
+        }
+        
+        .hero-btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .feature-text {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .about-section {
+            background: white;
+            padding: 100px 0;
+        }
+        
+        .about-image {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            transition: var(--transition);
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .about-content {
+            padding-left: 50px;
+        }
+        
+        .about-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+        
+        .about-text {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 60px 0 20px;
+        }
+        
+        .footer h5 {
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .footer p {
+            color: #cccccc;
+            line-height: 1.8;
+        }
+        
+        .footer a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: var(--primary-color);
+            background-color: rgba(76, 175, 80, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #999999;
+        }
+        
+        /* �����ֻ�������ʽ */
+        .wearable-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .wearable-image:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .wearable-content h3 {
+            color: var(--text-color);
+            font-weight: bold;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .wearable-content h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .feature-icon-small {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        
+        .feature-item:hover .feature-icon-small {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        /* ���ݷ���������ʽ */
+        .analysis-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .analysis-image:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .analysis-content h3 {
+            color: var(--text-color);
+            font-weight: bold;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .analysis-content h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .analysis-feature {
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .analysis-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .analysis-feature i {
+            font-size: 1.5rem;
+            display: block;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+        
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        
+        /* ͼ����ʽ */
+        .chart-container {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            transition: var(--transition);
+        }
+        
+        .chart-container:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .data-tabs .btn-group {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        
+        .data-tabs .btn {
+            padding: 10px 20px;
+            border-radius: 0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-color: #e5e5e5;
+        }
+        
+        .data-tabs .btn:first-child {
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+        }
+        
+        .data-tabs .btn:last-child {
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
+        }
+        
+        .data-tabs .btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.2);
+        }
+        
+        .data-tabs .btn:hover:not(.active) {
+            background-color: rgba(76, 175, 80, 0.05);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        /* ���Ի�����·����ʽ */
+        .custom-route-content h3 {
+            color: var(--text-color);
+            font-weight: bold;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .custom-route-content h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .route-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .route-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .route-card-header {
+            padding: 25px 20px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: rgba(76, 175, 80, 0.03);
+        }
+        
+        .route-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .route-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        
+        .route-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+        
+        .route-card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .route-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .route-features li {
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.05);
+        }
+        
+        .route-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .route-features li i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .route-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .ai-explanation {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .ai-explanation h4 {
+            color: var(--text-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .ai-explanation p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .tech-tag {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .tech-tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .btn-lg {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+        }
+        
+        /* ���ֻ�Ч����ʽ */
+        .typewriter-text {
+            display: inline-block;
+            color: inherit; /* ȷ���̳и�Ԫ�ص���ɫ */
+        }
+        
+        .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--primary-color);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        /* ��ť���붯�� */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        /* ��ͼ�����ʽ */
+        .route-map-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .route-map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .route-map-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .map-btn {
+            background-color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .map-btn:hover, .map-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* SVG��ͼ�����ʽ */
+        .svg-map-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .svg-map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .route-path {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 10, 5;
+            animation: dash 30s linear infinite;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+        }
+        
+        .route-path.heart-route {
+            stroke: #4CAF50;
+        }
+        
+        .route-path.sleep-route {
+            stroke: #2196F3;
+        }
+        
+        .route-path.food-route {
+            stroke: #FF9800;
+        }
+        
+        .map-marker {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .map-marker:hover {
+            transform: scale(1.2);
+        }
+        
+        .map-marker circle {
+            fill: white;
+            stroke-width: 2;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+        }
+        
+        .map-marker.forest circle {
+            stroke: #4CAF50;
+        }
+        
+        .map-marker.water circle {
+            stroke: #2196F3;
+        }
+        
+        .map-marker.food circle {
+            stroke: #FF9800;
+        }
+        
+        .map-marker text {
+            font-size: 10px;
+            text-anchor: middle;
+            alignment-baseline: middle;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        
+        .map-tooltip {
+            position: absolute;
+            background: white;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        
+        .map-controls {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .map-control-btn {
+            width: 30px;
+            height: 30px;
+            background: white;
+            border: none;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .map-control-btn:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+        }
+        
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+        
+        .route-cards-container {
+            height: 500px;
+            overflow: hidden;
+        }
+        
+        .route-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        
+        .route-card.active {
+            display: flex;
+        }
+        
+        .route-stats {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .route-stats span {
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .route-stats i {
+            color: var(--primary-color);
+        }
+        
+        /* ��ͼ��ǵ���ʽ */
+        .amap-marker-label {
+            border: none;
+            background-color: white;
+            border-radius: 4px;
+            padding: 6px 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            font-size: 13px;
+        }
+        
+        /* �ƶ����Ż� */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .navbar {
+                padding: 0.5rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+            
+            .navbar-brand i {
+                font-size: 1.2rem;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 6px 10px;
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: none;
+            }
+            
+            .navbar-toggler-icon {
+                width: 1.2rem;
+                height: 1.2rem;
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            }
+            
+            .navbar-collapse {
+                margin-top: 10px;
+            }
+            
+            .navbar-nav {
+                background-color: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 10px;
+            }
+            
+            .nav-item {
+                margin: 5px 0;
+                width: 100%;
+            }
+            
+            .nav-link {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .dual-text-large {
+                font-size: 2.5rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.5rem;
+            }
+            
+            .hero-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .service-card {
+                margin-bottom: 20px;
+            }
+            
+            .service-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+            
+            .expert-card {
+                margin-bottom: 20px;
+            }
+            
+            .feature-card {
+                margin-bottom: 20px;
+                padding: 1.5rem;
+            }
+            
+            .testimonial-card {
+                margin-bottom: 20px;
+                padding: 1.5rem;
+            }
+            
+            .cta-section {
+                padding: 40px 0;
+            }
+            
+            .footer {
+                padding: 40px 0 20px;
+            }
+            
+            .footer h5 {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* С��Ļ�ֻ��Ż� */
+        @media (max-width: 576px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .dual-text-large {
+                font-size: 1.8rem;
+                line-height: 1.2;
+                margin-bottom: 0.3rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.1rem;
+                line-height: 1.2;
+            }
+            
+            .dual-text {
+                margin-bottom: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+                margin-bottom: 1rem;
+            }
+            
+            .py-5 {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+            
+            .hero {
+                padding: 15px 0;
+                min-height: 70vh;
+            }
+            
+            .hero-buttons {
+                margin-top: 1.5rem !important;
+            }
+            
+            .hero-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+            
+            .service-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            .card-title {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .card-text {
+                font-size: 0.85rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .feature-card {
+                margin-bottom: 15px;
+                padding: 1.2rem;
+            }
+            
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 10px;
+            }
+            
+            .feature-title {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .feature-text {
+                font-size: 0.85rem;
+                margin-bottom: 0;
+            }
+            
+            .mb-4 {
+                margin-bottom: 1rem !important;
+            }
+            
+            .mb-5 {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .p-4 {
+                padding: 1rem !important;
+            }
+            
+            h3 {
+                font-size: 1.4rem;
+                margin-bottom: 0.8rem !important;
+            }
+            
+            p {
+                margin-bottom: 0.8rem !important;
+            }
+            
+            .lead {
+                font-size: 1rem;
+            }
+            
+            .expert-img {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .testimonial-avatar {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .testimonial-name {
+                font-size: 1rem;
+            }
+            
+            .testimonial-position {
+                font-size: 0.75rem;
+            }
+            
+            .testimonial-text {
+                font-size: 0.85rem;
+            }
+            
+            .cta-heading {
+                font-size: 1.5rem;
+            }
+            
+            .cta-subheading {
+                font-size: 0.9rem;
+            }
+            
+            .container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            .row {
+                margin-left: -5px;
+                margin-right: -5px;
+            }
+            
+            .col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, 
+            .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, 
+            .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, 
+            .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, 
+            .col-sm-10, .col-sm-11, .col-sm-12, .col-md, .col-md-1, 
+            .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, 
+            .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, 
+            .col-md-12, .col-lg, .col-lg-1, .col-lg-2, .col-lg-3, 
+            .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, 
+            .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        
+        /* ���Ӵ���������ʽ */
+        .touch-feedback {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .touch-feedback:active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: inherit;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            max-width: 70%;
+            opacity: 0.9;
+        }
+
+        /* IBM����װ��Ԫ�� */
+        .hero-decoration {
+            position: absolute;
+            bottom: 5%;
+            right: 10%;
+            width: 15%;
+            height: 15%;
+            border: 2px solid var(--primary-color);
+            opacity: 0.3;
+        }
+
+        .hero-arrow {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+
+        /* IBM�������񱳾� */
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            pointer-events: none;
+            opacity: 0.05;
+        }
+
+        .hero-grid-line {
+            height: 100%;
+            width: 1px;
+            background-color: white;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-grid-horizontal {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background-color: white;
+        }
+    </style>
+    <!-- ������Ҫ�ߵµ�ͼAPI -->
+</head>
+<body>
+    <!-- ������ -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-leaf"></i>
+                DeepRA ������Ұ
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html"><i class="fas fa-home"></i> ��ҳ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="health-data.html"><i class="fas fa-chart-line"></i> ��������</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ai-analysis.html"><i class="fas fa-brain"></i> AI����</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Ӣ������ -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="hero-content">
+                        <h1 class="hero-text">
+                            <span class="typewriter-text" id="text1">����������</span>
+                            <span class="typewriter-text" id="text2">���ǵĻ�����</span>
+                            <span class="highlight typewriter-text" id="text3">������Ұ���顣</span>
+                        </h1>
+                        <p class="hero-subtitle typewriter-text" id="text4">DeepRA������Ұ���Ƽ�����Ȼ�����ںϣ�������ǰ��δ�еĽ����������顣</p>
+                        <div class="hero-buttons" id="heroButtons" style="opacity: 0;">
+                            <a href="health-data.html" class="btn hero-btn hero-btn-primary">̽����������</a>
+                            <a href="ai-analysis.html" class="btn hero-btn hero-btn-secondary">AI��������</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-decoration"></div>
+        <div class="hero-arrow">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <!-- ��hero section���������񱳾� -->
+        <div class="hero-grid">
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-horizontal"></div>
+        </div>
+    </section>
+
+    <!-- ѡ������ -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">ѡ������</h2>
+            <p class="text-center mb-5">DeepRA ������Ұ����ͳ��ҽ�����ǻ����ִ��Ƽ������ںϣ�Ϊ���ṩȫ��λ�Ľ�����������</p>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h3 class="feature-title">�Ƽ�����</h3>
+                        <p class="feature-text">����Ƚ���DeepSeek�˹����ܺͿɴ����豸��ʵʱ��⽡�����ݣ��ṩ��׼������</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="feature-title">���Ի�����</h3>
+                        <p class="feature-text">�������Ľ������ݺ������ص㣬������������·�ߺ�����������������Ի�����</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h3 class="feature-title">С?����</h3>
+                        <p class="feature-text">С?��������Ⱥɽ����֮�У���ɫֲ�������ʴ�95%���������Ӻ����ߣ�����Ȼ���������ɡ�</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="p-4 bg-white rounded-3 shadow-sm">
+                            <h4 class="mb-3"><i class="fas fa-quote-left text-primary me-2"></i>���ǵĳ�ŵ<i class="fas fa-quote-right text-primary ms-2"></i></h4>
+                            <p class="lead mb-0">��ÿһλ�οͲ����ջ��������м��䣬���ܴ��߽������ʽ������DeepRA ������Ұ�����ĳ�ŵ��</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- �����ֻ���� -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <h2 class="section-title">�����ֻ��������</h2>
+            <div class="row">
+                <div class="col-12">
+                    <div class="wearable-content">
+                        <h3 class="mb-4">24Сʱȫ��λ�������</h3>
+                        <p class="mb-4">���ǵ������ֻ������Ƚ��Ĵ��м���������ʵʱ������ĸ����ָ�꣬�������ʡ�Ѫѹ��Ѫ�������¡�˯�������ȹؼ����ݡ�������ʱ�����Լ��Ľ���״����</p>
+                        
+                        <div class="row">
+                            <div class="col-md-3 mb-4">
+                                <div class="feature-item text-center p-3">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="feature-icon-small">
+                                            <i class="fas fa-heartbeat text-primary fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="mb-2">���ʼ��</h5>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-4">
+                                <div class="feature-item text-center p-3">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="feature-icon-small">
+                                            <i class="fas fa-tint text-primary fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="mb-2">ѪѹѪ��</h5>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-4">
+                                <div class="feature-item text-center p-3">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="feature-icon-small">
+                                            <i class="fas fa-moon text-primary fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="mb-2">˯�߼��</h5>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-4">
+                                <div class="feature-item text-center p-3">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="feature-icon-small">
+                                            <i class="fas fa-walking text-primary fa-2x"></i>
+                                        </div>
+                                    </div>
+                                    <h5 class="mb-2">�׷��</h5>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- DeepSeek�������ݷ��� -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="bg-light p-4 rounded-3">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="fas fa-brain text-primary fa-2x me-3"></i>
+                                        <h4 class="mb-0">DeepSeek�������ݷ���</h4>
+                                    </div>
+                                    <p>DeepSeek���ѧϰģ�ͻ�������Ľ��������е�ģʽ�����ƣ������ҽ�������ۺ��ִ�ҽѧ֪ʶ��Ϊ���Ƽ����ʺϵĻ��ʳ��ͻ������γ���ȫ���Ի���DeepRA ������Ұ�������顣</p>
+                                    <div class="text-center mt-3">
+                                        <a href="health-data.html" class="btn btn-primary">�˽����</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- һǧ����������һǧ��С? -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">һǧ����������һǧ��С?</h2>
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="custom-route-content text-center mb-4">
+                        <h3 class="mb-3">���ڽ������ݵĸ��Ի�����·��</h3>
+                        <p class="lead mb-4">��������DeepSeek���ѧϰ�����������Ľ������ݣ�Ϊ�������������ʺϵ�DeepRA ������Ұ����·�ߣ�������Ҳ��Ϊ������һ���֡�</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-7 mb-4">
+                    <!-- ��ͼ���� -->
+                    <div class="route-map-container">
+                        <div class="svg-map-container">
+                            <svg class="svg-map" viewBox="0 0 200 100" id="routeMapSVG">
+                                <defs>
+                                    <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="2" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                    <filter id="glow-blue" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="2" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                    <filter id="glow-orange" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="2" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                </defs>
+                                <rect width="100%" height="100%" fill="#f5f5f5" />
+                                
+                                <!-- �ķ�ǿ��·�� (Ĭ����ʾ) -->
+                                <g id="heart-route-svg">
+                                    <!-- ɭ�ֱ��� -->
+                                    <circle cx="80" cy="40" r="30" fill="#E8F5E9" opacity="0.6" />
+                                    <circle cx="100" cy="70" r="25" fill="#E8F5E9" opacity="0.5" />
+                                    <!-- ·�� -->
+                                    <path class="route-path heart-route" d="M40,80 C60,40 90,20 120,50 C150,80 180,60 160,30" filter="url(#glow-green)" />
+                                    <!-- ��ǵ� -->
+                                    <g class="map-marker forest" data-title="ɭ������" data-desc="�������Ӻ����ߣ��������ķι���">
+                                        <circle cx="60" cy="40" r="8" />
+                                        <text x="60" y="40" fill="#4CAF50">��</text>
+                                    </g>
+                                    <g class="map-marker forest" data-title="���ʼ���" data-desc="רҵ�豸����˶�����">
+                                        <circle cx="120" cy="50" r="8" />
+                                        <text x="120" y="50" fill="#4CAF50">��</text>
+                                    </g>
+                                    <g class="map-marker forest" data-title="��Ϣ��" data-desc="�ṩ�ʵ���Ϣ�Ͳ�ˮ">
+                                        <circle cx="150" cy="30" r="8" />
+                                        <text x="150" y="30" fill="#4CAF50">��</text>
+                                    </g>
+                                </g>
+                                
+                                <!-- ��������·�� (��ʼ����) -->
+                                <g id="sleep-route-svg" style="display: none;">
+                                    <!-- ˮ�򱳾� -->
+                                    <path d="M50,60 Q80,40 110,70 Q140,100 170,70" fill="#E3F2FD" opacity="0.6" />
+                                    <!-- ·�� -->
+                                    <path class="route-path sleep-route" d="M30,50 C50,30 90,60 120,40 C150,20 170,40 180,70" filter="url(#glow-blue)" />
+                                    <!-- ��ǵ� -->
+                                    <g class="map-marker water" data-title="����ֲ��԰" data-desc="޹�²ݾ��������ڷ���">
+                                        <circle cx="50" cy="30" r="8" />
+                                        <text x="50" y="30" fill="#2196F3">��</text>
+                                    </g>
+                                    <g class="map-marker water" data-title="ˮ����" data-desc="ˮ�������������˯��">
+                                        <circle cx="120" cy="40" r="8" />
+                                        <text x="120" y="40" fill="#2196F3">ˮ</text>
+                                    </g>
+                                    <g class="map-marker water" data-title="������Ϣ��" data-desc="�ʺ�ڤ��������">
+                                        <circle cx="170" cy="60" r="8" />
+                                        <text x="170" y="60" fill="#2196F3">��</text>
+                                    </g>
+                                </g>
+                                
+                                <!-- ������ʳ·�� (��ʼ����) -->
+                                <g id="food-route-svg" style="display: none;">
+                                    <!-- ũ�ﱳ�� -->
+                                    <rect x="40" y="20" width="50" height="40" fill="#FFF3E0" opacity="0.6" rx="5" ry="5" />
+                                    <rect x="110" y="50" width="60" height="30" fill="#FFF3E0" opacity="0.6" rx="5" ry="5" />
+                                    <!-- ·�� -->
+                                    <path class="route-path food-route" d="M30,70 C60,60 70,20 110,30 C150,40 180,70 160,90" filter="url(#glow-orange)" />
+                                    <!-- ��ǵ� -->
+                                    <g class="map-marker food" data-title="�л�ũ��" data-desc="���齡����ֲ">
+                                        <circle cx="70" cy="30" r="8" />
+                                        <text x="70" y="30" fill="#FF9800">ũ</text>
+                                    </g>
+                                    <g class="map-marker food" data-title="��������" data-desc="Ʒ��Ӫ����ʳ">
+                                        <circle cx="120" cy="40" r="8" />
+                                        <text x="120" y="40" fill="#FF9800">��</text>
+                                    </g>
+                                    <g class="map-marker food" data-title="��ժ��" data-desc="���ֲ�ժ����ʳ��">
+                                        <circle cx="160" cy="70" r="8" />
+                                        <text x="160" y="70" fill="#FF9800">ժ</text>
+                                    </g>
+                                </g>
+                            </svg>
+                            <div class="map-tooltip"></div>
+                            <div class="map-controls">
+                                <button class="map-control-btn" title="�Ŵ�">+</button>
+                                <button class="map-control-btn" title="��С">-</button>
+                            </div>
+                        </div>
+                        <div class="route-map-controls">
+                            <button class="map-btn active" data-route="heart" id="heartBtn"><i class="fas fa-heart"></i> �ķ�ǿ��·��</button>
+                            <button class="map-btn" data-route="sleep" id="sleepBtn"><i class="fas fa-moon"></i> ��������·��</button>
+                            <button class="map-btn" data-route="food" id="foodBtn"><i class="fas fa-utensils"></i> ������ʳ·��</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-5 mb-4">
+                    <div class="route-cards-container">
+                        <!-- ·�߿�Ƭ�л���ͼ -->
+                        <div class="route-card active" id="heart-route">
+                            <div class="route-card-header">
+                                <i class="fas fa-heart route-icon"></i>
+                                <h4 class="route-title">�ķ�ǿ��·��</h4>
+                                <span class="route-tag">�ʺ���Ҫ�����ķι�����Ⱥ</span>
+                            </div>
+                            <div class="route-card-body">
+                                <ul class="route-features">
+                                    <li><i class="fas fa-mountain"></i> DeepRA ������Ұɽ��ͽ��</li>
+                                    <li><i class="fas fa-tree"></i> ɭ�����ɺ���</li>
+                                    <li><i class="fas fa-water"></i> ɽȪˮԡ</li>
+                                    <li><i class="fas fa-leaf"></i> ��ҩ�ɼ�����</li>
+                                </ul>
+                                <p class="route-desc">�����������ʡ�Ѫѹ���ݣ����ǻᶨ���ʺϵ��˶�ǿ�Ⱥͺ��θ߶ȣ�ȷ������Ч����ͬʱ���ϰ�ȫ��</p>
+                                <div class="route-stats">
+                                    <span><i class="fas fa-route"></i> ȫ��Լ: 5.8����</span>
+                                    <span><i class="fas fa-clock"></i> ��ʱԼ: 3Сʱ</span>
+                                    <span><i class="fas fa-mountain"></i> ������: 320��</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="route-card" id="sleep-route" style="display: none;">
+                            <div class="route-card-header">
+                                <i class="fas fa-moon route-icon"></i>
+                                <h4 class="route-title">��������·��</h4>
+                                <span class="route-tag">�ʺ�˯������������Ⱥ</span>
+                            </div>
+                            <div class="route-card-body">
+                                <ul class="route-features">
+                                    <li><i class="fas fa-spa"></i> DeepRA ������Ұҩԡ����</li>
+                                    <li><i class="fas fa-fish"></i> ���ϵ���ڤ��</li>
+                                    <li><i class="fas fa-music"></i> ��ͳ����Ʒ�</li>
+                                    <li><i class="fas fa-mug-hot"></i> �����Ʒ��</li>
+                                </ul>
+                                <p class="route-desc">��������˯�����ݺ�ѹ��ָ����ѡ�����ܰ��������ɵĻ��ϣ�����˯��������</p>
+                                <div class="route-stats">
+                                    <span><i class="fas fa-route"></i> ȫ��Լ: 3.2����</span>
+                                    <span><i class="fas fa-clock"></i> ��ʱԼ: 5Сʱ</span>
+                                    <span><i class="fas fa-water"></i> ˮ�߻: 2Сʱ</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="route-card" id="food-route" style="display: none;">
+                            <div class="route-card-header">
+                                <i class="fas fa-utensils route-icon"></i>
+                                <h4 class="route-title">������ʳ·��</h4>
+                                <span class="route-tag">�ʺ���Ҫ����������Ⱥ</span>
+                            </div>
+                            <div class="route-card-body">
+                                <ul class="route-features">
+                                    <li><i class="fas fa-seedling"></i> �л�ũ����ժ</li>
+                                    <li><i class="fas fa-mortar-pestle"></i> ��ͳҩ������</li>
+                                    <li><i class="fas fa-pepper-hot"></i> ʳ����֪�γ�</li>
+                                    <li><i class="fas fa-apple-alt"></i> ���Ի���ʳ�滮</li>
+                                </ul>
+                                <p class="route-desc">��������Ѫ�ǡ�Ѫ֬�Ƚ���ָ�꣬DeepSeek���Ƽ����ʺ������ʵĵ���ʳ�ĺ���⿷�ʽ��</p>
+                                <div class="route-stats">
+                                    <span><i class="fas fa-route"></i> ȫ��Լ: 4.5����</span>
+                                    <span><i class="fas fa-clock"></i> ��ʱԼ: 4Сʱ</span>
+                                    <span><i class="fas fa-utensils"></i> ��⿿γ�: 2Сʱ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <a href="ai-analysis.html" class="btn btn-primary btn-lg">��ȡר������·��</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ������������ -->
+    <section id="homestay" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">������������</h2>
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="homestay-intro p-4 bg-white rounded shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-home fs-1 text-primary me-3"></i>
+                            <h3 class="mb-0">ƽ������ס�ޣ�����ʵ��������</h3>
+                        </div>
+                        <p class="lead">���ǵ���������ע������������Ϊ��ͨ��ͥ�ṩʵ�ݵĽ���ס��ѡ��ÿ�����䶼�л���������ʩ�����µ���Ȼ�����������ڲ�����̫��Ԥ�������£�Ҳ�����ܽ������ʽ��</p>
+                        <div class="homestay-tags d-flex flex-wrap gap-2 mt-3">
+                            <span class="badge bg-success rounded-pill"><i class="fas fa-leaf me-1"></i> ��ɫ����</span>
+                            <span class="badge bg-info rounded-pill"><i class="fas fa-heartbeat me-1"></i> �������</span>
+                            <span class="badge bg-warning rounded-pill"><i class="fas fa-utensils me-1"></i> ƽ����ʳ</span>
+                            <span class="badge bg-danger rounded-pill"><i class="fas fa-spa me-1"></i> ������ʩ</span>
+                            <span class="badge bg-primary rounded-pill"><i class="fas fa-money-bill-wave me-1"></i> ��ֵ�Ż�</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <!-- ɭ�־����׷� -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card homestay-card h-100 border-0 shadow-sm">
+                        <div class="card-img-wrapper">
+                            <img src="images/forest-cabin.jpg" class="card-img-top" alt="ɭ�־����׷�">
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h4 class="card-title mb-0">ɭ�־����׷�</h4>
+                                <span class="badge bg-success rounded-pill">�Լ۱ȸ�</span>
+                            </div>
+                            <p class="card-text">�ٽ�С?ɭ�������������£��䱸����˯�߼���豸����޹������������˯���������Լ۱ȳ��ߵ�����ѡ��</p>
+                            <div class="homestay-stats d-flex justify-content-between text-muted mb-3">
+                                <small><i class="fas fa-ruler-combined me-1"></i> 35-40�O</small>
+                                <small><i class="fas fa-user-friends me-1"></i> 1-2��</small>
+                                <small><i class="fas fa-bed me-1"></i> �󴲷�</small>
+                            </div>
+                            <div class="homestay-features mb-3">
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-tree text-success me-1"></i> ɭ�־���</span>
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-moon text-primary me-1"></i> ˯�߼��</span>
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-spa text-info me-1"></i> ��޹����</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="price-tag">
+                                    <span class="fs-5 fw-bold text-primary">��298</span>
+                                    <small class="text-muted">/����</small>
+                                </div>
+                                <button class="btn btn-outline-success">�鿴����</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ɭ�־���˫�˼� -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card homestay-card h-100 border-0 shadow-sm">
+                        <div class="card-img-wrapper">
+                            <img src="images/double-room.jpg" class="card-img-top" alt="ɭ�־���˫�˼�">
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h4 class="card-title mb-0">ɭ�־���˫�˼�</h4>
+                                <span class="badge bg-info rounded-pill">����ʵ��</span>
+                            </div>
+                            <p class="card-text">������̨������ɭ�֣��䱸˫����������Ϣ�����ʺ����ѻ�ͬ�¹�ס��ÿ�����ж����������ϵͳ��</p>
+                            <div class="homestay-stats d-flex justify-content-between text-muted mb-3">
+                                <small><i class="fas fa-ruler-combined me-1"></i> 40-45�O</small>
+                                <small><i class="fas fa-user-friends me-1"></i> 2-3��</small>
+                                <small><i class="fas fa-bed me-1"></i> ˫����</small>
+                            </div>
+                            <div class="homestay-features mb-3">
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-tree text-success me-1"></i> ɭ�־���</span>
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-heartbeat text-danger me-1"></i> ˫�����</span>
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-wind text-info me-1"></i> ��������</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="price-tag">
+                                    <span class="fs-5 fw-bold text-primary">��368</span>
+                                    <small class="text-muted">/����</small>
+                                </div>
+                                <button class="btn btn-outline-success">�鿴����</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ɭ�����Ӽ� -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card homestay-card h-100 border-0 shadow-sm">
+                        <div class="card-img-wrapper">
+                            <img src="images/family-room.jpg" class="card-img-top" alt="ɭ�����Ӽ�">
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h4 class="card-title mb-0">ɭ�����Ӽ�</h4>
+                                <span class="badge bg-warning rounded-pill">��ͥ��ѡ</span>
+                            </div>
+                            <p class="card-text">רΪ��ͥ��ƣ��䱸�󴲺Ͷ�ͯ��������������Ϸ������ͯ������ר�ŵĶ�ͯ�������װ�ã���ȫ�ֽ�����</p>
+                            <div class="homestay-stats d-flex justify-content-between text-muted mb-3">
+                                <small><i class="fas fa-ruler-combined me-1"></i> 50-55�O</small>
+                                <small><i class="fas fa-user-friends me-1"></i> 2-4��</small>
+                                <small><i class="fas fa-baby me-1"></i> ������ʩ</small>
+                            </div>
+                            <div class="homestay-features mb-3">
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-tree text-success me-1"></i> ɭ�־���</span>
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-child text-warning me-1"></i> ��ͯ���</span>
+                                <span class="d-inline-block me-2 mb-1"><i class="fas fa-gamepad text-primary me-1"></i> ���ӻ</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="price-tag">
+                                    <span class="fs-5 fw-bold text-primary">��468</span>
+                                    <small class="text-muted">/����</small>
+                                </div>
+                                <button class="btn btn-outline-success">�鿴����</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <button class="btn btn-outline-primary btn-lg px-5">
+                        <i class="fas fa-calendar-alt me-2"></i>����Ԥ��
+                    </button>
+                    <div class="mt-3 text-muted">
+                        <small><i class="fas fa-info-circle me-1"></i> ���ܻ�Ա�ۿ�����9���Żݣ�����/����Ƚڼ��ռ۸����и���</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ������ʩ����� -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h3 class="text-center mb-4">���ǵĽ�����ʩ�����</h3>
+                    <p class="text-center mb-4">ÿ�����Ͷ��䱸�˾�����ƵĽ�����ʩ��Ϊ���ṩȫ��λ����������</p>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="health-feature-card p-4 bg-white rounded shadow-sm h-100">
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="feature-icon-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(76, 175, 80, 0.1); border-radius: 50%;">
+                                <i class="fas fa-bed fs-2 text-primary"></i>
+                            </div>
+                        </div>
+                        <h4 class="mb-3 text-center">����˯��ϵͳ</h4>
+                        <p>רҵ��˯�߼���豸����¼����˯�����������������ṩ���Ի����Ʒ�������Ͽɵ��ڴ���Ӳ�ȵĴ��̺;�ѡ��޹�����豸����������ø���˯�����顣</p>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>˯���������</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>�ɵ��ڴ���</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>��޹����</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="health-feature-card p-4 bg-white rounded shadow-sm h-100">
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="feature-icon-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(220, 53, 69, 0.1); border-radius: 50%;">
+                                <i class="fas fa-heartbeat fs-2 text-danger"></i>
+                            </div>
+                        </div>
+                        <h4 class="mb-3 text-center">�����������</h4>
+                        <p>ÿ�����䶼�䱸������������豸��ʵʱ����������ʡ�Ѫѹ��ָ�꣬�����Զ�ͬ��������С?ϵͳ������DeepSeek AI��������ʱ�ṩ�������顣</p>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>ʵʱ�������ݼ��</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>AI��������</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>24Сʱ�������ʷ���</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="health-feature-card p-4 bg-white rounded shadow-sm h-100">
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="feature-icon-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(255, 193, 7, 0.1); border-radius: 50%;">
+                                <i class="fas fa-utensils fs-2 text-warning"></i>
+                            </div>
+                        </div>
+                        <h4 class="mb-3 text-center">Ӫ����ʳ����</h4>
+                        <p>�������������ص�ͽ������ݣ����Ƹ��Ի�Ӫ���͵�������ʳ�ľ�����С?���л�ũ����ȷ�����ʽ������ṩ��ҽӪ��ʦһ��һ��ѯ���ƶ��ʺ�����������ʳ������</p>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>���Ի���ʳ����</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>�����л�ʳ��</li>
+                            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>��ҽӪ��ָ��</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ҳ�� -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>��������</h5>
+                    <p>DeepRA ������Ұ��������ƽ̨��������ͨ���Ƚ�����Ϊ�����ṩרҵ�Ľ�����������</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>��������</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html">��ҳ</a></li>
+                        <li><a href="health-data.html">��������</a></li>
+                        <li><a href="ai-analysis.html">AI����</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>��ϵ����</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> �㶫ʡ������DeepRA ������Ұ��</p>
+                    <p><i class="fas fa-phone me-2"></i> 13398244764</p>
+                    <p><i class="fas fa-envelope me-2"></i> info@deepra.health.com</p>
+                    <p><i class="fas fa-clock me-2"></i> ��һ������ 9:00-18:00</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 DeepRA ������Ұ��������. ��������Ȩ��.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="js/nav-animation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ����SVG��������
+            const heroSection = document.querySelector('.hero');
+            const svgContainer = document.createElement('div');
+            svgContainer.style.position = 'absolute';
+            svgContainer.style.top = '0';
+            svgContainer.style.left = '0';
+            svgContainer.style.width = '100%';
+            svgContainer.style.height = '100%';
+            svgContainer.style.overflow = 'hidden';
+            svgContainer.style.pointerEvents = 'none';
+            svgContainer.style.zIndex = '0';
+            
+            heroSection.insertBefore(svgContainer, heroSection.firstChild);
+            
+            // ����SVGԪ��
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svgContainer.appendChild(svg);
+            
+            // ������������
+            const particleCount = 50;
+            const particles = [];
+            
+            for (let i = 0; i < particleCount; i++) {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                const size = Math.random() * 5 + 2;
+                
+                circle.setAttribute('r', size);
+                circle.setAttribute('fill', 'rgba(76, 175, 80, 0.2)');
+                
+                // ���λ��
+                const x = Math.random() * 100 + '%';
+                const y = Math.random() * 100 + '%';
+                
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                
+                svg.appendChild(circle);
+                particles.push(circle);
+                
+                // ��������
+                anime({
+                    targets: circle,
+                    translateX: function() { return anime.random(-100, 100) + 'px'; },
+                    translateY: function() { return anime.random(-100, 100) + 'px'; },
+                    scale: function() { return anime.random(0.5, 2); },
+                    opacity: [0.2, 0.5, 0.2],
+                    easing: 'easeInOutQuad',
+                    duration: function() { return anime.random(3000, 8000); },
+                    loop: true,
+                    direction: 'alternate'
+                });
+            }
+            
+            // ����ֱ��Ԫ��
+            const lineCount = 10;
+            for (let i = 0; i < lineCount; i++) {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                
+                // ��������յ�
+                const x1 = Math.random() * 100 + '%';
+                const y1 = Math.random() * 100 + '%';
+                const x2 = Math.random() * 100 + '%';
+                const y2 = Math.random() * 100 + '%';
+                
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('stroke', 'rgba(76, 175, 80, 0.1)');
+                line.setAttribute('stroke-width', '1');
+                
+                svg.appendChild(line);
+                
+                // ������������
+                anime({
+                    targets: line,
+                    opacity: [0.1, 0.3, 0.1],
+                    strokeWidth: [1, 2, 1],
+                    easing: 'easeInOutSine',
+                    duration: function() { return anime.random(5000, 10000); },
+                    loop: true,
+                    direction: 'alternate'
+                });
+            }
+            
+            // �������ֶ���
+            const text1 = document.getElementById('text1');
+            const text2 = document.getElementById('text2');
+            const text3 = document.getElementById('text3');
+            const text4 = document.getElementById('text4');
+            const heroButtons = document.getElementById('heroButtons');
+            
+            // ���ó�ʼ״̬
+            if(text1) text1.style.opacity = 0;
+            if(text2) text2.style.opacity = 0;
+            if(text3) text3.style.opacity = 0;
+            if(text4) text4.style.opacity = 0;
+            if(heroButtons) heroButtons.style.opacity = 0;
+            
+            // �������⶯������
+            const textTimeline = anime.timeline({
+                easing: 'easeOutExpo'
+            });
+            
+            if(text1) {
+                textTimeline.add({
+                    targets: text1,
+                    opacity: [0, 1],
+                    translateY: [30, 0],
+                    duration: 1000
+                });
+            }
+            
+            if(text2) {
+                textTimeline.add({
+                    targets: text2,
+                    opacity: [0, 1],
+                    translateX: [30, 0],
+                    duration: 800
+                }, '-=600');
+            }
+            
+            if(text3) {
+                textTimeline.add({
+                    targets: text3,
+                    opacity: [0, 1],
+                    translateY: [30, 0],
+                    duration: 1000
+                }, '-=600');
+            }
+            
+            if(text4) {
+                textTimeline.add({
+                    targets: text4,
+                    opacity: [0, 1],
+                    translateX: [30, 0],
+                    duration: 800
+                }, '-=600');
+            }
+            
+            if(heroButtons) {
+                textTimeline.add({
+                    targets: heroButtons,
+                    opacity: [0, 1],
+                    translateY: [20, 0],
+                    duration: 800
+                }, '-=400');
+            }
+            
+            // ���ӹ���ָʾ��
+            const scrollIndicator = document.createElement('div');
+            scrollIndicator.className = 'scroll-indicator';
+            scrollIndicator.innerHTML = '<i class="fas fa-chevron-down"></i>';
+            scrollIndicator.style.position = 'absolute';
+            scrollIndicator.style.bottom = '30px';
+            scrollIndicator.style.left = '50%';
+            scrollIndicator.style.transform = 'translateX(-50%)';
+            scrollIndicator.style.color = 'white';
+            scrollIndicator.style.fontSize = '24px';
+            scrollIndicator.style.cursor = 'pointer';
+            scrollIndicator.style.opacity = '0';
+            
+            heroSection.appendChild(scrollIndicator);
+            
+            // ��ͷ����
+            anime({
+                targets: scrollIndicator,
+                opacity: [0, 1],
+                translateY: [-10, 0],
+                delay: 3000,
+                duration: 800,
+                easing: 'easeOutExpo',
+                complete: function() {
+                    anime({
+                        targets: scrollIndicator,
+                        translateY: [0, 10],
+                        direction: 'alternate',
+                        loop: true,
+                        easing: 'easeInOutSine',
+                        duration: 1000
+                    });
+                }
+            });
+            
+            // �����ͷ��������һ����
+            scrollIndicator.addEventListener('click', function() {
+                const nextSection = document.querySelector('.hero + section');
+                if(nextSection) {
+                    nextSection.scrollIntoView({ 
+                        behavior: 'smooth' 
+                    });
+                }
+            });
+            
+            // Ϊ������Ƭ���Ӷ���
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            // ���ó�ʼ״̬
+            featureCards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(30px)';
+            });
+            
+            // ���������¼���ʵ�ֿ�Ƭ���ֶ���
+            window.addEventListener('scroll', function() {
+                featureCards.forEach((card, index) => {
+                    if (isElementInViewport(card) && card.style.opacity == 0) {
+                        anime({
+                            targets: card,
+                            opacity: [0, 1],
+                            translateY: [30, 0],
+                            easing: 'easeOutExpo',
+                            duration: 800,
+                            delay: index * 100
+                        });
+                    }
+                });
+            });
+            
+            // Ϊ·�߿�Ƭ���Ӷ���
+            const routeCards = document.querySelectorAll('.route-card');
+            
+            // ���ó�ʼ״̬
+            routeCards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(30px)';
+            });
+            
+            // ���������¼���ʵ�ֿ�Ƭ���ֶ���
+            window.addEventListener('scroll', function() {
+                routeCards.forEach((card, index) => {
+                    if (isElementInViewport(card) && card.style.opacity == 0) {
+                        anime({
+                            targets: card,
+                            opacity: [0, 1],
+                            translateY: [30, 0],
+                            easing: 'easeOutExpo',
+                            duration: 800,
+                            delay: index * 150
+                        });
+                    }
+                });
+            });
+            
+            // ����ͼ���ĳ��ֶ���
+            const chartContainer = document.getElementById('healthChart');
+            if(chartContainer) {
+                chartContainer.style.opacity = 0;
+                
+                window.addEventListener('scroll', function() {
+                    if (isElementInViewport(chartContainer) && chartContainer.style.opacity == 0) {
+                        anime({
+                            targets: chartContainer,
+                            opacity: [0, 1],
+                            scale: [0.9, 1],
+                            easing: 'easeOutExpo',
+                            duration: 1000
+                        });
+                    }
+                });
+            }
+            
+            // �ж�Ԫ���Ƿ����ӿ��еĸ�������
+            function isElementInViewport(el) {
+                const rect = el.getBoundingClientRect();
+                return (
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85 &&
+                    rect.bottom >= 0
+                );
+            }
+            
+            // ȫ�µĴ��ֻ�Ч��ʵ��
+            function startTyping(element, delay, callback) {
+                if (!element) return;
+                
+                // ����ԭʼ�ı�
+                const originalText = element.textContent || element.innerText;
+                
+                // ����ı�����
+                element.textContent = '';
+                
+                // �������Ԫ��
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor';
+                element.appendChild(cursor);
+                
+                // �ַ�����
+                let charIndex = 0;
+                
+                // �ӳٺ�ʼ����
+                setTimeout(() => {
+                    // �������ּ��
+                    const typingInterval = setInterval(() => {
+                        if (charIndex < originalText.length) {
+                            // �ڹ��ǰ�������ַ�
+                            element.insertBefore(
+                                document.createTextNode(originalText.charAt(charIndex)),
+                                cursor
+                            );
+                            charIndex++;
+                        } else {
+                            // ������ɣ�������
+                            clearInterval(typingInterval);
+                            
+                            // �Ƴ����
+                            if (element.contains(cursor)) {
+                                element.removeChild(cursor);
+                            }
+                            
+                            // ִ�лص�
+                            if (callback) callback();
+                        }
+                    }, 50); // ÿ���ַ��Ĵ����ٶ�
+                }, delay);
+            }
+            
+            // �����������ֶ���
+            startTyping(text1, 500, function() {
+                startTyping(text2, 100, function() {
+                    startTyping(text3, 100, function() {
+                        startTyping(text4, 100, function() {
+                            // �����ı���ʾ�����ʾ��ť
+                            setTimeout(() => {
+                                heroButtons.style.opacity = 1;
+                                anime({
+                                    targets: heroButtons,
+                                    translateY: [-20, 0],
+                                    opacity: [0, 1],
+                                    easing: 'easeOutExpo',
+                                    duration: 800
+                                });
+                            }, 300);
+                        });
+                    });
+                });
+            });
+            
+            // ���Ӵ����¼�֧��
+            document.addEventListener('DOMContentLoaded', function() {
+                // Ϊ���пɵ��Ԫ�����Ӵ���������
+                const clickableElements = document.querySelectorAll('a, button, .nav-link');
+                clickableElements.forEach(element => {
+                    element.classList.add('touch-feedback');
+                });
+                
+                // �Ż��ƶ��˹�������
+                if ('ontouchstart' in window) {
+                    document.body.style.webkitOverflowScrolling = 'touch';
+                }
+            });
+        });
+        
+        // ���ӹ�����ͷ����¼�
+        const heroArrow = document.querySelector('.hero-arrow');
+        if(heroArrow) {
+            heroArrow.addEventListener('click', function() {
+                const nextSection = document.querySelector('.hero + section');
+                if(nextSection) {
+                    nextSection.scrollIntoView({ 
+                        behavior: 'smooth' 
+                    });
+                }
+            });
+        }
+        
+        // SVG��ͼ��ع���
+        const routeBtns = document.querySelectorAll('.map-btn');
+        const routeCards = document.querySelectorAll('.route-card');
+        
+        // ���õ�ͼ�л�����
+        routeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // �Ƴ����а�ť��active��
+                routeBtns.forEach(b => b.classList.remove('active'));
+                // ���ӵ�ǰ��ť��active��
+                this.classList.add('active');
+                
+                // ��ȡ·������
+                const routeType = this.getAttribute('data-route');
+                
+                // ��������·��ͼ��
+                document.getElementById('heart-route-svg').style.display = 'none';
+                document.getElementById('sleep-route-svg').style.display = 'none';
+                document.getElementById('food-route-svg').style.display = 'none';
+                
+                // ��ʾѡ�е�·��ͼ��
+                document.getElementById(`${routeType}-route-svg`).style.display = 'block';
+                
+                // ��������·�߿�Ƭ
+                document.querySelectorAll('.route-card').forEach(card => {
+                    card.style.display = 'none';
+                });
+                
+                // ��ʾѡ�е�·�߿�Ƭ
+                document.getElementById(`${routeType}-route`).style.display = 'block';
+                
+                // Ϊ��ѡ�еĿ�Ƭ���Ӷ���
+                anime({
+                    targets: document.getElementById(`${routeType}-route`),
+                    opacity: [0, 1],
+                    translateY: [20, 0],
+                    easing: 'easeOutExpo',
+                    duration: 600
+                });
+            });
+        });
+        
+        // ʵ�ֵ�ͼ��ǵ���ͣЧ��
+        const mapMarkers = document.querySelectorAll('.map-marker');
+        const mapTooltip = document.querySelector('.map-tooltip');
+        
+        mapMarkers.forEach(marker => {
+            marker.addEventListener('mouseenter', function() {
+                const title = this.getAttribute('data-title');
+                const desc = this.getAttribute('data-desc');
+                
+                // ������ʾ����
+                mapTooltip.innerHTML = `<strong>${title}</strong><br>${desc}`;
+                
+                // ��ȡ��ǵ�λ��
+                const rect = this.getBoundingClientRect();
+                const svgRect = document.querySelector('.svg-map').getBoundingClientRect();
+                
+                // ������ʾ��λ��
+                const left = rect.left - svgRect.left;
+                const top = rect.top - svgRect.top - 40; // �ڱ�ǵ��Ϸ���ʾ
+                
+                // ������ʾ��λ�ú���ʾ
+                mapTooltip.style.left = `${left}px`;
+                mapTooltip.style.top = `${top}px`;
+                mapTooltip.style.opacity = '1';
+            });
+            
+            marker.addEventListener('mouseleave', function() {
+                // ������ʾ��
+                mapTooltip.style.opacity = '0';
+            });
+        });
+        
+        // ��ͼ���Ź���
+        const zoomInBtn = document.querySelector('.map-controls .map-control-btn:first-child');
+        const zoomOutBtn = document.querySelector('.map-controls .map-control-btn:last-child');
+        const svgMap = document.querySelector('.svg-map');
+        
+        let zoomLevel = 1;
+        const zoomStep = 0.2;
+        const maxZoom = 3;
+        const minZoom = 0.5;
+        
+        zoomInBtn.addEventListener('click', function() {
+            if (zoomLevel < maxZoom) {
+                zoomLevel += zoomStep;
+                updateZoom();
+            }
+        });
+        
+        zoomOutBtn.addEventListener('click', function() {
+            if (zoomLevel > minZoom) {
+                zoomLevel -= zoomStep;
+                updateZoom();
+            }
+        });
+        
+        function updateZoom() {
+            // ��ȡSVG���ĵ�
+            const viewBox = svgMap.viewBox.baseVal;
+            const centerX = viewBox.x + viewBox.width / 2;
+            const centerY = viewBox.y + viewBox.height / 2;
+            
+            // �����µ���ͼ��ߴ�
+            const newWidth = 200 / zoomLevel;
+            const newHeight = 100 / zoomLevel;
+            
+            // �����µ�x, y�Ա������ĵ㲻��
+            const newX = centerX - newWidth / 2;
+            const newY = centerY - newHeight / 2;
+            
+            // ����viewBox
+            svgMap.setAttribute('viewBox', `${newX} ${newY} ${newWidth} ${newHeight}`);
+        }
+    </script>
+</body>
+</html> 

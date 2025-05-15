@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>DeepRA 深算乡野 - 民宿订购</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 添加Anime.js库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --text-color: #333333;
+            --light-bg: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding-top: 76px;
+        }
+        
+        .navbar {
+            background-color: #000000;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff !important;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .navbar-brand:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .navbar-brand i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: transform 0.4s ease;
+        }
+        
+        .navbar-brand:hover i {
+            transform: rotate(15deg) scale(1.2);
+        }
+        
+        .nav-item {
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .nav-link {
+            color: #ffffff !important;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.6s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-link.active {
+            color: #ffffff !important;
+            background-color: var(--primary-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
+        
+        .nav-link.active:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(76, 175, 80, 0.6);
+        }
+        
+        .nav-link i {
+            color: #ffffff;
+            font-size: 1.2rem;
+            transition: transform 0.4s ease;
+        }
+        
+        .nav-link:hover i {
+            transform: translateY(-2px) scale(1.2);
+            color: var(--primary-color);
+        }
+        
+        .nav-link.active i {
+            color: #ffffff;
+            transform: translateY(0);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 60px 0 20px;
+        }
+        
+        .footer h5 {
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .footer p {
+            color: #cccccc;
+            line-height: 1.8;
+        }
+        
+        .footer a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: var(--primary-color);
+            background-color: rgba(76, 175, 80, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #999999;
+        }
+        
+        /* 订购页面特定样式 */
+        .hero {
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+        
+        .hero-content {
+            width: 100%;
+        }
+        
+        .hero-text {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 5rem;
+            color: white;
+            max-width: 80%;
+        }
+        
+        .hero-text .highlight {
+            color: var(--primary-color);
+            display: block;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            max-width: 70%;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            margin-top: 5rem;
+        }
+        
+        .hero-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+        }
+        
+        .hero-btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            margin-left: 1rem;
+        }
+        
+        .hero-btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        /* IBM风格的装饰元素 */
+        .hero-decoration {
+            position: absolute;
+            bottom: 5%;
+            right: 10%;
+            width: 15%;
+            height: 15%;
+            border: 2px solid var(--primary-color);
+            opacity: 0.3;
+        }
+        
+        .hero-arrow {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        /* IBM风格的网格背景 */
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            pointer-events: none;
+            opacity: 0.05;
+        }
+        
+        .hero-grid-line {
+            height: 100%;
+            width: 1px;
+            background-color: white;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-grid-horizontal {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background-color: white;
+        }
+        
+        .room-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            margin-bottom: 30px;
+        }
+        
+        .room-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .room-img {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .room-amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .room-amenity {
+            font-size: 0.8rem;
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        .room-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .room-original-price {
+            font-size: 1rem;
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .booking-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-label {
+            font-weight: 500;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        
+        .btn-book {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 12px 25px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .btn-book:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+        
+        .promotion-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #FF5722;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 500;
+            z-index: 1;
+        }
+        
+        .date-picker {
+            background-color: white;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 0.375rem 0.75rem;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .navbar {
+                padding: 0.5rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+            
+            .navbar-brand i {
+                font-size: 1.2rem;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 6px 10px;
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: none;
+            }
+            
+            .navbar-toggler-icon {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+            
+            .navbar-collapse {
+                margin-top: 10px;
+            }
+            
+            .navbar-nav {
+                background-color: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 10px;
+            }
+            
+            .nav-item {
+                margin: 5px 0;
+                width: 100%;
+            }
+            
+            .nav-link {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .hero {
+                padding: 50px 0;
+            }
+            
+            .hero-text {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .room-card {
+                margin-bottom: 20px;
+            }
+            
+            .room-price {
+                font-size: 1.3rem;
+            }
+            
+            .room-original-price {
+                font-size: 0.9rem;
+            }
+            
+            .room-amenities {
+                flex-wrap: wrap;
+            }
+            
+            .btn-book {
+                width: 100%;
+                padding: 8px 15px;
+                margin-top: 10px;
+                font-size: 0.9rem;
+            }
+            
+            .booking-form {
+                padding: 15px;
+            }
+            
+            .features {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            
+            .feature {
+                width: 48%;
+                margin-bottom: 10px;
+                font-size: 0.9rem;
+            }
+            
+            .footer {
+                padding: 40px 0 20px;
+            }
+            
+            .footer h5 {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* 小屏幕手机优化 */
+        @media (max-width: 576px) {
+            .hero-text {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .card-title {
+                font-size: 1.2rem;
+            }
+            
+            .room-amenity {
+                font-size: 0.7rem;
+                padding: 3px 8px;
+            }
+            
+            .card-text {
+                font-size: 0.9rem;
+            }
+            
+            .feature {
+                width: 100%;
+            }
+            
+            .package-card {
+                margin-bottom: 20px;
+            }
+        }
+        
+        /* 打字机效果样式 */
+        .typewriter-text {
+            display: inline-block;
+            color: inherit; /* 确保继承父元素的颜色 */
+        }
+        
+        .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--primary-color);
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        /* 按钮淡入动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-leaf"></i>
+                DeepRA 深算乡野
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-home"></i> 首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="health-data.html"><i class="fas fa-chart-line"></i> 健康数据</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ai-analysis.html"><i class="fas fa-brain"></i> AI分析</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="specialty-products.html"><i class="fas fa-shopping-basket"></i> 海滨特产</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#homestay"><i class="fas fa-home"></i> 养生民宿</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="booking.html"><i class="fas fa-calendar-alt"></i> 在线订购</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- IBM风格的英雄区域 -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="hero-text typewriter-text">
+                        预订您的 <span class="highlight">理想民宿体验</span>
+                    </h1>
+                    <p class="hero-subtitle">探索我们精心挑选的乡村民宿，融合现代科技与传统文化，提供独特的健康旅居体验。</p>
+                    <div class="hero-buttons">
+                        <a href="#booking-form" class="btn hero-btn hero-btn-primary">立即预订</a>
+                        <a href="#homestay-list" class="btn hero-btn hero-btn-secondary">浏览民宿</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- IBM风格装饰元素 -->
+        <div class="hero-decoration"></div>
+        <div class="hero-grid">
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+            <div class="hero-grid-line"></div>
+        </div>
+        <div class="hero-grid-horizontal"></div>
+        
+        <!-- 下滑箭头 -->
+        <a href="#booking-form" class="hero-arrow">
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </section>
+
+    <!-- 房间列表 -->
+    <section id="rooms" class="py-5">
+        <div class="container">
+            <h2 class="section-title">可预订房型</h2>
+            
+            <div class="row justify-content-center">
+                <!-- 森林静养套房-大床房 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card room-card h-100 border-0 shadow-sm hover-elevation">
+                        <div class="room-img-wrapper">
+                            <img src="images/forest-cabin.jpg" class="card-img-top room-img" alt="森林静养套房-大床房">
+                            <div class="room-badge">DeepRA 深算乡野特惠</div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">森林静养套房-大床房</h5>
+                            <div class="room-amenities">
+                                <span class="room-amenity"><i class="fas fa-expand-arrows-alt"></i> 35-40㎡</span>
+                                <span class="room-amenity"><i class="fas fa-user"></i> 适合1-2人</span>
+                                <span class="room-amenity"><i class="fas fa-bed"></i> 大床房</span>
+                                <span class="room-amenity"><i class="fas fa-tree"></i> 森林景观</span>
+                                <span class="room-amenity"><i class="fas fa-moon"></i> 睡眠监测</span>
+                            </div>
+                            <p class="card-text">临近童子湾森林区，空气清新，配备基础睡眠监测设备和香薰器，帮助改善睡眠质量，特大床带来舒适睡眠体验。</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <span class="room-price">¥298</span>
+                                    <span class="room-original-price ms-2">¥358</span>
+                                    <small class="d-block">每晚/含早</small>
+                                </div>
+                                <a href="#booking-form" class="btn btn-success btn-book" data-room-type="forest-king">立即预订</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 森林静养套房-双人间 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card room-card h-100 border-0 shadow-sm hover-elevation">
+                        <div class="room-img-wrapper">
+                            <img src="images/forest-cabin.jpg" class="card-img-top room-img" alt="森林静养套房-双人间">
+                            <div class="room-badge">闺蜜首选</div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">森林静养套房-双人间</h5>
+                            <div class="room-amenities">
+                                <span class="room-amenity"><i class="fas fa-expand-arrows-alt"></i> 38-42㎡</span>
+                                <span class="room-amenity"><i class="fas fa-user"></i> 适合2人</span>
+                                <span class="room-amenity"><i class="fas fa-bed"></i> 双床房</span>
+                                <span class="room-amenity"><i class="fas fa-tree"></i> 森林景观</span>
+                                <span class="room-amenity"><i class="fas fa-spa"></i> 香薰助眠</span>
+                            </div>
+                            <p class="card-text">两张单人床配置，提供宁静舒适的睡眠环境，房间布置温馨优雅，配备独立阅读角落和香薰助眠，适合与好友共享。</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <span class="room-price">¥328</span>
+                                    <span class="room-original-price ms-2">¥398</span>
+                                    <small class="d-block">每晚/含早</small>
+                                </div>
+                                <a href="#booking-form" class="btn btn-success btn-book" data-room-type="forest-twin">立即预订</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 森林静养套房-亲子间 -->
+                <div class="col-md-4 mb-4">
+                    <div class="card room-card h-100 border-0 shadow-sm hover-elevation">
+                        <div class="room-img-wrapper">
+                            <img src="images/forest-cabin.jpg" class="card-img-top room-img" alt="森林静养套房-亲子间">
+                            <div class="room-badge">亲子特惠</div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">森林静养套房-亲子间</h5>
+                            <div class="room-amenities">
+                                <span class="room-amenity"><i class="fas fa-expand-arrows-alt"></i> 45-50㎡</span>
+                                <span class="room-amenity"><i class="fas fa-user"></i> 适合2-3人</span>
+                                <span class="room-amenity"><i class="fas fa-bed"></i> 大床+儿童床</span>
+                                <span class="room-amenity"><i class="fas fa-tree"></i> 森林景观</span>
+                                <span class="room-amenity"><i class="fas fa-child"></i> 儿童设施</span>
+                            </div>
+                            <p class="card-text">特别设计的亲子房型，大床加儿童床配置，配备儿童读物和玩具角落，提供儿童专用洗浴用品，让全家人享受森林静养体验。</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div>
+                                    <span class="room-price">¥368</span>
+                                    <span class="room-original-price ms-2">¥438</span>
+                                    <small class="d-block">每晚/含早</small>
+                                </div>
+                                <a href="#booking-form" class="btn btn-success btn-book" data-room-type="forest-family">立即预订</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <p class="text-muted"><small>*价格仅供参考，节假日价格可能有所浮动，会员可享受额外折扣</small></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 预订表单 -->
+    <section id="booking-form" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title">在线预订</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="booking-info">
+                        <h4>预订须知</h4>
+                        <ul>
+                            <li><i class="fas fa-info-circle"></i> 入住时间为下午14:00后，退房时间为次日12:00前</li>
+                            <li><i class="fas fa-info-circle"></i> 预订确认后将收到短信和邮件通知</li>
+                            <li><i class="fas fa-info-circle"></i> 儿童入住政策：6岁以下儿童免费，需与大人同住</li>
+                            <li><i class="fas fa-info-circle"></i> 可免费取消政策：入住前48小时取消不收取费用</li>
+                            <li><i class="fas fa-info-circle"></i> 若有任何特殊要求，请在备注中说明</li>
+                        </ul>
+                        <h4 class="mt-4">健康民宿特色</h4>
+                        <div class="features">
+                            <div class="feature">
+                                <i class="fas fa-wifi"></i>
+                                <span>全屋WiFi</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-dumbbell"></i>
+                                <span>健身房</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-spa"></i>
+                                <span>养生SPA</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-utensils"></i>
+                                <span>健康餐厅</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-hiking"></i>
+                                <span>健走路线</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-head-side-mask"></i>
+                                <span>清洁消毒</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-heartbeat"></i>
+                                <span>健康监测</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-leaf"></i>
+                                <span>有机用品</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form class="booking-form">
+                        <div class="form-group mb-3">
+                            <label for="room-type">选择房型</label>
+                            <select class="form-control" id="room-type" required>
+                                <option value="">请选择房型</option>
+                                <option value="forest-king">森林静养套房-大床房</option>
+                                <option value="forest-twin">森林静养套房-双人间</option>
+                                <option value="forest-family">森林静养套房-亲子间</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="check-in-date">入住日期</label>
+                                    <input type="date" class="form-control" id="check-in-date" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="check-out-date">离店日期</label>
+                                    <input type="date" class="form-control" id="check-out-date" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="guests">入住人数</label>
+                                    <select class="form-control" id="guests" required>
+                                        <option value="1">1人</option>
+                                        <option value="2" selected>2人</option>
+                                        <option value="3">3人</option>
+                                        <option value="4">4人</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="phone">联系电话</label>
+                                    <input type="tel" class="form-control" id="phone" placeholder="用于接收预订确认" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="name">姓名</label>
+                            <input type="text" class="form-control" id="name" placeholder="请输入预订人姓名" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="email">邮箱</label>
+                            <input type="email" class="form-control" id="email" placeholder="用于接收预订确认" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="special-requests">特殊要求（可选）</label>
+                            <textarea class="form-control" id="special-requests" rows="3" placeholder="如有其他特殊需求请在此说明"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="health-data-consent">
+                                <label class="form-check-label" for="health-data-consent">
+                                    我同意将我的健康数据用于提供个性化住宿体验（可选）
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg w-100">提交预订</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 推荐套餐 -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title">健康体验套餐</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card package-card">
+                        <div class="card-body">
+                            <h5 class="card-title">深度睡眠体验</h5>
+                            <p class="package-price">¥99/人次</p>
+                            <ul class="package-features">
+                                <li>专业睡眠质量评估</li>
+                                <li>助眠香薰疗法</li>
+                                <li>舒压按摩服务</li>
+                                <li>睡眠环境个性化调整</li>
+                            </ul>
+                            <button class="btn btn-outline-success w-100">添加到预订</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card package-card">
+                        <div class="card-body">
+                            <h5 class="card-title">营养膳食规划</h5>
+                            <p class="package-price">¥158/人次</p>
+                            <ul class="package-features">
+                                <li>个人体质评估</li>
+                                <li>营养师一对一指导</li>
+                                <li>有机食材DIY烹饪课</li>
+                                <li>个性化膳食方案</li>
+                            </ul>
+                            <button class="btn btn-outline-success w-100">添加到预订</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card package-card">
+                        <div class="card-body">
+                            <h5 class="card-title">活力运动计划</h5>
+                            <p class="package-price">¥128/人次</p>
+                            <ul class="package-features">
+                                <li>专属健走路线规划</li>
+                                <li>晨间太极/瑜伽课</li>
+                                <li>心率监测与运动建议</li>
+                                <li>森林浴体验</li>
+                            </ul>
+                            <button class="btn btn-outline-success w-100">添加到预订</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>关于我们</h5>
+                    <p>健康民宿是一家专注于健康生活方式的住宿品牌，致力于为用户提供融合健康管理的精品住宿体验。</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>快速链接</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="health-data.html">健康数据</a></li>
+                        <li><a href="ai-analysis.html">AI分析</a></li>
+                        <li><a href="specialty-products.html">海滨特产</a></li>
+                        <li><a href="booking.html">民宿预订</a></li>
+                        <li><a href="#">关于我们</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>联系我们</h5>
+                    <address>
+                        <p><i class="fas fa-map-marker-alt"></i> 广东省广州市DeepRA 深算乡野村</p>
+                        <p><i class="fas fa-phone"></i> 13398244764</p>
+                        <p><i class="fas fa-envelope"></i> info@deepra.health.com</p>
+                    </address>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p class="copyright">© 2023 健康民宿预订系统. 保留所有权利.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- 预订脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 打字机效果实现函数
+            function startTyping(element, delay, callback) {
+                if (!element) return;
+                
+                // 保存原始文本
+                const originalText = element.textContent || element.innerText;
+                
+                // 清空文本内容
+                element.textContent = '';
+                
+                // 创建光标元素
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor';
+                element.appendChild(cursor);
+                
+                // 字符索引
+                let charIndex = 0;
+                
+                // 延迟后开始打字
+                setTimeout(() => {
+                    // 创建打字间隔
+                    const typingInterval = setInterval(() => {
+                        if (charIndex < originalText.length) {
+                            // 在光标前插入新字符
+                            element.insertBefore(
+                                document.createTextNode(originalText.charAt(charIndex)),
+                                cursor
+                            );
+                            charIndex++;
+                        } else {
+                            // 打字完成，清除间隔
+                            clearInterval(typingInterval);
+                            
+                            // 移除光标
+                            if (element.contains(cursor)) {
+                                element.removeChild(cursor);
+                            }
+                            
+                            // 执行回调
+                            if (callback) callback();
+                        }
+                    }, 50); // 每个字符的打字速度
+                }, delay);
+            }
+            
+            // 获取需要打字效果的元素
+            const textElements = document.querySelectorAll('.typewriter-text');
+            
+            // 依次应用打字效果
+            if (textElements.length > 0) {
+                let delay = 500;
+                textElements.forEach((element, index) => {
+                    startTyping(element, delay, null);
+                    delay += 1000; // 每个元素之间增加延迟
+                });
+            }
+
+            // 日期选择器初始化
+            const today = new Date();
+            const checkInInput = document.getElementById('check-in-date');
+            const checkOutInput = document.getElementById('check-out-date');
+            
+            if (checkInInput && checkOutInput) {
+                // 设置最小日期为今天
+                const todayFormatted = today.toISOString().split('T')[0];
+                checkInInput.min = todayFormatted;
+                
+                // 默认入住日期为今天
+                checkInInput.value = todayFormatted;
+                
+                // 计算明天的日期
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+                
+                // 设置最小退房日期为明天
+                checkOutInput.min = tomorrowFormatted;
+                
+                // 默认退房日期为明天
+                checkOutInput.value = tomorrowFormatted;
+                
+                // 入住日期变更时更新退房最小日期
+                checkInInput.addEventListener('change', function() {
+                    const selectedDate = new Date(this.value);
+                    const nextDay = new Date(selectedDate);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    const nextDayFormatted = nextDay.toISOString().split('T')[0];
+                    
+                    checkOutInput.min = nextDayFormatted;
+                    
+                    // 如果当前选择的退房日期早于新的最小日期，则更新退房日期
+                    if (new Date(checkOutInput.value) <= selectedDate) {
+                        checkOutInput.value = nextDayFormatted;
+                    }
+                });
+            }
+
+            // 预订表单提交
+            document.querySelector('.booking-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const roomType = document.getElementById('room-type').value;
+                const checkIn = document.getElementById('check-in-date').value;
+                const checkOut = document.getElementById('check-out-date').value;
+                const guests = document.getElementById('guests').value;
+                const name = document.getElementById('name').value;
+                
+                // 简单验证
+                if (!roomType || !checkIn || !checkOut || !name) {
+                    alert('请填写所有必填字段');
+                    return;
+                }
+                
+                // 日期验证
+                const checkInDate = new Date(checkIn);
+                const checkOutDate = new Date(checkOut);
+                
+                if (checkInDate >= checkOutDate) {
+                    alert('离店日期必须晚于入住日期');
+                    return;
+                }
+                
+                // 模拟预订成功
+                alert(`${name}，您好！您的预订已提交，我们将尽快确认。预订信息：${roomType}，入住日期：${checkIn}，离店日期：${checkOut}，入住人数：${guests}人`);
+                
+                // 实际应用中这里应该发送到服务器
+            });
+            
+            // 立即预订按钮点击事件
+            document.querySelectorAll('.btn-book').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // 获取房型并设置到表单
+                    const roomCard = this.closest('.room-card');
+                    const roomTitle = roomCard.querySelector('.card-title').textContent;
+                    
+                    const roomTypeSelect = document.getElementById('room-type');
+                    for(let i = 0; i < roomTypeSelect.options.length; i++) {
+                        if(roomTypeSelect.options[i].text.includes(roomTitle)) {
+                            roomTypeSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    // 滚动到表单
+                    document.getElementById('booking-form').scrollIntoView({behavior: 'smooth'});
+                });
+            });
+        });
+    </script>
+</body>
+</html>

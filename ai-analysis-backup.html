@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小㘵村智能养生 - AI分析</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2E7D32;
+            --text-color: #333333;
+            --light-bg: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding-top: 76px;
+        }
+        
+        .navbar {
+            background-color: #000000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff !important;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .navbar-brand i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: #ffffff !important;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link.active {
+            color: #ffffff !important;
+            background-color: var(--primary-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
+        
+        .nav-link.active i {
+            color: #ffffff;
+        }
+        
+        /* Perspective Split Text Menu Animation 相关样式 */
+        .nav-text-container {
+            position: relative;
+            display: inline-block;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        
+        .nav-text {
+            display: block;
+            position: relative;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        .nav-text.static {
+            transform-origin: bottom;
+            opacity: 1;
+        }
+        
+        .nav-text.dynamic {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transform: rotateX(-90deg);
+            opacity: 0;
+            color: var(--primary-color);
+        }
+        
+        .nav-link.perspective-active .nav-text.static {
+            transform: rotateX(90deg);
+            opacity: 0;
+        }
+        
+        .nav-link.perspective-active .nav-text.dynamic {
+            transform: rotateX(0);
+            opacity: 1;
+        }
+        
+        .nav-link i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link.perspective-active i {
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .hero {
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .dual-text {
+            margin-bottom: 2rem;
+        }
+        
+        .dual-text-large {
+            font-size: 4rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+        
+        .dual-text-small {
+            font-size: 2rem;
+            color: var(--primary-color);
+            line-height: 1.3;
+        }
+        
+        .hero-buttons {
+            margin-top: 3rem;
+        }
+        
+        .hero-button {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 0;
+            transition: var(--transition);
+        }
+        
+        .hero-button-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .hero-button-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .hero-button-secondary {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        
+        .hero-button-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .analysis-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .analysis-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .analysis-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .analysis-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .analysis-text {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 60px 0 20px;
+        }
+        
+        .footer h5 {
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .footer p {
+            color: #cccccc;
+            line-height: 1.8;
+        }
+        
+        .footer a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer a:hover {
+            color: var(--primary-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #999999;
+        }
+        
+        /* 问答界面样式 */
+        .chat-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: 650px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: rgba(76, 175, 80, 0.05);
+            border-radius: 10px;
+            max-height: 550px;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            max-width: 85%;
+        }
+        
+        .message-user {
+            margin-left: auto;
+        }
+        
+        .message-ai {
+            margin-right: auto;
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .message-header i {
+            color: var(--primary-color);
+        }
+        
+        .message-content {
+            padding: 15px;
+            border-radius: 10px;
+            background-color: white;
+            margin-top: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            white-space: pre-line;
+        }
+        
+        .message-time {
+            font-size: 12px;
+            opacity: 0.7;
+            text-align: right;
+            color: #666;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-input textarea {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 12px 15px;
+            font-size: 16px;
+            resize: none;
+            min-height: 50px;
+        }
+        
+        .chat-input textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .chat-input button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .chat-input button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .suggestion-chip {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .suggestion-chip:hover {
+            background-color: rgba(76, 175, 80, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .suggestion-chip i {
+            color: var(--primary-color);
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-8px);
+            }
+        }
+        
+        /* 打字机效果样式 */
+        .typewriter-text {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0;
+            border-right: 3px solid var(--primary-color);
+            animation: blinkCursor 0.8s step-end infinite;
+            opacity: 0;
+        }
+        
+        .typewriter-text.typing {
+            animation: typingEffect 0.5s steps(40, end) forwards, blinkCursor 0.8s step-end infinite;
+        }
+        
+        .typewriter-text.typing-done {
+            width: 100%;
+            border-right: none;
+            animation: none;
+            opacity: 1;
+        }
+        
+        @keyframes typingEffect {
+            from { 
+                width: 0;
+                opacity: 1;
+            }
+            to { 
+                width: 100%;
+                opacity: 1;
+            }
+        }
+        
+        @keyframes blinkCursor {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary-color) }
+        }
+        
+        /* 按钮淡入动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .navbar {
+                padding: 0.5rem 0;
+            }
+            
+            .navbar-brand {
+                font-size: 1rem;
+                padding: 6px 10px;
+            }
+            
+            .navbar-brand i {
+                font-size: 1.2rem;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 6px 10px;
+            }
+            
+            .navbar-toggler:focus {
+                box-shadow: none;
+            }
+            
+            .navbar-toggler-icon {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+            
+            .navbar-collapse {
+                margin-top: 10px;
+            }
+            
+            .navbar-nav {
+                background-color: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(10px);
+                border-radius: 10px;
+                padding: 10px;
+            }
+            
+            .nav-item {
+                margin: 5px 0;
+                width: 100%;
+            }
+            
+            .nav-link {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .dual-text-large {
+                font-size: 2.5rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.5rem;
+            }
+            
+            .hero-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .analysis-feature {
+                margin-bottom: 20px;
+            }
+            
+            .chat-container {
+                border-radius: 10px;
+                padding: 15px;
+                height: auto;
+                max-height: 80vh;
+            }
+            
+            .chat-messages {
+                max-height: 400px;
+                padding: 10px;
+            }
+            
+            .message {
+                padding: 10px;
+                margin-bottom: 10px;
+                max-width: 95%;
+            }
+            
+            .message-header {
+                padding: 8px 10px;
+            }
+            
+            .message-text {
+                font-size: 0.9rem;
+            }
+            
+            .suggestion-chips {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .suggestion-chip {
+                margin-bottom: 8px;
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
+            
+            .chat-input {
+                padding: 8px;
+            }
+            
+            .chat-input textarea {
+                font-size: 0.9rem;
+            }
+            
+            .footer {
+                padding: 40px 0 20px;
+            }
+            
+            .footer h5 {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* 小屏幕手机优化 */
+        @media (max-width: 576px) {
+            .dual-text-large {
+                font-size: 2rem;
+            }
+            
+            .dual-text-small {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero {
+                padding: 20px 0;
+                min-height: 80vh;
+            }
+            
+            .analysis-icon {
+                font-size: 2.5rem;
+            }
+            
+            .analysis-title {
+                font-size: 1.3rem;
+            }
+            
+            .analysis-text {
+                font-size: 0.9rem;
+            }
+            
+            .message-text {
+                font-size: 0.8rem;
+            }
+            
+            .suggestion-chip {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-leaf"></i>
+                小㘵村智能养生
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-home"></i> 首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="health-data.html"><i class="fas fa-chart-line"></i> 健康数据</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="ai-analysis.html"><i class="fas fa-brain"></i> AI分析</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="dual-text">
+                        <div class="dual-text-large typewriter-text" id="text1">AI智能分析，</div>
+                        <div class="dual-text-small typewriter-text" id="text2">健康管理专家。</div>
+                    </div>
+                    <div class="dual-text">
+                        <div class="dual-text-large typewriter-text" id="text3">数据驱动决策，</div>
+                        <div class="dual-text-small typewriter-text" id="text4">智慧守护健康。</div>
+                    </div>
+                    <div class="hero-buttons mt-5" id="heroButtons" style="opacity: 0;">
+                        <a href="#analysis" class="btn hero-button hero-button-primary">查看分析</a>
+                        <a href="#insights" class="btn hero-button hero-button-secondary">健康洞察</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI分析 -->
+    <section id="analysis" class="py-5">
+        <div class="container">
+            <h2 class="section-title">DeepSeek健康数据分析</h2>
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="p-4 bg-white rounded-3 shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-microchip fa-3x text-primary me-3"></i>
+                            <h3 class="mb-0">最前沿的健康大数据分析技术</h3>
+                        </div>
+                        <p class="lead mb-4">DeepSeek健康数据分析基于先进的大语言模型及深度学习技术，能够从多维度健康数据中提取有价值的洞察，为您提供个性化健康管理方案。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="analysis-card h-100">
+                        <i class="fas fa-database analysis-icon"></i>
+                        <h3 class="analysis-title">多源数据整合</h3>
+                        <p class="analysis-text">DeepSeek能够无缝整合来自智能手环、血压计、体重秤等多种设备的健康数据，并与您的生活习惯、饮食记录和环境因素相结合，构建全面的健康数据画像。</p>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-primary me-2 mb-2">穿戴设备数据</span>
+                            <span class="badge bg-light text-primary me-2 mb-2">医疗记录</span>
+                            <span class="badge bg-light text-primary me-2 mb-2">饮食日志</span>
+                            <span class="badge bg-light text-primary me-2 mb-2">运动轨迹</span>
+                            <span class="badge bg-light text-primary me-2 mb-2">睡眠监测</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="analysis-card h-100">
+                        <i class="fas fa-brain analysis-icon"></i>
+                        <h3 class="analysis-title">深度神经网络</h3>
+                        <p class="analysis-text">采用175B参数的超大规模神经网络模型，通过自监督学习和多任务训练，使模型能够理解复杂的健康数据模式和潜在关联，识别健康风险因素和预警信号。</p>
+                        <div class="mt-3 small">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-success rounded-circle p-1 me-2" style="width: 10px; height: 10px;"></div>
+                                <span>自然语言处理</span>
+                            </div>
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-info rounded-circle p-1 me-2" style="width: 10px; height: 10px;"></div>
+                                <span>时间序列分析</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-warning rounded-circle p-1 me-2" style="width: 10px; height: 10px;"></div>
+                                <span>多模态数据融合</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="analysis-card h-100">
+                        <i class="fas fa-shield-alt analysis-icon"></i>
+                        <h3 class="analysis-title">隐私保护技术</h3>
+                        <p class="analysis-text">采用联邦学习和差分隐私技术，确保您的健康数据安全。分析处理过程在本地设备上完成，敏感信息不会被上传到云端，同时保持高精度的分析结果。</p>
+                        <div class="mt-3">
+                            <div class="progress mb-2" style="height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 95%;" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="d-flex justify-content-between small text-muted">
+                                <span>数据加密率</span>
+                                <span>95%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="chart-container p-4">
+                        <h3 class="chart-title">DeepSeek分析流程</h3>
+                        <div class="row align-items-center">
+                            <div class="col-lg-6">
+                                <div class="process-flow">
+                                    <div class="d-flex align-items-start mb-4">
+                                        <div class="bg-primary text-white rounded-circle p-3 me-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">1</div>
+                                        <div>
+                                            <h5 class="mb-1">数据收集与预处理</h5>
+                                            <p class="text-muted small mb-0">从多种设备和应用收集原始健康数据，进行清洗、标准化和特征提取</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start mb-4">
+                                        <div class="bg-primary text-white rounded-circle p-3 me-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">2</div>
+                                        <div>
+                                            <h5 class="mb-1">多模态数据融合</h5>
+                                            <p class="text-muted small mb-0">整合生理指标、行为数据和环境因素，创建综合健康画像</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start mb-4">
+                                        <div class="bg-primary text-white rounded-circle p-3 me-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">3</div>
+                                        <div>
+                                            <h5 class="mb-1">深度学习分析</h5>
+                                            <p class="text-muted small mb-0">通过神经网络模型分析健康趋势、识别异常模式和预测潜在风险</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-start">
+                                        <div class="bg-primary text-white rounded-circle p-3 me-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">4</div>
+                                        <div>
+                                            <h5 class="mb-1">个性化建议生成</h5>
+                                            <p class="text-muted small mb-0">结合医学知识库和个人健康历史，生成针对性的健康建议和干预方案</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mt-4 mt-lg-0">
+                                <div class="text-center">
+                                    <img src="https://via.placeholder.com/500x300/f8f9fa/4CAF50?text=DeepSeek+分析流程图" class="img-fluid rounded shadow-sm" alt="DeepSeek分析流程示意图">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="p-4 bg-white rounded-3 shadow-sm">
+                        <h3 class="mb-4">实际应用案例</h3>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card border-0 h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                                                <i class="fas fa-heartbeat text-success fa-2x"></i>
+                                            </div>
+                                            <h4 class="card-title mb-0">心血管健康预警</h4>
+                                        </div>
+                                        <p class="card-text">王先生，65岁，DeepSeek通过分析其连续30天的心率变异性、血压波动和活动模式，发现其心血管健康存在潜在风险。系统提前一周预警了可能出现的心律不齐情况，及时调整药物后避免了更严重的心脏事件。</p>
+                                        <div class="alert alert-success mt-3 mb-0">
+                                            <i class="fas fa-check-circle me-2"></i>预警准确率达到92.7%，比传统方法提高37%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="bg-info bg-opacity-10 p-3 rounded-circle me-3">
+                                                <i class="fas fa-moon text-info fa-2x"></i>
+                                            </div>
+                                            <h4 class="card-title mb-0">睡眠质量优化</h4>
+                                        </div>
+                                        <p class="card-text">李女士，42岁，长期存在睡眠问题。DeepSeek通过分析她的睡眠周期、心率、体温变化和环境因素，发现其深度睡眠不足与晚间屏幕使用和室温有显著相关性。根据个性化建议调整后，一个月内深度睡眠时间增加了43%。</p>
+                                        <div class="alert alert-info mt-3 mb-0">
+                                            <i class="fas fa-chart-line me-2"></i>95%的用户在2周内报告睡眠质量显著改善
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="p-4 bg-primary bg-opacity-10 rounded-3">
+                        <h3 class="text-primary mb-3">体验DeepSeek健康分析</h3>
+                        <p class="mb-4">连接您的健康设备或手动输入健康数据，开始获取个性化的AI健康分析和建议</p>
+                        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#dataConnectModal">
+                            <i class="fas fa-link me-2"></i>连接健康数据
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 数据连接模态框 -->
+    <div class="modal fade" id="dataConnectModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-link me-2 text-primary"></i>连接健康数据源</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-database fa-3x text-primary mb-3"></i>
+                        <p>请选择您的健康数据来源，或手动输入您的健康指标</p>
+                    </div>
+                    <div class="data-source-list">
+                        <div class="data-source-item p-3 mb-3 border rounded d-flex align-items-center">
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="checkbox" id="appleHealth">
+                            </div>
+                            <div class="me-auto">
+                                <label class="form-check-label fw-bold" for="appleHealth">Apple健康</label>
+                                <div class="text-muted small">步数、运动、睡眠、心率数据</div>
+                            </div>
+                            <i class="fab fa-apple fa-lg text-dark"></i>
+                        </div>
+                        <div class="data-source-item p-3 mb-3 border rounded d-flex align-items-center">
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="checkbox" id="fitbit">
+                            </div>
+                            <div class="me-auto">
+                                <label class="form-check-label fw-bold" for="fitbit">Fitbit</label>
+                                <div class="text-muted small">活动、睡眠、心率数据</div>
+                            </div>
+                            <i class="fas fa-heartbeat fa-lg text-danger"></i>
+                        </div>
+                        <div class="data-source-item p-3 mb-3 border rounded d-flex align-items-center">
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="checkbox" id="xiaomi">
+                            </div>
+                            <div class="me-auto">
+                                <label class="form-check-label fw-bold" for="xiaomi">小米健康</label>
+                                <div class="text-muted small">小米手环、体重秤数据</div>
+                            </div>
+                            <i class="fas fa-mobile-alt fa-lg text-warning"></i>
+                        </div>
+                        <div class="data-source-item p-3 mb-3 border rounded d-flex align-items-center">
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="checkbox" id="manual">
+                            </div>
+                            <div class="me-auto">
+                                <label class="form-check-label fw-bold" for="manual">手动输入</label>
+                                <div class="text-muted small">自行记录健康指标</div>
+                            </div>
+                            <i class="fas fa-edit fa-lg text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">开始连接</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI问答 -->
+    <section id="qa" class="py-5">
+        <div class="container">
+            <h2 class="section-title">AI健康问答</h2>
+            <div class="row">
+                <div class="col-lg-12 mx-auto">
+                    <div class="chat-container">
+                        <div id="chatMessages" class="chat-messages">
+                            <!-- AI欢迎消息 -->
+                            <div class="message message-ai">
+                                <div class="message-header">
+                                    <i class="fas fa-brain"></i>
+                                    <span>AI健康助手</span>
+                                </div>
+                                <div class="message-content">
+                                    <div class="message-text">
+                                        您好！我是您的AI健康助手。我可以基于您的健康数据提供分析和建议。您可以询问我关于您的睡眠、步数、心率、压力和体重等方面的问题。
+                                    </div>
+                                    <div class="message-time">刚刚</div>
+                                    <div class="suggestion-chips">
+                                        <div class="suggestion-chip" data-question="我的睡眠质量如何？">
+                                            <i class="fas fa-moon"></i>
+                                            <span>我的睡眠质量如何？</span>
+                                        </div>
+                                        <div class="suggestion-chip" data-question="我的步数达标了吗？">
+                                            <i class="fas fa-walking"></i>
+                                            <span>我的步数达标了吗？</span>
+                                        </div>
+                                        <div class="suggestion-chip" data-question="我的心率正常吗？">
+                                            <i class="fas fa-heartbeat"></i>
+                                            <span>我的心率正常吗？</span>
+                                        </div>
+                                        <div class="suggestion-chip" data-question="我的压力水平如何？">
+                                            <i class="fas fa-brain"></i>
+                                            <span>我的压力水平如何？</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <textarea id="userInput" placeholder="输入您的问题..." rows="1"></textarea>
+                            <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>关于我们</h5>
+                    <p>小㘵村智能养生平台，致力于通过先进技术为村民提供专业的健康管理服务。</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>快速链接</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="health-data.html">健康数据</a></li>
+                        <li><a href="ai-analysis.html">AI分析</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>联系我们</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> 广东省广州市DeepRA 深算乡野村</p>
+                    <p><i class="fas fa-phone me-2"></i> 13398244764</p>
+                    <p><i class="fas fa-envelope me-2"></i> info@deepra.health.com</p>
+                    <p><i class="fas fa-clock me-2"></i> 周一至周日 9:00-18:00</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2024 小㘵村智能养生. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/nav-animation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 打字机效果
+            const text1 = document.getElementById('text1');
+            const text2 = document.getElementById('text2');
+            const text3 = document.getElementById('text3');
+            const text4 = document.getElementById('text4');
+            const heroButtons = document.getElementById('heroButtons');
+            
+            function startTyping(element, delay, callback) {
+                setTimeout(() => {
+                    element.classList.add('typing');
+                    
+                    // 计算动画完成时间（基于文本长度）
+                    const textLength = element.textContent.length;
+                    const typingDuration = textLength * 100; // 每个字符约100ms
+                    
+                    setTimeout(() => {
+                        element.classList.remove('typing');
+                        element.classList.add('typing-done');
+                        if (callback) callback();
+                    }, typingDuration);
+                }, delay);
+            }
+            
+            // 依次启动打字动画
+            startTyping(text1, 500, function() {
+                startTyping(text2, 200, function() {
+                    startTyping(text3, 400, function() {
+                        startTyping(text4, 200, function() {
+                            // 所有文本显示完后，显示按钮
+                            setTimeout(() => {
+                                heroButtons.classList.add('fade-in');
+                            }, 300);
+                        });
+                    });
+                });
+            });
+            
+            // AI健康问答功能
+            const chatMessages = document.getElementById('chatMessages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            
+            // 监听发送按钮点击
+            sendButton.addEventListener('click', sendMessage);
+            
+            // 监听输入框回车事件
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // 自动调整输入框高度
+            userInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // 监听建议问题点击
+            document.querySelectorAll('.suggestion-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const question = this.getAttribute('data-question');
+                    userInput.value = question;
+                    sendMessage();
+                });
+            });
+            
+            // 发送消息函数
+            function sendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    // 添加用户消息
+                    addUserMessage(message);
+                    
+                    // 清空输入框
+                    userInput.value = '';
+                    userInput.style.height = 'auto';
+                    
+                    // 显示输入中动画
+                    showTypingIndicator();
+                    
+                    // 模拟AI响应延迟
+                    setTimeout(() => {
+                        // 移除输入中动画
+                        removeTypingIndicator();
+                        
+                        // 根据问题生成AI响应
+                        const aiResponse = generateAIResponse(message);
+                        
+                        // 添加AI响应
+                        addAIMessage(aiResponse);
+                        
+                        // 滚动到底部
+                        scrollToBottom();
+                    }, 1500);
+                }
+            }
+            
+            // 添加用户消息
+            function addUserMessage(message) {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message message-user';
+                
+                const now = new Date();
+                const timeStr = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+                
+                messageElement.innerHTML = `
+                    <div class="message-header">
+                        <span>您</span>
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${message}</div>
+                        <div class="message-time">${timeStr}</div>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(messageElement);
+                scrollToBottom();
+            }
+            
+            // 添加AI消息
+            function addAIMessage(message) {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message message-ai';
+                
+                const now = new Date();
+                const timeStr = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+                
+                messageElement.innerHTML = `
+                    <div class="message-header">
+                        <i class="fas fa-brain"></i>
+                        <span>AI健康助手</span>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text typewriter-text">${message}</div>
+                        <div class="message-time">${timeStr}</div>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(messageElement);
+                
+                // 添加打字效果
+                const textElement = messageElement.querySelector('.typewriter-text');
+                textElement.classList.add('typing');
+                
+                setTimeout(() => {
+                    textElement.classList.remove('typing');
+                    textElement.classList.add('typing-done');
+                    scrollToBottom();
+                }, message.length * 20); // 根据文本长度计算动画时间
+            }
+            
+            // 显示输入中动画
+            function showTypingIndicator() {
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'message message-ai typing-indicator-container';
+                typingIndicator.id = 'typingIndicator';
+                
+                typingIndicator.innerHTML = `
+                    <div class="message-header">
+                        <i class="fas fa-brain"></i>
+                        <span>AI健康助手</span>
+                    </div>
+                    <div class="message-content">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(typingIndicator);
+                scrollToBottom();
+            }
+            
+            // 移除输入中动画
+            function removeTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            // 滚动到底部
+            function scrollToBottom() {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // 根据问题生成AI响应（示例）
+            function generateAIResponse(question) {
+                // 将问题转换为小写以便比较
+                const lowerQuestion = question.toLowerCase();
+                
+                if (lowerQuestion.includes('睡眠质量')) {
+                    return '根据您近7天的睡眠数据，您的平均睡眠时间为6.2小时，略低于健康标准（7-8小时）。深度睡眠比例为18%，处于正常范围。建议您每天22:30前入睡，保持规律的作息时间，避免睡前使用电子设备。';
+                } else if (lowerQuestion.includes('步数')) {
+                    return '您昨天的步数为8,756步，已达到每日推荐步数（8,000步）。过去一周您的平均步数为7,823步，周一和周五的活动量较低。建议您在工作日也保持适当的活动量，每小时起身活动5-10分钟。';
+                } else if (lowerQuestion.includes('心率')) {
+                    return '您的静息心率平均为68次/分钟，处于正常范围（60-80次/分钟）。最近一周没有检测到异常心率事件。您的心率变异性指数为52，表明您的心血管健康状况良好。';
+                } else if (lowerQuestion.includes('压力')) {
+                    return '您的压力水平评分为65（中等偏高）。工作日的压力明显高于周末。建议您每天安排15-20分钟的冥想或深呼吸练习，有助于降低压力水平。也可以考虑在工作间隙进行短暂的伸展活动。';
+                } else if (lowerQuestion.includes('体重')) {
+                    return '您当前的体重指数(BMI)为23.5，处于正常范围（18.5-24.9）。过去一个月您的体重变化不大，波动在±0.5kg范围内，属于正常波动。建议您继续保持当前的饮食和运动习惯。';
+                } else {
+                    return '感谢您的提问。根据您的健康数据，我建议您保持规律的作息时间，每天保证7-8小时的睡眠，坚持适度运动，并注意饮食均衡。如需更具体的健康建议，请告诉我您关注的具体健康方面，如睡眠、运动、饮食等。';
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
