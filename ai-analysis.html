@@ -1369,6 +1369,16 @@
     <section id="qa" class="py-5">
         <div class="container">
             <h2 class="section-title">AI健康问答</h2>
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-check-circle me-3 fs-4"></i>
+                    <div>
+                        <strong>DeepSeek AI已成功接入！</strong>
+                        <p class="mb-0">现在您可以使用强大的DeepSeek大模型来分析您的健康数据，获取个性化健康建议。只需输入您的问题，AI将结合您的健康数据提供专业回答。</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             <div class="row">
                 <div class="col-lg-12 mx-auto">
                     <div class="chat-container">
@@ -1550,72 +1560,6 @@
                                                     </div>
                                                 </div>
                                                 <button class="btn btn-success w-100" data-route-id="heart-route">查看详情</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                    </div>
-                </div>
-                
-                            <!-- 改善睡眠路线 -->
-                            <div class="carousel-item">
-                                <div class="card route-card border-0 shadow-sm">
-                                    <div class="row g-0">
-                                        <div class="col-md-4">
-                                            <div class="route-amap-container h-100">
-                                                <div id="sleep-route-map" class="amap-container h-100">
-                                                    <!-- 备用方案 -->
-                                                    <div class="backup-route-sleep" style="display: flex;">
-                                                        <div class="backup-route-overlay"></div>
-                                                        <div class="backup-route-title">改善睡眠路线</div>
-                            </div>
-                        </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <h3 class="card-title mb-0">改善睡眠路线</h3>
-                                <span class="badge bg-info rounded-pill">热门</span>
-                            </div>
-                                                <p class="card-text fw-light text-muted mb-4">
-                                                    <i class="fas fa-ruler me-1"></i> 2.8公里 · 
-                                                    <i class="fas fa-clock ms-2 me-1"></i> 约1小时 · 
-                                                    <i class="fas fa-mountain ms-2 me-1"></i> 平缓
-                                                </p>
-                                                <div class="card-text mb-4">
-                                                    <p>根据您的睡眠数据量身定制，通过平缓的海滨薰衣草园和水景区，帮助放松身心，改善睡眠质量。全程保持平缓坡度，避免过度运动影响夜间休息。</p>
-                                                    <p>路线经过专门培育的薰衣草园，自然芳香有助于缓解焦虑和压力。沿途水景区的流水声能够促进身心放松，为夜间睡眠创造良好条件。傍晚时段行走此路线效果最佳，海风和日落景色有助于调节生物钟。路线终点设有专门的光疗区，通过合理光照帮助重置生物节律。</p>
-                            </div>
-                                                <div class="route-features mb-4">
-                                                    <h5 class="text-muted fs-6">路线特色</h5>
-                                                    <div class="d-flex flex-wrap gap-2">
-                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-water text-info me-1"></i> 溪流环绕</span>
-                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-leaf text-success me-1"></i> 薰衣草园</span>
-                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-moon text-secondary me-1"></i> 助眠环境</span>
-                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-sun text-warning me-1"></i> 光照疗法</span>
-                                                        <span class="d-inline-block mb-1 bg-light rounded-pill px-3 py-1"><i class="fas fa-wind text-primary me-1"></i> 海风舒缓</span>
-                            </div>
-                        </div>
-                                                <div class="health-benefits mb-4">
-                                                    <h5 class="text-muted fs-6">健康益处</h5>
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <ul class="list-unstyled">
-                                                                <li><i class="fas fa-check-circle text-success me-2"></i>改善入睡时间</li>
-                                                                <li><i class="fas fa-check-circle text-success me-2"></i>提高睡眠质量</li>
-                                                                <li><i class="fas fa-check-circle text-success me-2"></i>减少夜间醒来</li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <ul class="list-unstyled">
-                                                                <li><i class="fas fa-check-circle text-success me-2"></i>降低焦虑水平</li>
-                                                                <li><i class="fas fa-check-circle text-success me-2"></i>调节生物节律</li>
-                                                                <li><i class="fas fa-check-circle text-success me-2"></i>改善昼夜周期</li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <button class="btn btn-info text-white w-100" data-route-id="sleep-route">查看详情</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1900,207 +1844,55 @@
             // 保存配置
             saveApiConfigButton.addEventListener('click', saveApiConfig);
             
-            // 初始加载配置
-            loadApiConfig();
-            
-            // 自动配置密钥
-            function autoConfigureApiKey() {
-                // 设置DeepSeek API密钥
-                apiConfig.apiKey = "sk-bb38b61a66d44929aed948cad529d1f2";
-                apiConfig.apiEndpoint = "https://api.deepseek.com/v1/chat";
-                apiConfig.apiModel = "deepseek-chat";
-                
-                // 保存到本地存储
-                localStorage.setItem('deepseekApiConfig', JSON.stringify(apiConfig));
-                
-                // 显示通知
-                const toast = `
-                <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
-                    <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header bg-success text-white">
-                            <strong class="me-auto">密钥已配置</strong>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            DeepSeek API密钥已成功配置，现在可以开始使用AI健康问答功能了。
-                        </div>
-                    </div>
-                </div>`;
-                
-                const toastContainer = document.createElement('div');
-                toastContainer.innerHTML = toast;
-                document.body.appendChild(toastContainer);
-                
-                // 5秒后自动消失
-                setTimeout(() => {
-                    document.body.removeChild(toastContainer);
-                }, 5000);
-            }
-            
-            // 页面加载完成后自动配置密钥
-            autoConfigureApiKey();
-            
-            // 保存聊天历史
-            let chatHistory = [{
-                role: 'assistant', 
-                content: '您好！我是您的AI健康助手。我可以基于您的健康数据提供分析和建议。您可以询问我关于您的睡眠、步数、心率、压力和体重等方面的问题。'
-            }];
-            
-            // 健康数据样本 - 在实际应用中，这些数据应该从用户的健康监测设备或数据库中获取
-            const healthData = {
-                sleep: {
-                    averageDuration: 7.2, // 小时
-                    deepSleepPercentage: 28, // 百分比
-                    remSleepPercentage: 22, // 百分比
-                    wakeupCount: 3, // 次数
-                    sleepQualityScore: 68 // 0-100分
-                },
-                steps: {
-                    daily: 8750, // 步数
-                    weeklyAverage: 7980, // 步数
-                    goal: 10000, // 目标步数
-                    achievementRate: 87.5 // 百分比
-                },
-                heartRate: {
-                    resting: 68, // 次/分钟
-                    average: 72, // 次/分钟
-                    max: 132, // 次/分钟
-                    min: 58 // 次/分钟
-                },
-                stress: {
-                    score: 42, // 0-100分，越高压力越大
-                    weeklyTrend: "下降", // 趋势
-                    recommendedRelaxTime: 20 // 分钟
-                },
-                weight: {
-                    current: 65.5, // 公斤
-                    bmi: 23.2, // BMI指数
-                    bodyFatPercentage: 22.5, // 体脂率
-                    trend: "稳定" // 趋势
-                }
-            };
-            
-            // 将健康数据转换为上下文提示
-            function getHealthDataContext() {
-                return JSON.stringify(healthData);
-            }
-            
-            // 处理用户发送消息
-            function handleSendMessage() {
-                const message = userInput.value.trim();
-                if (message === '') return;
-                
-                // 添加用户消息到聊天界面
-                addMessageToChat('user', message);
-                    
-                    // 清空输入框
-                    userInput.value = '';
-                    
-                // 显示正在输入指示器
-                    showTypingIndicator();
-                    
-                // 发送请求到DeepSeek
-                sendToDeepSeek(message);
-            }
-            
-            // 显示正在输入提示
-            function showTypingIndicator() {
-                const typingIndicator = document.createElement('div');
-                typingIndicator.className = 'message message-ai';
-                typingIndicator.id = 'typingIndicator';
-                typingIndicator.innerHTML = `
-                    <div class="message-header">
-                        <i class="fas fa-brain"></i>
-                        <span>AI健康助手</span>
-                    </div>
-                    <div class="message-content">
-                        <div class="typing-indicator">
-                            <div class="typing-dot"></div>
-                            <div class="typing-dot"></div>
-                            <div class="typing-dot"></div>
-                        </div>
-                    </div>
-                `;
-                chatMessages.appendChild(typingIndicator);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-            
-            // 隐藏正在输入提示
-            function hideTypingIndicator() {
-                const indicator = document.getElementById('typingIndicator');
-                if (indicator) {
-                    indicator.remove();
-                }
-            }
-            
-            // 将消息添加到聊天界面
-            function addMessageToChat(sender, content, additionalHTML = '') {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message message-${sender}`;
-                
-                const currentTime = new Date();
-                const timeString = currentTime.getHours() + ':' + 
-                    (currentTime.getMinutes() < 10 ? '0' : '') + currentTime.getMinutes();
-                
-                if (sender === 'user') {
-                    messageDiv.innerHTML = `
-                    <div class="message-header">
-                        <span>您</span>
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="message-content">
-                            <div class="message-text">${content}</div>
-                            <div class="message-time">${timeString}</div>
-                    </div>
-                `;
-                
-                    // 添加到聊天历史
-                    chatHistory.push({
-                        role: 'user',
-                        content: content
-                    });
-                } else {
-                    messageDiv.innerHTML = `
-                        <div class="message-header">
-                            <i class="fas fa-brain"></i>
-                            <span>AI健康助手</span>
-                        </div>
-                        <div class="message-content">
-                            <div class="message-text">${content}</div>
-                            <div class="message-time">${timeString}</div>
-                            ${additionalHTML}
-                        </div>
-                    `;
-                    
-                    // 添加到聊天历史
-                    chatHistory.push({
-                        role: 'assistant',
-                        content: content
-                    });
-                }
-                
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-            
             // 发送消息到DeepSeek API
             async function sendToDeepSeek(message) {
                 try {
+                    // 将用户消息添加到聊天历史
+                    chatHistory.push({
+                        role: 'user',
+                        content: message
+                    });
+                    
                     // 检查是否配置了API密钥
                     if (apiConfig.apiKey) {
-                        // 真实调用DeepSeek API
+                        // 显示正在输入指示器
+                        showTypingIndicator();
+                        
+                        // 构建发送给DeepSeek的健康数据上下文
+                        const healthContext = `以下是用户的健康数据，请基于这些数据提供专业的健康分析和建议:
+睡眠数据: 平均睡眠时长${healthData.sleep.averageDuration}小时，深度睡眠占比${healthData.sleep.deepSleepPercentage}%，快速眼动睡眠占比${healthData.sleep.remSleepPercentage}%，夜间醒来次数${healthData.sleep.wakeupCount}次，睡眠质量评分${healthData.sleep.sleepQualityScore}/100分
+步数数据: 今日步数${healthData.steps.daily}步，周平均步数${healthData.steps.weeklyAverage}步，目标${healthData.steps.goal}步，目标达成率${healthData.steps.achievementRate}%
+心率数据: 静息心率${healthData.heartRate.resting}次/分钟，平均心率${healthData.heartRate.average}次/分钟，最高心率${healthData.heartRate.max}次/分钟，最低心率${healthData.heartRate.min}次/分钟
+压力水平: 压力评分${healthData.stress.score}/100分(越高压力越大)，周压力趋势${healthData.stress.weeklyTrend}，建议放松时间${healthData.stress.recommendedRelaxTime}分钟/天
+体重数据: 当前体重${healthData.weight.current}公斤，BMI指数${healthData.weight.bmi}，体脂率${healthData.weight.bodyFatPercentage}%，体重趋势${healthData.weight.trend}
+
+请根据用户的提问，给出专业、清晰且针对性的健康建议，尽量结合上述健康数据进行分析。如果用户询问的是数据中没有的内容，请告知用户目前没有相关数据，并给出一般性的健康建议。`;
+                        
+                        // 构建消息数组，包括系统指令和用户历史消息
+                        const messages = [
+                            {
+                                role: 'system',
+                                content: healthContext
+                            },
+                            ...chatHistory.slice(-6) // 只发送最近6条消息以保持上下文简洁
+                        ];
+                        
+                        console.log('正在发送请求到DeepSeek API...');
+                        
                         try {
                             const response = await axios.post(apiConfig.apiEndpoint, {
                                 model: apiConfig.apiModel,
-                                messages: chatHistory,
+                                messages: messages,
                                 temperature: 0.7,
-                                max_tokens: 2000,
-                                context: getHealthDataContext()
+                                max_tokens: 1000,
+                                top_p: 0.95,
+                                stream: false
                             }, {
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'Authorization': `Bearer ${apiConfig.apiKey}`
-                                }
+                                },
+                                timeout: 30000 // 30秒超时
                             });
                             
                             // 移除输入指示器
@@ -2109,10 +1901,29 @@
                             // 处理API响应
                             if (response.data && response.data.choices && response.data.choices.length > 0) {
                                 const aiResponse = response.data.choices[0].message.content;
+                                
+                                // 将AI回复添加到聊天历史
+                                chatHistory.push({
+                                    role: 'assistant',
+                                    content: aiResponse
+                                });
+                                
+                                // 添加到聊天界面
                                 addMessageToChat('ai', aiResponse);
+                                
+                                // 生成相关建议提示
+                                const suggestionsHTML = generateSuggestions(message, aiResponse);
+                                if (suggestionsHTML) {
+                                    // 将建议添加到最后一条消息
+                                    const lastMessage = chatMessages.lastElementChild;
+                                    const messageContent = lastMessage.querySelector('.message-content');
+                                    messageContent.appendChild(suggestionsHTML);
+                                }
                                 
                                 // 重新绑定新增的建议选项事件
                                 setTimeout(bindSuggestionChips, 100);
+                                
+                                console.log('DeepSeek API响应成功');
                             } else {
                                 throw new Error('无效的API响应');
                             }
@@ -2120,156 +1931,168 @@
                             return;
                         } catch (apiError) {
                             console.error('DeepSeek API调用失败:', apiError);
-                            // 如果API调用失败，回退到模拟响应
+                            // 如果API调用失败，回退到备用方案
+                            fallbackToSimulation(message);
                         }
+                    } else {
+                        // 如果未配置API密钥，使用备用方案
+                        fallbackToSimulation(message);
                     }
-                    
-                    // 如果没有API密钥或API调用失败，使用模拟响应
-                    
-                    // 模拟API延迟
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    
-                    // 移除输入指示器
+                } catch (error) {
+                    console.error('处理消息时出错:', error);
                     hideTypingIndicator();
-                    
-                    // 模拟回答
-                    let aiResponse = '';
-                    let additionalHTML = '';
-                    
-                    // 简单的问答模拟
-                    if (message.includes('睡眠')) {
-                        aiResponse = `您的睡眠数据显示，平均睡眠时长为${healthData.sleep.averageDuration}小时，深度睡眠占比${healthData.sleep.deepSleepPercentage}%，快速眼动睡眠占比${healthData.sleep.remSleepPercentage}%。睡眠质量评分为${healthData.sleep.sleepQualityScore}分。
+                    addMessageToChat('ai', '抱歉，处理您的请求时发生错误。请稍后再试或联系客服。');
+                }
+            }
+
+            // 备用方案：使用模拟响应
+            async function fallbackToSimulation(message) {
+                console.log('使用备用响应模式');
+                
+                // 模拟API延迟
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // 移除输入指示器
+                hideTypingIndicator();
+                
+                // 模拟回答
+                let aiResponse = '';
+                let additionalHTML = '';
+                
+                // 简单的问答模拟
+                if (message.includes('睡眠')) {
+                    aiResponse = `您的睡眠数据显示，平均睡眠时长为${healthData.sleep.averageDuration}小时，深度睡眠占比${healthData.sleep.deepSleepPercentage}%，快速眼动睡眠占比${healthData.sleep.remSleepPercentage}%。睡眠质量评分为${healthData.sleep.sleepQualityScore}分。
 
 您的睡眠时长略低于推荐的7.5-8小时，深度睡眠比例适中。建议您可以：
 1. 尝试每晚固定时间入睡
 2. 睡前1小时避免使用电子设备
 3. 确保睡眠环境舒适、安静且黑暗`;
 
-                        // 添加睡眠数据图表
-                        additionalHTML = `
-                            <div class="message-chart-container">
-                                <div class="message-chart-title">本周睡眠质量趋势</div>
-                                <canvas id="sleepChart"></canvas>
-                            </div>
-                        `;
-                        
-                        // 延迟添加图表
-                        setTimeout(() => {
-                            const ctx = document.getElementById('sleepChart').getContext('2d');
-                            new Chart(ctx, {
-                                type: 'line',
-                                data: {
-                                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                                    datasets: [{
-                                        label: '睡眠时长(小时)',
-                                        data: [7.1, 6.8, 7.3, 7.5, 6.9, 7.8, 7.2],
-                                        borderColor: '#4CAF50',
-                                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                                        tension: 0.4,
-                                        fill: true
-                                    }, {
-                                        label: '深度睡眠比例(%)',
-                                        data: [25, 22, 27, 30, 26, 31, 28],
-                                        borderColor: '#2196F3',
-                                        backgroundColor: 'transparent',
-                                        tension: 0.4
-                                    }]
+                    // 添加睡眠数据图表
+                    additionalHTML = `
+                        <div class="message-chart-container">
+                            <div class="message-chart-title">本周睡眠质量趋势</div>
+                            <canvas id="sleepChart"></canvas>
+                        </div>
+                    `;
+                    
+                    // 延迟添加图表
+                    setTimeout(() => {
+                        const ctx = document.getElementById('sleepChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                                datasets: [{
+                                    label: '睡眠时长(小时)',
+                                    data: [7.1, 6.8, 7.3, 7.5, 6.9, 7.8, 7.2],
+                                    borderColor: '#4CAF50',
+                                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                                    tension: 0.4,
+                                    fill: true
+                                }, {
+                                    label: '深度睡眠比例(%)',
+                                    data: [25, 22, 27, 30, 26, 31, 28],
+                                    borderColor: '#2196F3',
+                                    backgroundColor: 'transparent',
+                                    tension: 0.4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                        labels: {
+                                            boxWidth: 10,
+                                            font: {
+                                                size: 10
+                                            }
+                                        }
+                                    }
                                 },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: {
-                                        legend: {
-                                            position: 'top',
-                                            labels: {
-                                                boxWidth: 10,
-                                                font: {
-                                                    size: 10
-                                                }
+                                scales: {
+                                    y: {
+                                        beginAtZero: false,
+                                        ticks: {
+                                            font: {
+                                                size: 10
                                             }
                                         }
                                     },
-                                    scales: {
-                                        y: {
-                                            beginAtZero: false,
-                                            ticks: {
-                                                font: {
-                                                    size: 10
-                                                }
-                                            }
-                                        },
-                                        x: {
-                                            ticks: {
-                                                font: {
-                                                    size: 10
-                                                }
+                                    x: {
+                                        ticks: {
+                                            font: {
+                                                size: 10
                                             }
                                         }
                                     }
                                 }
-                            });
-                        }, 100);
-                    } else if (message.includes('步数')) {
-                        aiResponse = `您的步数数据显示，今日步数为${healthData.steps.daily}步，周平均步数为${healthData.steps.weeklyAverage}步，目标达成率为${healthData.steps.achievementRate}%。
+                            }
+                        });
+                    }, 100);
+                } else if (message.includes('步数')) {
+                    aiResponse = `您的步数数据显示，今日步数为${healthData.steps.daily}步，周平均步数为${healthData.steps.weeklyAverage}步，目标达成率为${healthData.steps.achievementRate}%。
 
 相比推荐的每日10,000步目标，您的步行活动略有不足。建议：
 1. 尝试在日常生活中增加步行机会，例如步行上下班或购物
 2. 每工作1小时起身活动5-10分钟
 3. 考虑参加我们的心肺强化路线活动，以更有趣的方式增加步数`;
 
-                        // 添加步数数据图表
-                        additionalHTML = `
-                            <div class="message-chart-container">
-                                <div class="message-chart-title">本周步数统计</div>
-                                <canvas id="stepsChart"></canvas>
-                            </div>
-                        `;
-                        
-                        // 延迟添加图表
-                        setTimeout(() => {
-                            const ctx = document.getElementById('stepsChart').getContext('2d');
-                            new Chart(ctx, {
-                                type: 'bar',
-                    data: {
-                                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                        datasets: [{
-                                        label: '步数',
-                                        data: [8250, 7830, 6950, 8120, 7650, 9150, 8750],
-                                        backgroundColor: '#4CAF50',
-                                        borderWidth: 0,
-                                        borderRadius: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
+                    // 添加步数数据图表
+                    additionalHTML = `
+                        <div class="message-chart-container">
+                            <div class="message-chart-title">本周步数统计</div>
+                            <canvas id="stepsChart"></canvas>
+                        </div>
+                    `;
+                    
+                    // 延迟添加图表
+                    setTimeout(() => {
+                        const ctx = document.getElementById('stepsChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                                datasets: [{
+                                    label: '步数',
+                                    data: [8250, 7830, 6950, 8120, 7650, 9150, 8750],
+                                    backgroundColor: '#4CAF50',
+                                    borderWidth: 0,
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: {
+                                            font: {
+                                                size: 10
+                                            }
                                         }
                                     },
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true,
-                                            ticks: {
-                                                font: {
-                                                    size: 10
-                                                }
-                                            }
-                                        },
-                                        x: {
-                                            ticks: {
-                                                font: {
-                                                    size: 10
-                                                }
+                                    x: {
+                                        ticks: {
+                                            font: {
+                                                size: 10
                                             }
                                         }
                                     }
                                 }
-                            });
-                        }, 100);
-                    } else if (message.includes('心率')) {
-                        aiResponse = `您的心率数据显示，安静心率为${healthData.heartRate.resting}次/分钟，平均心率为${healthData.heartRate.average}次/分钟，最高心率${healthData.heartRate.max}次/分钟，最低心率${healthData.heartRate.min}次/分钟。
+                            }
+                        });
+                    }, 100);
+                } else if (message.includes('心率')) {
+                    aiResponse = `您的心率数据显示，安静心率为${healthData.heartRate.resting}次/分钟，平均心率为${healthData.heartRate.average}次/分钟，最高心率${healthData.heartRate.max}次/分钟，最低心率${healthData.heartRate.min}次/分钟。
 
 您的安静心率处于健康范围内（60-100次/分钟）。建议：
 1. 继续保持规律的有氧运动，有助于降低静息心率
@@ -2328,7 +2151,7 @@
                                 }
                             });
                         }, 100);
-                    } else if (message.includes('压力')) {
+                    } else if (message.includes('压力') || message.includes('焦虑')) {
                         aiResponse = `您的压力水平评分为${healthData.stress.score}分（满分100分），处于中度压力水平。近期压力趋势为${healthData.stress.weeklyTrend}，建议每日放松时间${healthData.stress.recommendedRelaxTime}分钟。
 
 为降低压力水平，建议：
@@ -2388,53 +2211,98 @@
                                 }
                             });
                         }, 100);
-                    } else if (message.includes('路线') || message.includes('旅游')) {
-                        aiResponse = `基于您的健康数据分析，我为您推荐以下路线：
+                    } else if (message.includes('体重') || message.includes('减肥')) {
+                        aiResponse = `您的体重数据显示，当前体重${healthData.weight.current}公斤，BMI指数${healthData.weight.bmi}，体脂率${healthData.weight.bodyFatPercentage}%。建议：
+1. 保持健康的饮食习惯，减少高热量食物的摄入
+2. 增加日常活动量，例如散步或参加体育活动
+3. 考虑参加我们的减重路线活动，以科学的方式减轻体重`;
 
-1. 心脏健康路线：您的心率数据显示，适当的有氧运动将有助于提高心肺功能和心血管健康。
-2. 改善睡眠路线：鉴于您的睡眠质量略低于理想水平，这条路线的薰衣草园和水景区可帮助放松身心。
-
-以上路线您可以在下方的"健康旅游路线推荐"部分查看详细信息，您更倾向于哪一条路线？`;
-                    } else if (message.includes('童子湾')) {
-                        aiResponse = `童子湾村位于广东省广州市，是一处环境优美的海滨村落，拥有：
-
-1. 95%的绿色植被覆盖率
-2. 丰富的负氧离子含量
-3. 独特的海岸线和松林景观
-4. 多样化的健康养生资源
-
-村内设有多条健康主题路线，结合您的健康数据，我推荐您可以体验我们的海滨心肺强化路线或改善睡眠路线，这些路线都经过精心设计，能够针对性地改善您的健康状况。`;
+                        // 添加体重数据图表
+                        additionalHTML = `
+                            <div class="message-chart-container">
+                                <div class="message-chart-title">体重变化趋势</div>
+                                <canvas id="weightChart"></canvas>
+                            </div>
+                        `;
+                        
+                        // 延迟添加图表
+                        setTimeout(() => {
+                            const ctx = document.getElementById('weightChart').getContext('2d');
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                                    datasets: [{
+                                        label: '体重(公斤)',
+                                        data: [70, 69, 68, 67, 66, 65, 64],
+                                        borderColor: '#FF9800',
+                                        backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                                        tension: 0.4,
+                                        fill: true
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            display: false
+                                        }
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                font: {
+                                                    size: 10
+                                                }
+                                            }
+                                        },
+                                        x: {
+                                            ticks: {
+                                                font: {
+                                                    size: 10
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }, 100);
                     } else {
-                        aiResponse = `感谢您的提问。基于您的健康数据，我发现：
+                        // 默认回答
+                        aiResponse = `您好，基于您的健康数据，我可以为您提供个性化的健康建议。请问您想了解哪方面的健康信息？您可以询问关于睡眠、步数、心率、压力或体重方面的问题。`;
 
-- 您的睡眠时长略低于理想水平
-- 日均步数达成率为87.5%
-- 心率处于健康范围内
-- 压力水平呈下降趋势
-
-您有任何特定的健康方面的问题吗？我可以为您提供关于睡眠、步数、心率、压力管理等方面的详细分析和建议。或者，您想了解我们为您推荐的健康旅游路线吗？`;
-
-                        // 添加更多建议选项
+                        // 添加建议提示
                         additionalHTML = `
                             <div class="suggestion-chips">
-                                <div class="suggestion-chip" data-question="我应该如何改善睡眠质量？">
+                                <div class="suggestion-chip" data-question="我的睡眠质量如何？">
                                     <i class="fas fa-moon"></i>
-                                    <span>如何改善睡眠质量？</span>
-                    </div>
-                                <div class="suggestion-chip" data-question="推荐的童子湾健康活动有哪些？">
-                                    <i class="fas fa-hiking"></i>
-                                    <span>推荐的健康活动</span>
-                        </div>
-                    </div>
-                `;
+                                    <span>我的睡眠质量如何？</span>
+                                </div>
+                                <div class="suggestion-chip" data-question="我的步数达标了吗？">
+                                    <i class="fas fa-walking"></i>
+                                    <span>我的步数达标了吗？</span>
+                                </div>
+                                <div class="suggestion-chip" data-question="我的心率正常吗？">
+                                    <i class="fas fa-heartbeat"></i>
+                                    <span>我的心率正常吗？</span>
+                                </div>
+                            </div>
+                        `;
                     }
-                    
-                    // 添加AI回复到聊天界面
+
+                    // 添加回复到聊天
                     addMessageToChat('ai', aiResponse, additionalHTML);
                     
-                    // 重新绑定新增的建议选项事件
-                    bindSuggestionChips();
+                    // 将AI回复添加到聊天历史
+                    chatHistory.push({
+                        role: 'assistant',
+                        content: aiResponse
+                    });
                     
+                    // 重新绑定建议选项事件
+                    setTimeout(bindSuggestionChips, 100);
                 } catch (error) {
                     console.error('DeepSeek API调用失败:', error);
                     
@@ -2444,6 +2312,65 @@
                     // 显示错误信息
                     addMessageToChat('ai', '抱歉，我暂时无法回答您的问题。请稍后再试。');
                 }
+            }
+
+            // 根据对话内容生成建议提示
+            function generateSuggestions(userMessage, aiResponse) {
+                // 分析对话内容，生成相关建议
+                let suggestions = [];
+                
+                if (userMessage.includes('睡眠')) {
+                    suggestions = [
+                        { icon: 'fas fa-bed', text: '如何改善睡眠环境？' },
+                        { icon: 'fas fa-clock', text: '什么时间入睡最好？' },
+                        { icon: 'fas fa-utensils', text: '睡前饮食建议？' }
+                    ];
+                } else if (userMessage.includes('步数') || userMessage.includes('运动')) {
+                    suggestions = [
+                        { icon: 'fas fa-walking', text: '如何增加日常步数？' },
+                        { icon: 'fas fa-shoe-prints', text: '我适合什么运动？' },
+                        { icon: 'fas fa-heartbeat', text: '运动对心率有什么影响？' }
+                    ];
+                } else if (userMessage.includes('心率')) {
+                    suggestions = [
+                        { icon: 'fas fa-heart', text: '如何降低静息心率？' },
+                        { icon: 'fas fa-exclamation-circle', text: '什么心率属于异常？' },
+                        { icon: 'fas fa-dumbbell', text: '最佳运动心率区间？' }
+                    ];
+                } else if (userMessage.includes('压力') || userMessage.includes('焦虑')) {
+                    suggestions = [
+                        { icon: 'fas fa-spa', text: '有效的减压方法？' },
+                        { icon: 'fas fa-brain', text: '压力对健康的影响？' },
+                        { icon: 'fas fa-wind', text: '推荐的呼吸放松技巧？' }
+                    ];
+                } else if (userMessage.includes('体重') || userMessage.includes('减肥')) {
+                    suggestions = [
+                        { icon: 'fas fa-weight', text: '健康的减重速度？' },
+                        { icon: 'fas fa-apple-alt', text: '减重饮食建议？' },
+                        { icon: 'fas fa-running', text: '最有效的减脂运动？' }
+                    ];
+                } else {
+                    // 默认建议
+                    suggestions = [
+                        { icon: 'fas fa-chart-line', text: '我的整体健康状况如何？' },
+                        { icon: 'fas fa-hiking', text: '适合我的旅游路线？' },
+                        { icon: 'fas fa-fish', text: '推荐的海产品？' }
+                    ];
+                }
+                
+                // 创建建议HTML元素
+                const suggestionDiv = document.createElement('div');
+                suggestionDiv.className = 'suggestion-chips';
+                
+                suggestions.forEach(suggestion => {
+                    const chip = document.createElement('div');
+                    chip.className = 'suggestion-chip';
+                    chip.dataset.question = suggestion.text;
+                    chip.innerHTML = `<i class="${suggestion.icon}"></i><span>${suggestion.text}</span>`;
+                    suggestionDiv.appendChild(chip);
+                });
+                
+                return suggestionDiv;
             }
             
             // 绑定建议选项点击事件
@@ -2475,640 +2402,6 @@
                 this.style.height = (this.scrollHeight) + 'px';
             });
         });
-    </script>
-    
-    <script>
-        // 全局变量存储地图实例
-        let heartRouteMap = null;
-        let sleepRouteMap = null;
-        let foodRouteMap = null;
-        let detailRouteMap = null;
-        let mapsInitialized = false;
-        
-        // 设置备用地图图片背景
-        function setupBackupMaps() {
-            // 设置详情页面的备用地图
-            document.getElementById('routeDetailModal').addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget || document.querySelector('[data-route-id].active');
-                if (!button) return;
-                
-                const routeId = button.getAttribute('data-route-id');
-                const backupDetailMap = document.getElementById('backup-detail-map');
-                
-                // 根据路线类型设置不同的背景
-                if (routeId === 'heart-route') {
-                    backupDetailMap.className = 'backup-route-heart';
-                } else if (routeId === 'sleep-route') {
-                    backupDetailMap.className = 'backup-route-sleep';
-                } else if (routeId === 'food-route') {
-                    backupDetailMap.className = 'backup-route-food';
-                }
-            });
-        }
-        
-        // 初始化所有地图
-        function initMaps() {
-            // 防止重复初始化
-            if (mapsInitialized) return;
-            mapsInitialized = true;
-            
-            try {
-                console.log("开始初始化地图...");
-                
-                // 隐藏备用地图
-                document.querySelectorAll('.backup-route-heart, .backup-route-sleep, .backup-route-food').forEach(function(element) {
-                    element.style.display = 'none';
-                });
-                
-                // 检查高德地图API是否正确加载
-                if (typeof AMap === 'undefined') {
-                    throw new Error('高德地图API未成功加载');
-                }
-                
-                console.log("高德地图API已成功加载");
-                
-                // 定义路线数据
-                const routesData = {
-                    'heart-route': {
-                        name: '心肺强化路线',
-                        desc: '沿着异木棉花大道和小叶紫薇花村道行走，空气中富含负氧离子，有助于心肺功能强化。根据您的心率数据，我们定制了缓坡和休息点分布，确保锻炼效果的同时不会过度疲劳。',
-                        distance: '3.5公里',
-                        time: '约1.5小时',
-                        slope: '坡度适中',
-                        color: '#4CAF50',
-                        activities: [
-                            { name: '经典四小园', desc: '在园林环境中进行10分钟冥想，聆听自然声音' },
-                            { name: '异木棉花大道', desc: '在花海和树木之间进行深呼吸练习' },
-                            { name: '文化中心', desc: '设有专业设备监测运动心率，调整步行速度' }
-                        ],
-                        // 路径坐标（保持原有坐标，更改注释）
-                        path: [
-                            [116.397428, 39.90923], // 起点 - 经典四小园
-                            [116.398428, 39.90823],
-                            [116.399428, 39.90723],
-                            [116.399928, 39.90623],
-                            [116.400428, 39.90523], // 小叶紫薇花村道
-                            [116.401428, 39.90523],
-                            [116.402428, 39.90523],
-                            [116.403428, 39.90523],
-                            [116.404428, 39.90523], // 异木棉花大道
-                            [116.404928, 39.90623],
-                            [116.405428, 39.90723],
-                            [116.405928, 39.90823],
-                            [116.405928, 39.90923]  // 文化中心（终点）
-                        ],
-                        // 路线上的标记点
-                        markers: [
-                            { 
-                                position: [116.397428, 39.90923], 
-                                title: '起点 - 经典四小园', 
-                                icon: 'start',
-                                desc: '路线起点，园林环境优美，负氧离子含量高。这里可以测量您的基础心率，作为后续对比的参考。四个主题小园分别展示不同植物，有助于放松心情。',
-                                time: '15分钟'
-                            },
-                            { 
-                                position: [116.400428, 39.90523], 
-                                title: '小叶紫薇花村道', 
-                                icon: 'point',
-                                type: 'rest',
-                                desc: '两侧种满小叶紫薇花的村道，空气清新，景色宜人。建议在此放慢脚步，欣赏花景，并进行缓和的呼吸练习，帮助调节心率和血压。',
-                                time: '20分钟'
-                            },
-                            { 
-                                position: [116.404428, 39.90523], 
-                                title: '异木棉花大道', 
-                                icon: 'point',
-                                type: 'activity',
-                                desc: '种植异木棉花的林荫大道，色彩鲜艳，空气中富含植物芳香。建议在此进行深呼吸练习，每次吸气5秒，屏息2秒，呼气7秒，共重复10次。',
-                                time: '20分钟'
-                            },
-                            { 
-                                position: [116.405928, 39.90923], 
-                                title: '文化中心 - 终点', 
-                                icon: 'end',
-                                desc: '路线终点，文化中心内设有健康监测区，配备专业心率监测设备，可以记录运动后心率数据，并提供专业分析。还有休息区和健康茶饮供应。',
-                                time: '15分钟'
-                            }
-                        ],
-                        // 路线标注
-                        labels: [
-                            { 
-                                position: [116.399428, 39.90823], 
-                                text: '花景观赏区' 
-                            },
-                            { 
-                                position: [116.402928, 39.90523], 
-                                text: '林荫步道' 
-                            },
-                            { 
-                                position: [116.405428, 39.90823], 
-                                text: '文化观景台' 
-                            }
-                        ]
-                    },
-                    'sleep-route': {
-                        name: '安神助眠路线',
-                        desc: '专为改善睡眠质量设计的路线。沿途经过古庙、渔港和音乐轻吧，结合自然声音和文化体验，帮助放松身心，为晚间优质睡眠做准备。',
-                        distance: '2.8公里',
-                        time: '约1小时',
-                        slope: '平缓',
-                        color: '#2196F3',
-                        activities: [
-                            { name: '古庙参观', desc: '庙宇环境宁静，有助于心灵放松' },
-                            { name: '渔港观景', desc: '聆听海浪和渔船声，有助于深度睡眠' },
-                            { name: '音乐轻吧', desc: '在轻柔音乐中进行放松冥想练习' }
-                        ],
-                        // 路径坐标（保持原有坐标，更改注释）
-                        path: [
-                            [116.407428, 39.91323], // 起点 - 古庙
-                            [116.407428, 39.91223],
-                            [116.407428, 39.91123],
-                            [116.407428, 39.91023],
-                            [116.407428, 39.90923],
-                            [116.407428, 39.90823],
-                            [116.407428, 39.90723], // 渔港
-                            [116.408428, 39.90723],
-                            [116.409428, 39.90723],
-                            [116.410428, 39.90723],
-                            [116.411428, 39.90723],
-                            [116.412428, 39.90723],
-                            [116.413428, 39.90723],
-                            [116.414428, 39.90723],
-                            [116.415428, 39.90723], // 海景民宿
-                            [116.415428, 39.90823],
-                            [116.415428, 39.90923],
-                            [116.415428, 39.91023],
-                            [116.415428, 39.91123],
-                            [116.415428, 39.91223],
-                            [116.415428, 39.91323]  // 音乐轻吧（终点）
-                        ],
-                        // 路线上的标记点
-                        markers: [
-                            { 
-                                position: [116.407428, 39.91323], 
-                                title: '起点 - 古庙', 
-                                icon: 'start',
-                                desc: '路线起始点，古庙环境宁静祥和，历史悠久。在此可以体验传统的冥想和静心方法，帮助您放松身心，为睡眠之旅做准备。庙内提供健康茶饮。',
-                                time: '20分钟'
-                            },
-                            { 
-                                position: [116.407428, 39.90723], 
-                                title: '渔港观景', 
-                                icon: 'point',
-                                type: 'activity',
-                                desc: '传统渔港，可以观赏渔船和捕鱼活动，聆听海浪和船只的声音。研究表明，这类自然声音能够有效降低焦虑水平，促进深度睡眠。设有舒适的观景座椅。',
-                                time: '25分钟'
-                            },
-                            { 
-                                position: [116.415428, 39.90723], 
-                                title: '海景民宿', 
-                                icon: 'point',
-                                type: 'rest',
-                                desc: '面朝大海的精品民宿，提供短暂休息和茶点服务。这里的露台视野开阔，可以看到海景，听着潮汐声放松。民宿内有专门的休息区和阅读角。',
-                                time: '20分钟'
-                            },
-                            { 
-                                position: [116.415428, 39.91323], 
-                                title: '音乐轻吧 - 终点', 
-                                icon: 'end',
-                                desc: '路线终点，一家专注于助眠音乐和放松体验的轻音乐吧。环境舒适，播放的是经科学证明有助于改善睡眠的音乐频率。专业指导员会教授"4-7-8"呼吸法。',
-                                time: '30分钟'
-                            }
-                        ],
-                        // 路线标注
-                        labels: [
-                            { 
-                                position: [116.407428, 39.91023], 
-                                text: '古道石阶' 
-                            },
-                            { 
-                                position: [116.411428, 39.90723], 
-                                text: '滨海小路' 
-                            },
-                            { 
-                                position: [116.415428, 39.91023], 
-                                text: '观景平台' 
-                            }
-                        ]
-                    },
-                    'food-route': {
-                        name: '养生饮食路线',
-                        desc: '结合您的饮食习惯和健康数据定制的美食之旅。沿途经过渔港、海边餐饮和文旅周边店铺，品尝新鲜营养的海产品，了解健康饮食知识。',
-                        distance: '4.2公里',
-                        time: '约2小时',
-                        slope: '起伏小',
-                        color: '#FF9800',
-                        activities: [
-                            { name: '渔港选鲜', desc: '了解新鲜海产品的挑选与营养价值' },
-                            { name: '海边餐饮', desc: '品尝低油低盐的健康海鲜料理' },
-                            { name: '文旅店铺', desc: '选购特色健康食材和手工制品' }
-                        ],
-                        // 路径坐标（保持原有坐标，更改注释）
-                        path: [
-                            [116.417428, 39.91723], // 起点 - 渔港
-                            [116.417428, 39.91623],
-                            [116.417428, 39.91523],
-                            [116.417428, 39.91423],
-                            [116.417428, 39.91323],
-                            [116.417428, 39.91223],
-                            [116.417428, 39.91121], // 垂钓台
-                            [116.418428, 39.91121],
-                            [116.419428, 39.91121],
-                            [116.420428, 39.91121],
-                            [116.421428, 39.91121],
-                            [116.422428, 39.91121],
-                            [116.423428, 39.91121],
-                            [116.424428, 39.91121],
-                            [116.425428, 39.91121], // 海边餐饮
-                            [116.425428, 39.91221],
-                            [116.425428, 39.91321],
-                            [116.425428, 39.91421],
-                            [116.425428, 39.91521],
-                            [116.425428, 39.91621],
-                            [116.425428, 39.91723]  // 文旅周边店铺（终点）
-                        ],
-                        // 路线上的标记点
-                        markers: [
-                            { 
-                                position: [116.417428, 39.91723], 
-                                title: '起点 - 渔港', 
-                                icon: 'start',
-                                desc: '路线起点，这里有当地渔民的鱼获直销，可以了解各种海鲜的挑选方法和最佳食用时节。现场有营养师讲解各类海鲜的营养价值和健康吃法。',
-                                time: '25分钟'
-                            },
-                            { 
-                                position: [116.417428, 39.91121], 
-                                title: '垂钓台', 
-                                icon: 'point',
-                                type: 'activity',
-                                desc: '设有专业垂钓设施的观景平台，可以亲自体验钓鱼乐趣。这里提供简易的钓具和指导，让您在放松心情的同时，体验"从海洋到餐桌"的过程。',
-                                time: '30分钟'
-                            },
-                            { 
-                                position: [116.425428, 39.91121], 
-                                title: '海边餐饮', 
-                                icon: 'point',
-                                type: 'food',
-                                desc: '临海特色餐厅，专注健康烹饪理念。厨师会现场示范如何用少油少盐的方式烹制鲜美海鲜。餐厅提供根据您健康数据定制的个性化菜单，兼顾美味与健康。',
-                                time: '45分钟'
-                            },
-                            { 
-                                position: [116.425428, 39.91723], 
-                                title: '文旅周边店铺 - 终点', 
-                                icon: 'end',
-                                desc: '路线终点，一条集合了多家文创和特产店铺的特色街区。这里可以购买到当地特色健康食材、手工制品和文创产品，是体验当地文化和选购纪念品的理想场所。',
-                                time: '30分钟'
-                            }
-                        ],
-                        // 路线标注
-                        labels: [
-                            { 
-                                position: [116.417428, 39.91423], 
-                                text: '滨海步道' 
-                            },
-                            { 
-                                position: [116.421428, 39.91121], 
-                                text: '美食街区' 
-                            },
-                            { 
-                                position: [116.425428, 39.91421], 
-                                text: '文创区域' 
-                            }
-                        ]
-                    }
-                };
-                
-                // 初始化各路线地图
-                try {
-                    console.log("初始化心脏健康路线地图...");
-                    heartRouteMap = initRouteMap('heart-route-map', 'heart-route', routesData);
-                } catch (e) {
-                    console.error('心脏健康路线地图初始化失败', e);
-                    document.querySelector('#heart-route-map .backup-route-heart').style.display = 'flex';
-                }
-                
-                try {
-                    console.log("初始化改善睡眠路线地图...");
-                    sleepRouteMap = initRouteMap('sleep-route-map', 'sleep-route', routesData);
-                } catch (e) {
-                    console.error('改善睡眠路线地图初始化失败', e);
-                    document.querySelector('#sleep-route-map .backup-route-sleep').style.display = 'flex';
-                }
-                
-                try {
-                    console.log("初始化健康饮食路线地图...");
-                    foodRouteMap = initRouteMap('food-route-map', 'food-route', routesData);
-                } catch (e) {
-                    console.error('健康饮食路线地图初始化失败', e);
-                    document.querySelector('#food-route-map .backup-route-food').style.display = 'flex';
-                }
-                
-                // 设置路线详情按钮点击事件
-                document.querySelectorAll('[data-route-id]').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const routeId = this.getAttribute('data-route-id');
-                        const routeData = routesData[routeId];
-                        
-                        // 设置模态框内容
-                        document.getElementById('routeDetailTitle').textContent = '路线详情';
-                        document.getElementById('routeDetailName').textContent = routeData.name;
-                        document.getElementById('routeDetailDesc').textContent = routeData.desc;
-                        document.getElementById('routeDetailDistance').textContent = routeData.distance;
-                        document.getElementById('routeDetailTime').textContent = routeData.time;
-                        document.getElementById('routeDetailSlope').textContent = routeData.slope;
-                        
-                        // 设置详情地图背景类
-                        const backupDetailMap = document.getElementById('backup-detail-map');
-                        backupDetailMap.className = routeId === 'heart-route' ? 'backup-route-heart' : 
-                                                  routeId === 'sleep-route' ? 'backup-route-sleep' : 'backup-route-food';
-                        
-                        // 生成活动列表
-                        const activitiesList = document.getElementById('routeActivitiesList');
-                        activitiesList.innerHTML = '';
-                        
-                        routeData.activities.forEach(activity => {
-                            const li = document.createElement('li');
-                            li.className = 'list-group-item border-0 px-0';
-                            li.innerHTML = `
-                                <div class="d-flex">
-                                    <div class="me-3">
-                                        <div class="bg-light rounded-circle p-2">
-                                            <i class="fas fa-map-pin text-primary"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h6 class="mb-1">${activity.name}</h6>
-                                        <p class="mb-0 text-muted small">${activity.desc}</p>
-                                    </div>
-                                </div>
-                            `;
-                            activitiesList.appendChild(li);
-                        });
-                        
-                        // 显示模态框
-                        const modal = new bootstrap.Modal(document.getElementById('routeDetailModal'));
-                        modal.show();
-                        
-                        // 模态框显示后初始化地图
-                        document.getElementById('routeDetailModal').addEventListener('shown.bs.modal', function() {
-                            try {
-                                console.log("初始化详情地图...");
-                                // 如果地图已经初始化，销毁它
-                                if (detailRouteMap) {
-                                    detailRouteMap.destroy();
-                                }
-                                
-                                // 初始化详情地图
-                                backupDetailMap.style.display = 'none';
-                                detailRouteMap = initRouteMap('detailRouteMap', routeId, routesData);
-                            } catch (e) {
-                                console.error('详情地图初始化失败', e);
-                                backupDetailMap.style.display = 'flex';
-                            }
-                        }, { once: true });
-                        
-                        // 设置导航按钮行为
-                        document.getElementById('routeNavigateBtn').onclick = function(e) {
-                            e.preventDefault();
-                            // 这里可以添加导航功能，例如打开高德导航应用
-                            const startPoint = routeData.path[0].join(',');
-                            const endPoint = routeData.path[routeData.path.length - 1].join(',');
-                            const navigationUrl = `https://uri.amap.com/navigation?from=${startPoint}&to=${endPoint}&mode=walk&policy=1&src=mypage&callnative=0`;
-                            window.open(navigationUrl, '_blank');
-                        };
-                    });
-                });
-            } catch (error) {
-                console.error('地图初始化总错误：', error);
-                // 显示备用地图
-                showBackupMaps();
-            }
-        }
-        
-        // 显示备用地图
-        function showBackupMaps() {
-            console.log("使用备用地图...");
-            document.querySelectorAll('.backup-route-heart, .backup-route-sleep, .backup-route-food').forEach(function(element) {
-                element.style.display = 'flex';
-            });
-            document.getElementById('backup-detail-map').style.display = 'flex';
-        }
-        
-        // 初始化地图
-        function initRouteMap(containerId, routeId, routesData) {
-            if (typeof AMap === 'undefined') {
-                throw new Error('高德地图API未加载');
-            }
-            
-            const container = document.getElementById(containerId);
-            if (!container) {
-                throw new Error(`找不到地图容器: ${containerId}`);
-            }
-            
-            const routeData = routesData[routeId];
-            if (!routeData) {
-                throw new Error(`找不到路线数据: ${routeId}`);
-            }
-            
-            // 创建地图实例
-            const map = new AMap.Map(containerId, {
-                zoom: 14,
-                viewMode: '2D',
-                resizeEnable: true,
-                pitch: 0,  // 俯仰角度
-                mapStyle: 'amap://styles/fresh'
-            });
-            
-            // 创建折线实例
-            const polyline = new AMap.Polyline({
-                path: routeData.path,
-                strokeColor: routeData.color,
-                strokeWeight: 8,  // 增加线条粗细
-                strokeOpacity: 0.8,
-                strokeStyle: 'solid',
-                lineJoin: 'round',
-                lineCap: 'round',
-                zIndex: 50,
-                showDir: true,
-                dirColor: 'white', // 方向箭头颜色
-                isOutline: true,  // 是否描边
-                outlineColor: 'white', // 描边颜色
-                borderWeight: 1  // 描边宽度
-            });
-            
-            // 路线装饰效果
-            const routeEffect = new AMap.Polyline({
-                path: routeData.path,
-                strokeColor: routeData.color,
-                strokeWeight: 2,
-                strokeOpacity: 0.8,
-                strokeStyle: 'dashed',
-                strokeDasharray: [5, 5],
-                zIndex: 49,
-                lineJoin: 'round',
-                lineCap: 'round'
-            });
-            
-            // 将折线添加到地图
-            map.add([routeEffect, polyline]);
-            
-            // 添加起点和路径点标记
-            let markers = [];
-            
-            routeData.markers.forEach(markerData => {
-                let icon;
-                
-                if (markerData.icon === 'start') {
-                    icon = new AMap.Icon({
-                        size: new AMap.Size(32, 44),
-                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
-                        imageSize: new AMap.Size(32, 44),
-                        imageOffset: new AMap.Pixel(0, 0)
-                    });
-                } else if (markerData.icon === 'end') {
-                    icon = new AMap.Icon({
-                        size: new AMap.Size(32, 44),
-                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
-                        imageSize: new AMap.Size(32, 44),
-                        imageOffset: new AMap.Pixel(0, 0)
-                    });
-                } else {
-                    // 不同类型的标记使用不同颜色
-                    let iconColor = routeData.color;
-                    if (markerData.type === 'food') {
-                        iconColor = '#FF9800';
-                    } else if (markerData.type === 'rest') {
-                        iconColor = '#2196F3';
-                    } else if (markerData.type === 'activity') {
-                        iconColor = '#9C27B0';
-                    }
-                    
-                    icon = new AMap.Icon({
-                        size: new AMap.Size(28, 34),
-                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_' + iconColor.replace('#', '') + '.png',
-                        imageSize: new AMap.Size(28, 34),
-                        imageOffset: new AMap.Pixel(0, 0)
-                    });
-                }
-                
-                const marker = new AMap.Marker({
-                    position: markerData.position,
-                    title: markerData.title,
-                    icon: icon,
-                    offset: new AMap.Pixel(-14, -34),
-                    animation: 'AMAP_ANIMATION_DROP',
-                    zIndex: 100
-                });
-                
-                // 创建标记的信息窗体
-                const content = `
-                    <div class="route-info-window">
-                        <h5>${markerData.title}</h5>
-                        <p class="mb-1">${markerData.desc || '点击查看详情'}</p>
-                        ${markerData.image ? `<img src="${markerData.image}" class="img-fluid rounded mb-2" style="max-height:80px;" alt="${markerData.title}">` : ''}
-                        ${markerData.time ? `<p class="mb-0 small"><i class="fas fa-clock text-muted me-1"></i> 建议停留: ${markerData.time}</p>` : ''}
-                    </div>
-                `;
-                
-                const infoWindow = new AMap.InfoWindow({
-                    isCustom: true,
-                    content: content,
-                    offset: new AMap.Pixel(0, -35),
-                    autoMove: true,
-                    closeWhenClickMap: true
-                });
-                
-                // 点击标记时打开信息窗体
-                marker.on('click', function() {
-                    infoWindow.open(map, marker.getPosition());
-                });
-                
-                markers.push(marker);
-            });
-            
-            // 添加路线上的标注文字
-            if (routeData.labels) {
-                routeData.labels.forEach(label => {
-                    const textMarker = new AMap.Text({
-                        text: label.text,
-                        position: label.position,
-                        anchor: 'center',
-                        style: {
-                            'padding': '5px 10px',
-                            'background-color': 'rgba(255,255,255,0.8)',
-                            'border-radius': '5px',
-                            'border-width': '1px',
-                            'border-color': routeData.color,
-                            'border-style': 'solid',
-                            'color': routeData.color,
-                            'font-size': '12px',
-                            'font-weight': 'bold',
-                            'box-shadow': '0 2px 5px rgba(0,0,0,0.1)'
-                        },
-                        zIndex: 90
-                    });
-                    markers.push(textMarker);
-                });
-            }
-            
-            // 将所有标记添加到地图
-            map.add(markers);
-            
-            // 添加比例尺和指南针
-            map.plugin(['AMap.Scale', 'AMap.ToolBar'], function() {
-                map.addControl(new AMap.Scale());
-                map.addControl(new AMap.ToolBar({
-                    position: 'RB'
-                }));
-            });
-            
-            // 调整视图以适应路线
-            map.setFitView([polyline, ...markers], {
-                padding: [50, 50, 50, 50] // 上、右、下、左 内边距
-            });
-            
-            return map;
-        }
-        
-        // 确保文档加载完成后设置备用地图
-        document.addEventListener('DOMContentLoaded', function() {
-            setupBackupMaps();
-            
-            // 添加手动初始化按钮（调试用）
-            // const debugBtn = document.createElement('button');
-            // debugBtn.innerText = '手动初始化地图';
-            // debugBtn.style.position = 'fixed';
-            // debugBtn.style.bottom = '20px';
-            // debugBtn.style.left = '20px';
-            // debugBtn.style.zIndex = '9999';
-            // debugBtn.onclick = function() {
-            //     mapsInitialized = false;
-            //     initMaps();
-            // };
-            // document.body.appendChild(debugBtn);
-            
-            // 如果高德地图API加载失败，30秒后自动显示备用地图
-            setTimeout(function() {
-                if (typeof AMap === 'undefined' || !mapsInitialized) {
-                    console.warn('高德地图API加载超时，使用备用地图');
-                    showBackupMaps();
-                }
-            }, 30000);
-        });
-        
-        // 如果地图API加载失败，window.AMapLoadError会被调用
-        window.AMapLoadError = function() {
-            console.error('高德地图API加载失败，使用备用地图');
-            showBackupMaps();
-        };
-        
-        // 如果地图API加载成功但回调函数不执行，这里手动尝试初始化
-        window.setTimeout(function() {
-            if (!mapsInitialized && typeof AMap !== 'undefined') {
-                console.log('检测到高德地图API已加载但未初始化，手动初始化...');
-                initMaps();
-            }
-        }, 5000);
     </script>
 </body>
 </html>
