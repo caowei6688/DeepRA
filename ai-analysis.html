@@ -1777,6 +1777,126 @@
             const apiConfigModal = new bootstrap.Modal(document.getElementById('apiConfigModal'));
             const saveApiConfigButton = document.getElementById('saveApiConfig');
             
+            // 聊天历史记录
+            let chatHistory = [];
+            
+            // 添加健康数据示例
+            const healthData = {
+                sleep: {
+                    averageDuration: 7.2,
+                    deepSleepPercentage: 28,
+                    remSleepPercentage: 22,
+                    wakeupCount: 2,
+                    sleepQualityScore: 78
+                },
+                steps: {
+                    daily: 8750,
+                    weeklyAverage: 8100,
+                    goal: 10000,
+                    achievementRate: 87.5
+                },
+                heartRate: {
+                    resting: 68,
+                    average: 75,
+                    max: 132,
+                    min: 62
+                },
+                stress: {
+                    score: 65,
+                    weeklyTrend: "逐渐下降",
+                    recommendedRelaxTime: 20
+                },
+                weight: {
+                    current: 68,
+                    bmi: 23.2,
+                    bodyFatPercentage: 21.5,
+                    trend: "稳定"
+                }
+            };
+            
+            // 显示打字指示器
+            function showTypingIndicator() {
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'message message-ai';
+                typingIndicator.id = 'typingIndicator';
+                typingIndicator.innerHTML = `
+                    <div class="message-header">
+                        <i class="fas fa-brain"></i>
+                        <span>AI健康助手</span>
+                    </div>
+                    <div class="message-content">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                `;
+                chatMessages.appendChild(typingIndicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // 隐藏打字指示器
+            function hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            // 添加消息到聊天
+            function addMessageToChat(type, text, additionalHTML = '') {
+                // 创建消息元素
+                const message = document.createElement('div');
+                message.className = `message message-${type}`;
+                
+                // 当前时间
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const timeString = `${hours}:${minutes}`;
+                
+                // 消息内容
+                message.innerHTML = `
+                    <div class="message-header">
+                        <i class="${type === 'user' ? 'fas fa-user' : 'fas fa-brain'}"></i>
+                        <span>${type === 'user' ? '您' : 'AI健康助手'}</span>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${text}</div>
+                        <div class="message-time">${timeString}</div>
+                    </div>
+                `;
+                
+                // 添加额外的HTML内容（如图表等）
+                if (additionalHTML) {
+                    const messageContent = message.querySelector('.message-content');
+                    const additionalContent = document.createElement('div');
+                    additionalContent.innerHTML = additionalHTML;
+                    messageContent.appendChild(additionalContent);
+                }
+                
+                // 添加到聊天框并滚动到底部
+                chatMessages.appendChild(message);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // 处理发送消息
+            function handleSendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    // 添加用户消息到聊天
+                    addMessageToChat('user', message);
+                    
+                    // 清空输入框
+                    userInput.value = '';
+                    userInput.style.height = 'auto';
+                    
+                    // 发送到DeepSeek API
+                    sendToDeepSeek(message);
+                }
+            }
+            
             // DeepSeek API 配置
             let apiConfig = {
                 apiKey: '',
@@ -1947,240 +2067,56 @@
 
             // 备用方案：使用模拟响应
             async function fallbackToSimulation(message) {
-                console.log('使用备用响应模式');
-                
-                // 模拟API延迟
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // 移除输入指示器
-                hideTypingIndicator();
-                
-                // 模拟回答
-                let aiResponse = '';
-                let additionalHTML = '';
-                
-                // 简单的问答模拟
-                if (message.includes('睡眠')) {
-                    aiResponse = `您的睡眠数据显示，平均睡眠时长为${healthData.sleep.averageDuration}小时，深度睡眠占比${healthData.sleep.deepSleepPercentage}%，快速眼动睡眠占比${healthData.sleep.remSleepPercentage}%。睡眠质量评分为${healthData.sleep.sleepQualityScore}分。
+                try {
+                    console.log('使用备用响应模式');
+                    
+                    // 模拟API延迟
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // 移除输入指示器
+                    hideTypingIndicator();
+                    
+                    // 模拟回答
+                    let aiResponse = '';
+                    let additionalHTML = '';
+                    
+                    // 简单的问答模拟
+                    if (message.includes('睡眠')) {
+                        aiResponse = `您的睡眠数据显示，平均睡眠时长为${healthData.sleep.averageDuration}小时，深度睡眠占比${healthData.sleep.deepSleepPercentage}%，快速眼动睡眠占比${healthData.sleep.remSleepPercentage}%。睡眠质量评分为${healthData.sleep.sleepQualityScore}分。
 
 您的睡眠时长略低于推荐的7.5-8小时，深度睡眠比例适中。建议您可以：
 1. 尝试每晚固定时间入睡
 2. 睡前1小时避免使用电子设备
 3. 确保睡眠环境舒适、安静且黑暗`;
 
-                    // 添加睡眠数据图表
-                    additionalHTML = `
-                        <div class="message-chart-container">
-                            <div class="message-chart-title">本周睡眠质量趋势</div>
-                            <canvas id="sleepChart"></canvas>
-                        </div>
-                    `;
-                    
-                    // 延迟添加图表
-                    setTimeout(() => {
-                        const ctx = document.getElementById('sleepChart').getContext('2d');
-                        new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                                datasets: [{
-                                    label: '睡眠时长(小时)',
-                                    data: [7.1, 6.8, 7.3, 7.5, 6.9, 7.8, 7.2],
-                                    borderColor: '#4CAF50',
-                                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                                    tension: 0.4,
-                                    fill: true
-                                }, {
-                                    label: '深度睡眠比例(%)',
-                                    data: [25, 22, 27, 30, 26, 31, 28],
-                                    borderColor: '#2196F3',
-                                    backgroundColor: 'transparent',
-                                    tension: 0.4
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        position: 'top',
-                                        labels: {
-                                            boxWidth: 10,
-                                            font: {
-                                                size: 10
-                                            }
-                                        }
-                                    }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: false,
-                                        ticks: {
-                                            font: {
-                                                size: 10
-                                            }
-                                        }
-                                    },
-                                    x: {
-                                        ticks: {
-                                            font: {
-                                                size: 10
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }, 100);
-                } else if (message.includes('步数')) {
-                    aiResponse = `您的步数数据显示，今日步数为${healthData.steps.daily}步，周平均步数为${healthData.steps.weeklyAverage}步，目标达成率为${healthData.steps.achievementRate}%。
-
-相比推荐的每日10,000步目标，您的步行活动略有不足。建议：
-1. 尝试在日常生活中增加步行机会，例如步行上下班或购物
-2. 每工作1小时起身活动5-10分钟
-3. 考虑参加我们的心肺强化路线活动，以更有趣的方式增加步数`;
-
-                    // 添加步数数据图表
-                    additionalHTML = `
-                        <div class="message-chart-container">
-                            <div class="message-chart-title">本周步数统计</div>
-                            <canvas id="stepsChart"></canvas>
-                        </div>
-                    `;
-                    
-                    // 延迟添加图表
-                    setTimeout(() => {
-                        const ctx = document.getElementById('stepsChart').getContext('2d');
-                        new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                                datasets: [{
-                                    label: '步数',
-                                    data: [8250, 7830, 6950, 8120, 7650, 9150, 8750],
-                                    backgroundColor: '#4CAF50',
-                                    borderWidth: 0,
-                                    borderRadius: 4
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        display: false
-                                    }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        ticks: {
-                                            font: {
-                                                size: 10
-                                            }
-                                        }
-                                    },
-                                    x: {
-                                        ticks: {
-                                            font: {
-                                                size: 10
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }, 100);
-                } else if (message.includes('心率')) {
-                    aiResponse = `您的心率数据显示，安静心率为${healthData.heartRate.resting}次/分钟，平均心率为${healthData.heartRate.average}次/分钟，最高心率${healthData.heartRate.max}次/分钟，最低心率${healthData.heartRate.min}次/分钟。
-
-您的安静心率处于健康范围内（60-100次/分钟）。建议：
-1. 继续保持规律的有氧运动，有助于降低静息心率
-2. 关注高心率出现的时段，了解诱因
-3. 考虑参加我们的心脏健康路线活动，科学锻炼心肺功能`;
-
-                        // 添加心率数据图表
+                        // 添加睡眠数据图表
                         additionalHTML = `
                             <div class="message-chart-container">
-                                <div class="message-chart-title">今日心率变化</div>
-                                <canvas id="heartRateChart"></canvas>
+                                <div class="message-chart-title">本周睡眠质量趋势</div>
+                                <canvas id="sleepChart"></canvas>
                             </div>
                         `;
                         
                         // 延迟添加图表
                         setTimeout(() => {
-                            const ctx = document.getElementById('heartRateChart').getContext('2d');
-                            new Chart(ctx, {
-                                type: 'line',
-                                data: {
-                                    labels: ['0:00', '3:00', '6:00', '9:00', '12:00', '15:00', '18:00', '21:00'],
-                                    datasets: [{
-                                        label: '心率(次/分)',
-                                        data: [62, 58, 60, 85, 92, 78, 95, 72],
-                                        borderColor: '#FF5252',
-                                        backgroundColor: 'rgba(255, 82, 82, 0.1)',
-                                        tension: 0.4,
-                                        fill: true
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: {
-                                        legend: {
-                                            display: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                            beginAtZero: false,
-                                ticks: {
-                                    font: {
-                                        size: 10
-                                    }
-                                }
-                            },
-                            x: {
-                                            ticks: {
-                                                font: {
-                                                    size: 10
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                        }, 100);
-                    } else if (message.includes('压力') || message.includes('焦虑')) {
-                        aiResponse = `您的压力水平评分为${healthData.stress.score}分（满分100分），处于中度压力水平。近期压力趋势为${healthData.stress.weeklyTrend}，建议每日放松时间${healthData.stress.recommendedRelaxTime}分钟。
-
-为降低压力水平，建议：
-1. 尝试冥想或深呼吸练习
-2. 保证充足的睡眠时间
-3. 参加我们的改善睡眠路线活动，体验专业的压力释放方法`;
-
-                        // 添加压力数据图表
-                        additionalHTML = `
-                            <div class="message-chart-container">
-                                <div class="message-chart-title">本周压力水平变化</div>
-                                <canvas id="stressChart"></canvas>
-                            </div>
-                        `;
-                        
-                        // 延迟添加图表
-                        setTimeout(() => {
-                            const ctx = document.getElementById('stressChart').getContext('2d');
+                            const ctx = document.getElementById('sleepChart').getContext('2d');
                             new Chart(ctx, {
                                 type: 'line',
                                 data: {
                                     labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
                                     datasets: [{
-                                        label: '压力指数',
-                                        data: [58, 62, 55, 50, 48, 42, 40],
-                                        borderColor: '#9C27B0',
-                                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                                        label: '睡眠时长(小时)',
+                                        data: [7.1, 6.8, 7.3, 7.5, 6.9, 7.8, 7.2],
+                                        borderColor: '#4CAF50',
+                                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
                                         tension: 0.4,
                                         fill: true
+                                    }, {
+                                        label: '深度睡眠比例(%)',
+                                        data: [25, 22, 27, 30, 26, 31, 28],
+                                        borderColor: '#2196F3',
+                                        backgroundColor: 'transparent',
+                                        tension: 0.4
                                     }]
                                 },
                                 options: {
@@ -2188,70 +2124,18 @@
                                     maintainAspectRatio: false,
                                     plugins: {
                                         legend: {
-                                    display: false
-                                        }
-                                },
-                                    scales: {
-                                        y: {
-                                            beginAtZero: false,
-                                ticks: {
-                                    font: {
-                                        size: 10
-                                    }
-                                }
-                                        },
-                                        x: {
-                                            ticks: {
+                                            position: 'top',
+                                            labels: {
+                                                boxWidth: 10,
                                                 font: {
                                                     size: 10
                                                 }
                                             }
                                         }
-                                    }
-                                }
-                            });
-                        }, 100);
-                    } else if (message.includes('体重') || message.includes('减肥')) {
-                        aiResponse = `您的体重数据显示，当前体重${healthData.weight.current}公斤，BMI指数${healthData.weight.bmi}，体脂率${healthData.weight.bodyFatPercentage}%。建议：
-1. 保持健康的饮食习惯，减少高热量食物的摄入
-2. 增加日常活动量，例如散步或参加体育活动
-3. 考虑参加我们的减重路线活动，以科学的方式减轻体重`;
-
-                        // 添加体重数据图表
-                        additionalHTML = `
-                            <div class="message-chart-container">
-                                <div class="message-chart-title">体重变化趋势</div>
-                                <canvas id="weightChart"></canvas>
-                            </div>
-                        `;
-                        
-                        // 延迟添加图表
-                        setTimeout(() => {
-                            const ctx = document.getElementById('weightChart').getContext('2d');
-                            new Chart(ctx, {
-                                type: 'line',
-                                data: {
-                                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                                    datasets: [{
-                                        label: '体重(公斤)',
-                                        data: [70, 69, 68, 67, 66, 65, 64],
-                                        borderColor: '#FF9800',
-                                        backgroundColor: 'rgba(255, 152, 0, 0.1)',
-                                        tension: 0.4,
-                                        fill: true
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: {
-                                        legend: {
-                                            display: false
-                                        }
                                     },
                                     scales: {
                                         y: {
-                                            beginAtZero: true,
+                                            beginAtZero: false,
                                             ticks: {
                                                 font: {
                                                     size: 10
@@ -2269,27 +2153,11 @@
                                 }
                             });
                         }, 100);
+                    } else if (message.includes('步数')) {
+                        aiResponse = `您的步数数据显示，今日步数为${healthData.steps.daily}步，周平均步数为${healthData.steps.weeklyAverage}步，目标达成率为${healthData.steps.achievementRate}%。相比推荐的每日10,000步目标，您的步行活动略有不足。`;
                     } else {
                         // 默认回答
                         aiResponse = `您好，基于您的健康数据，我可以为您提供个性化的健康建议。请问您想了解哪方面的健康信息？您可以询问关于睡眠、步数、心率、压力或体重方面的问题。`;
-
-                        // 添加建议提示
-                        additionalHTML = `
-                            <div class="suggestion-chips">
-                                <div class="suggestion-chip" data-question="我的睡眠质量如何？">
-                                    <i class="fas fa-moon"></i>
-                                    <span>我的睡眠质量如何？</span>
-                                </div>
-                                <div class="suggestion-chip" data-question="我的步数达标了吗？">
-                                    <i class="fas fa-walking"></i>
-                                    <span>我的步数达标了吗？</span>
-                                </div>
-                                <div class="suggestion-chip" data-question="我的心率正常吗？">
-                                    <i class="fas fa-heartbeat"></i>
-                                    <span>我的心率正常吗？</span>
-                                </div>
-                            </div>
-                        `;
                     }
 
                     // 添加回复到聊天
@@ -2324,30 +2192,6 @@
                         { icon: 'fas fa-bed', text: '如何改善睡眠环境？' },
                         { icon: 'fas fa-clock', text: '什么时间入睡最好？' },
                         { icon: 'fas fa-utensils', text: '睡前饮食建议？' }
-                    ];
-                } else if (userMessage.includes('步数') || userMessage.includes('运动')) {
-                    suggestions = [
-                        { icon: 'fas fa-walking', text: '如何增加日常步数？' },
-                        { icon: 'fas fa-shoe-prints', text: '我适合什么运动？' },
-                        { icon: 'fas fa-heartbeat', text: '运动对心率有什么影响？' }
-                    ];
-                } else if (userMessage.includes('心率')) {
-                    suggestions = [
-                        { icon: 'fas fa-heart', text: '如何降低静息心率？' },
-                        { icon: 'fas fa-exclamation-circle', text: '什么心率属于异常？' },
-                        { icon: 'fas fa-dumbbell', text: '最佳运动心率区间？' }
-                    ];
-                } else if (userMessage.includes('压力') || userMessage.includes('焦虑')) {
-                    suggestions = [
-                        { icon: 'fas fa-spa', text: '有效的减压方法？' },
-                        { icon: 'fas fa-brain', text: '压力对健康的影响？' },
-                        { icon: 'fas fa-wind', text: '推荐的呼吸放松技巧？' }
-                    ];
-                } else if (userMessage.includes('体重') || userMessage.includes('减肥')) {
-                    suggestions = [
-                        { icon: 'fas fa-weight', text: '健康的减重速度？' },
-                        { icon: 'fas fa-apple-alt', text: '减重饮食建议？' },
-                        { icon: 'fas fa-running', text: '最有效的减脂运动？' }
                     ];
                 } else {
                     // 默认建议
@@ -2401,6 +2245,9 @@
                 this.style.height = 'auto';
                 this.style.height = (this.scrollHeight) + 'px';
             });
+            
+            // 加载保存的API配置
+            loadApiConfig();
         });
     </script>
 </body>
