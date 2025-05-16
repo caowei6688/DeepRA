@@ -714,6 +714,147 @@
             background: rgba(255, 255, 255, 0.2);
             border-radius: inherit;
         }
+        
+        /* 添加苹果风格的健康数据卡片样式 */
+        .health-indicators-tab {
+            margin-bottom: 1.5rem;
+        }
+        
+        .health-tab-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+            border: none;
+            background-color: #f1f1f1;
+            color: #666;
+        }
+        
+        .health-tab-btn.active {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #333;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+        }
+        
+        .health-tab-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .health-tab-btn i {
+            margin-right: 5px;
+        }
+        
+        .health-data-card {
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .health-data-item {
+            display: none;
+        }
+        
+        .health-data-item.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* 苹果风格的渐变色背景 */
+        .bg-gradient-heartrate {
+            background: linear-gradient(135deg, #FF3B30, #FF9500);
+        }
+        
+        .bg-gradient-bloodpressure {
+            background: linear-gradient(135deg, #5E5CE6, #0A84FF);
+        }
+        
+        .bg-gradient-steps {
+            background: linear-gradient(135deg, #34C759, #30D158);
+        }
+        
+        .bg-gradient-sleep {
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: none;
+            color: white;
+        }
+        
+        .bg-purple {
+            background-color: #5856D6;
+        }
+        
+        .text-purple {
+            color: #5856D6;
+        }
+        
+        .stats-row {
+            margin: 1.5rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-unit {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .data-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .chart-wrapper {
+            margin: 1.5rem 0;
+            height: 250px;
+        }
+        
+        /* 睡眠阶段样式 */
+        .stage-item {
+            margin-bottom: 1rem;
+        }
+        
+        /* 触摸设备优化 */
+        @media (max-width: 768px) {
+            .health-tab-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .health-tab-btn i {
+                font-size: 1rem;
+            }
+            
+            .data-value {
+                font-size: 2rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .chart-wrapper {
+                height: 200px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -988,74 +1129,247 @@
         </div>
     </div>
 
-    <!-- 数据概览 -->
-    <section id="data-overview" class="py-5">
+    <!-- 数据概览和趋势分析 -->
+    <section id="health-dashboard" class="py-4">
         <div class="container">
-            <h2 class="section-title">数据概览</h2>
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <div class="data-card">
-                        <i class="fas fa-heartbeat data-icon"></i>
-                        <h3 class="data-title">心率</h3>
-                        <div class="data-value">75</div>
-                        <p class="data-text">次/分钟</p>
+            <h2 class="section-title mb-3">健康数据</h2>
+            
+            <!-- 健康数据卡片 -->
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <!-- 指标切换器 -->
+                    <div class="health-indicators-tab mb-4 d-flex justify-content-center">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-lg health-tab-btn active" data-target="heartrate">
+                                <i class="fas fa-heartbeat text-danger"></i> 心率
+                            </button>
+                            <button type="button" class="btn btn-lg health-tab-btn" data-target="bloodpressure">
+                                <i class="fas fa-tint text-primary"></i> 血压
+                            </button>
+                            <button type="button" class="btn btn-lg health-tab-btn" data-target="steps">
+                                <i class="fas fa-walking text-success"></i> 步数
+                            </button>
+                            <button type="button" class="btn btn-lg health-tab-btn" data-target="sleep">
+                                <i class="fas fa-moon text-purple"></i> 睡眠
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="data-card">
-                        <i class="fas fa-tint data-icon"></i>
-                        <h3 class="data-title">血压</h3>
-                        <div class="data-value">120/80</div>
-                        <p class="data-text">mmHg</p>
+                    
+                    <!-- 健康数据卡片 -->
+                    <div class="health-data-card card border-0 shadow-sm overflow-hidden">
+                        <!-- 数据内容区 -->
+                        <div class="health-data-content position-relative">
+                            <!-- 心率内容 -->
+                            <div class="health-data-item active" id="heartrate-data">
+                                <div class="card-header bg-gradient-heartrate text-white p-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h3 class="mb-0 fs-4"><i class="fas fa-heartbeat me-2"></i>心率</h3>
+                                            <small>最近7天记录</small>
+                                        </div>
+                                        <div class="data-summary text-end">
+                                            <div class="data-value fs-1">75</div>
+                                            <small>次/分钟 (平均)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="chart-wrapper mb-4">
+                                        <canvas id="heartRateChart" height="250"></canvas>
+                                    </div>
+                                    <div class="stats-row d-flex justify-content-around text-center mb-4">
+                                        <div class="stat-item">
+                                            <div class="stat-label small text-muted">最低</div>
+                                            <div class="stat-value fw-bold fs-4">68</div>
+                                            <div class="stat-unit small text-muted">次/分钟</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label small text-muted">平均</div>
+                                            <div class="stat-value fw-bold fs-4 text-danger">75</div>
+                                            <div class="stat-unit small text-muted">次/分钟</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label small text-muted">最高</div>
+                                            <div class="stat-value fw-bold fs-4">82</div>
+                                            <div class="stat-unit small text-muted">次/分钟</div>
+                                        </div>
+                                    </div>
+                                    <div class="health-insight p-3 rounded bg-light">
+                                        <div class="d-flex align-items-start">
+                                            <i class="fas fa-info-circle text-primary me-2 mt-1"></i>
+                                            <p class="mb-0 small">您的心率保持在健康范围内。适度的有氧运动有助于加强心肺功能。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 血压内容 -->
+                            <div class="health-data-item" id="bloodpressure-data">
+                                <div class="card-header bg-gradient-bloodpressure text-white p-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h3 class="mb-0 fs-4"><i class="fas fa-tint me-2"></i>血压</h3>
+                                            <small>最近7天记录</small>
+                                        </div>
+                                        <div class="data-summary text-end">
+                                            <div class="data-value fs-1">120/80</div>
+                                            <small>mmHg (平均)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="chart-wrapper mb-4">
+                                        <canvas id="bloodPressureChart" height="250"></canvas>
+                                    </div>
+                                    <div class="stats-row d-flex justify-content-around text-center mb-4">
+                                        <div class="stat-item">
+                                            <div class="stat-label small text-muted">最低</div>
+                                            <div class="stat-value fw-bold fs-4">118/78</div>
+                                            <div class="stat-unit small text-muted">mmHg</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label small text-muted">平均</div>
+                                            <div class="stat-value fw-bold fs-4 text-primary">120/80</div>
+                                            <div class="stat-unit small text-muted">mmHg</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label small text-muted">最高</div>
+                                            <div class="stat-value fw-bold fs-4">123/83</div>
+                                            <div class="stat-unit small text-muted">mmHg</div>
+                                        </div>
+                                    </div>
+                                    <div class="health-insight p-3 rounded bg-light">
+                                        <div class="d-flex align-items-start">
+                                            <i class="fas fa-info-circle text-primary me-2 mt-1"></i>
+                                            <p class="mb-0 small">您的血压处于理想范围内。保持低盐饮食和规律作息有助于维持健康血压。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 步数内容 -->
+                            <div class="health-data-item" id="steps-data">
+                                <div class="card-header bg-gradient-steps text-white p-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h3 class="mb-0 fs-4"><i class="fas fa-walking me-2"></i>步数</h3>
+                                            <small>最近7天记录</small>
+                                        </div>
+                                        <div class="data-summary text-end">
+                                            <div class="data-value fs-1">8,285</div>
+                                            <small>步/天 (平均)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="chart-wrapper mb-4">
+                                        <canvas id="stepsChart" height="250"></canvas>
+                                    </div>
+                                    <div class="stats-row d-flex justify-content-around text-center mb-3">
+                                        <div class="stat-item">
+                                            <div class="stat-label small text-muted">最少</div>
+                                            <div class="stat-value fw-bold fs-4">7,532</div>
+                                            <div class="stat-unit small text-muted">步</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label small text-muted">平均</div>
+                                            <div class="stat-value fw-bold fs-4 text-success">8,285</div>
+                                            <div class="stat-unit small text-muted">步</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-label small text-muted">最多</div>
+                                            <div class="stat-value fw-bold fs-4">9,234</div>
+                                            <div class="stat-unit small text-muted">步</div>
+                                        </div>
+                                    </div>
+                                    <div class="progress mb-2" style="height: 12px; border-radius: 10px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 82.85%; border-radius: 10px;" aria-valuenow="82.85" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <small class="text-muted">目标: 10,000步</small>
+                                        <small class="text-success">完成82.85%</small>
+                                    </div>
+                                    <div class="health-insight p-3 rounded bg-light">
+                                        <div class="d-flex align-items-start">
+                                            <i class="fas fa-info-circle text-primary me-2 mt-1"></i>
+                                            <p class="mb-0 small">您的步数接近每日建议的10,000步。继续保持活跃的生活方式以增强心肺健康。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 睡眠内容 -->
+                            <div class="health-data-item" id="sleep-data">
+                                <div class="card-header bg-gradient-sleep text-white p-4">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h3 class="mb-0 fs-4"><i class="fas fa-moon me-2"></i>睡眠</h3>
+                                            <small>最近7天记录</small>
+                                        </div>
+                                        <div class="data-summary text-end">
+                                            <div class="data-value fs-1">7.5</div>
+                                            <small>小时/晚 (平均)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="chart-wrapper mb-4">
+                                        <div class="d-flex justify-content-center">
+                                            <div id="sleepDonutChart" style="width: 220px; height: 220px;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="sleep-stages mb-4">
+                                        <div class="stage-item mb-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <span><i class="fas fa-circle text-info me-2"></i>浅睡眠</span>
+                                                <span class="text-info">4.2小时 (56%)</span>
+                                            </div>
+                                            <div class="progress" style="height: 10px; border-radius: 5px;">
+                                                <div class="progress-bar bg-info" style="width: 56%; border-radius: 5px;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="stage-item mb-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <span><i class="fas fa-circle text-primary me-2"></i>深睡眠</span>
+                                                <span class="text-primary">2.3小时 (31%)</span>
+                                            </div>
+                                            <div class="progress" style="height: 10px; border-radius: 5px;">
+                                                <div class="progress-bar bg-primary" style="width: 31%; border-radius: 5px;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="stage-item">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <span><i class="fas fa-circle text-purple me-2"></i>REM睡眠</span>
+                                                <span class="text-purple">1.0小时 (13%)</span>
+                                            </div>
+                                            <div class="progress" style="height: 10px; border-radius: 5px;">
+                                                <div class="progress-bar bg-purple" style="width: 13%; border-radius: 5px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="health-insight p-3 rounded bg-light">
+                                        <div class="d-flex align-items-start">
+                                            <i class="fas fa-info-circle text-primary me-2 mt-1"></i>
+                                            <p class="mb-0 small">您的睡眠时长符合健康标准。尝试在睡前减少屏幕时间以提高深睡眠比例。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="data-card">
-                        <i class="fas fa-walking data-icon"></i>
-                        <h3 class="data-title">步数</h3>
-                        <div class="data-value">8,532</div>
-                        <p class="data-text">步</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="data-card">
-                        <i class="fas fa-moon data-icon"></i>
-                        <h3 class="data-title">睡眠</h3>
-                        <div class="data-value">7.5</div>
-                        <p class="data-text">小时</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 趋势分析 -->
-    <section id="trend-analysis" class="py-5">
-        <div class="container">
-            <h2 class="section-title">趋势分析</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="chart-container">
-                        <h3 class="chart-title">心率趋势</h3>
-                        <canvas id="heartRateChart"></canvas>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="chart-container">
-                        <h3 class="chart-title">血压趋势</h3>
-                        <canvas id="bloodPressureChart"></canvas>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="chart-container">
-                        <h3 class="chart-title">步数趋势</h3>
-                        <canvas id="stepsChart"></canvas>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="chart-container">
-                        <h3 class="chart-title">睡眠趋势</h3>
-                        <canvas id="sleepChart"></canvas>
+                    
+                    <!-- 日期范围选择器 -->
+                    <div class="date-range-selector mt-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-primary active">周</button>
+                                <button type="button" class="btn btn-outline-primary">月</button>
+                                <button type="button" class="btn btn-outline-primary">年</button>
+                            </div>
+                            <div class="date-display">
+                                <small class="text-muted">2024年05月10日 - 2024年05月16日</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1485,108 +1799,150 @@
                 }, delay);
             }
             
-            // 心率趋势图
-            const heartRateCtx = document.getElementById('heartRateChart').getContext('2d');
-            new Chart(heartRateCtx, {
-                type: 'line',
-                data: {
-                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                    datasets: [{
-                        label: '心率',
-                        data: [72, 75, 73, 76, 74, 78, 75],
-                        borderColor: '#4CAF50',
-                        tension: 0.4,
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
+            // 健康数据切换交互
+            const tabButtons = document.querySelectorAll('.health-tab-btn');
+            const dataItems = document.querySelectorAll('.health-data-item');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // 更新按钮状态
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 更新内容状态
+                    dataItems.forEach(item => {
+                        item.classList.remove('active');
+                        if (item.id === `${target}-data`) {
+                            item.classList.add('active');
                         }
-                    }
-                }
+                    });
+                });
             });
-
-            // 血压趋势图
-            const bloodPressureCtx = document.getElementById('bloodPressureChart').getContext('2d');
-            new Chart(bloodPressureCtx, {
-                type: 'line',
-                data: {
-                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                    datasets: [{
-                        label: '收缩压',
-                        data: [120, 118, 122, 119, 121, 123, 120],
-                        borderColor: '#4CAF50',
-                        tension: 0.4,
-                        fill: false
-                    }, {
-                        label: '舒张压',
-                        data: [80, 78, 82, 79, 81, 83, 80],
-                        borderColor: '#2E7D32',
-                        tension: 0.4,
-                        fill: false
-                    }]
+            
+            // 睡眠环形图
+            const sleepData = [56, 31, 13]; // 浅睡眠、深睡眠、REM睡眠
+            const sleepColors = ['#5AC8FA', '#007AFF', '#5856D6'];
+            const sleepLabels = ['浅睡眠', '深睡眠', 'REM睡眠'];
+            
+            // 使用Canvas API绘制环形图
+            const sleepDonut = document.getElementById('sleepDonutChart');
+            if (sleepDonut) {
+                const canvas = document.createElement('canvas');
+                canvas.width = 220;
+                canvas.height = 220;
+                sleepDonut.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const radius = Math.min(centerX, centerY) * 0.8;
+                const innerRadius = radius * 0.6;
+                
+                let startAngle = -Math.PI / 2; // 从12点钟方向开始
+                
+                // 绘制环形图
+                sleepData.forEach((value, index) => {
+                    const sliceAngle = (value / 100) * 2 * Math.PI;
+                    const endAngle = startAngle + sliceAngle;
+                    
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                    ctx.arc(centerX, centerY, innerRadius, endAngle, startAngle, true);
+                    ctx.closePath();
+                    
+                    ctx.fillStyle = sleepColors[index];
+                    ctx.fill();
+                    
+                    startAngle = endAngle;
+                });
+                
+                // 绘制中心文本
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 36px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('7.5', centerX, centerY - 10);
+                
+                ctx.fillStyle = '#888';
+                ctx.font = '14px Arial';
+                ctx.fillText('小时', centerX, centerY + 20);
+            }
+            
+            // 苹果风格图表颜色设置
+            const chartColors = {
+                heartRate: {
+                    borderColor: '#FF3B30',
+                    backgroundColor: 'rgba(255, 59, 48, 0.1)',
+                    pointBackgroundColor: '#FF3B30'
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
+                bloodPressure: {
+                    systolic: {
+                        borderColor: '#5E5CE6',
+                        backgroundColor: 'rgba(94, 92, 230, 0.1)',
+                        pointBackgroundColor: '#5E5CE6'
+                    },
+                    diastolic: {
+                        borderColor: '#0A84FF',
+                        backgroundColor: 'rgba(10, 132, 255, 0.1)',
+                        pointBackgroundColor: '#0A84FF'
                     }
-                }
-            });
-
-            // 步数趋势图
-            const stepsCtx = document.getElementById('stepsChart').getContext('2d');
-            new Chart(stepsCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                    datasets: [{
-                        label: '步数',
-                        data: [7532, 8231, 7890, 8456, 8123, 9234, 8532],
-                        backgroundColor: '#4CAF50',
-                        borderColor: '#4CAF50',
-                        borderWidth: 1
-                    }]
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
-
-            // 睡眠趋势图
-            const sleepCtx = document.getElementById('sleepChart').getContext('2d');
-            new Chart(sleepCtx, {
-                type: 'line',
-                data: {
-                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                    datasets: [{
-                        label: '睡眠时长',
-                        data: [7.2, 7.5, 7.0, 7.8, 7.3, 8.0, 7.5],
-                        borderColor: '#4CAF50',
-                        tension: 0.4,
-                        fill: false
-                    }]
+                steps: {
+                    backgroundColor: '#34C759',
+                    borderColor: '#34C759',
+                    hoverBackgroundColor: '#30D158'
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
+                sleep: {
+                    borderColor: '#5856D6',
+                    backgroundColor: 'rgba(88, 86, 214, 0.1)',
+                    pointBackgroundColor: '#5856D6'
                 }
-            });
+            };
+            
+            // 更新心率图表
+            const heartRateChart = Chart.getChart('heartRateChart');
+            if (heartRateChart) {
+                heartRateChart.data.datasets[0].borderColor = chartColors.heartRate.borderColor;
+                heartRateChart.data.datasets[0].backgroundColor = chartColors.heartRate.backgroundColor;
+                heartRateChart.data.datasets[0].pointBackgroundColor = chartColors.heartRate.pointBackgroundColor;
+                heartRateChart.options.elements = {
+                    line: { tension: 0.4, borderWidth: 3 },
+                    point: { radius: 4, hitRadius: 10, hoverRadius: 6 }
+                };
+                heartRateChart.update();
+            }
+            
+            // 更新血压图表
+            const bloodPressureChart = Chart.getChart('bloodPressureChart');
+            if (bloodPressureChart) {
+                bloodPressureChart.data.datasets[0].borderColor = chartColors.bloodPressure.systolic.borderColor;
+                bloodPressureChart.data.datasets[0].backgroundColor = chartColors.bloodPressure.systolic.backgroundColor;
+                bloodPressureChart.data.datasets[0].pointBackgroundColor = chartColors.bloodPressure.systolic.pointBackgroundColor;
+                
+                bloodPressureChart.data.datasets[1].borderColor = chartColors.bloodPressure.diastolic.borderColor;
+                bloodPressureChart.data.datasets[1].backgroundColor = chartColors.bloodPressure.diastolic.backgroundColor;
+                bloodPressureChart.data.datasets[1].pointBackgroundColor = chartColors.bloodPressure.diastolic.pointBackgroundColor;
+                
+                bloodPressureChart.options.elements = {
+                    line: { tension: 0.4, borderWidth: 3 },
+                    point: { radius: 4, hitRadius: 10, hoverRadius: 6 }
+                };
+                bloodPressureChart.update();
+            }
+            
+            // 更新步数图表
+            const stepsChart = Chart.getChart('stepsChart');
+            if (stepsChart) {
+                stepsChart.data.datasets[0].backgroundColor = chartColors.steps.backgroundColor;
+                stepsChart.data.datasets[0].borderColor = chartColors.steps.borderColor;
+                stepsChart.data.datasets[0].hoverBackgroundColor = chartColors.steps.hoverBackgroundColor;
+                stepsChart.options.barPercentage = 0.6;
+                stepsChart.options.categoryPercentage = 0.7;
+                stepsChart.options.borderRadius = 8;
+                stepsChart.update();
+            }
             
             // 添加触摸事件支持
             const clickableElements = document.querySelectorAll('a, button, .nav-link');
@@ -1607,6 +1963,199 @@
                         window.scrollTo(0, this.getBoundingClientRect().top + window.scrollY - 100);
                     }, 100);
                 });
+            });
+            
+            // 初始化图表
+            // 心率趋势图
+            const heartRateCtx = document.getElementById('heartRateChart').getContext('2d');
+            new Chart(heartRateCtx, {
+                type: 'line',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '心率',
+                        data: [72, 75, 73, 76, 74, 78, 75],
+                        borderColor: '#FF3B30',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(255, 59, 48, 0.1)',
+                        pointBackgroundColor: '#FF3B30',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: {
+                                size: 14,
+                                family: 'Microsoft YaHei'
+                            },
+                            bodyFont: {
+                                size: 13,
+                                family: 'Microsoft YaHei'
+                            },
+                            padding: 10,
+                            cornerRadius: 6
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 血压趋势图
+            const bloodPressureCtx = document.getElementById('bloodPressureChart').getContext('2d');
+            new Chart(bloodPressureCtx, {
+                type: 'line',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '收缩压',
+                        data: [120, 118, 122, 119, 121, 123, 120],
+                        borderColor: '#5E5CE6',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(94, 92, 230, 0.1)',
+                        pointBackgroundColor: '#5E5CE6',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }, {
+                        label: '舒张压',
+                        data: [80, 78, 82, 79, 81, 83, 80],
+                        borderColor: '#0A84FF',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(10, 132, 255, 0.1)',
+                        pointBackgroundColor: '#0A84FF',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                boxWidth: 12,
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                padding: 20,
+                                font: {
+                                    family: 'Microsoft YaHei',
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: {
+                                size: 14,
+                                family: 'Microsoft YaHei'
+                            },
+                            bodyFont: {
+                                size: 13,
+                                family: 'Microsoft YaHei'
+                            },
+                            padding: 10,
+                            cornerRadius: 6
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 步数趋势图
+            const stepsCtx = document.getElementById('stepsChart').getContext('2d');
+            new Chart(stepsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [{
+                        label: '步数',
+                        data: [7532, 8231, 7890, 8456, 8123, 9234, 8532],
+                        backgroundColor: '#34C759',
+                        borderColor: '#34C759',
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        hoverBackgroundColor: '#30D158'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleFont: {
+                                size: 14,
+                                family: 'Microsoft YaHei'
+                            },
+                            bodyFont: {
+                                size: 13,
+                                family: 'Microsoft YaHei'
+                            },
+                            padding: 10,
+                            cornerRadius: 6
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: true,
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    barPercentage: 0.6,
+                    categoryPercentage: 0.7
+                }
             });
         });
     </script>
