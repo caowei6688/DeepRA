@@ -359,7 +359,7 @@
             color: #ffffff;
             margin-bottom: 2rem;
             max-width: 70%;
-            opacity: 0.9;
+            opacity: 1; /* 修改为完全不透明 */
         }
         
         .hero-buttons {
@@ -420,6 +420,15 @@
             font-size: 2rem;
             animation: bounce 2s infinite;
             cursor: pointer;
+        }
+        
+        /* 添加hero-subtitle.typewriter-text样式，确保文本为纯白色 */
+        .hero-subtitle.typewriter-text {
+            font-weight: 400;
+            line-height: 1.5;
+            color: #ffffff !important; /* 确保颜色为纯白色 */
+            opacity: 1 !important; /* 确保完全不透明 */
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* 轻微阴影增强可读性 */
         }
         
         @keyframes bounce {
@@ -1458,7 +1467,7 @@
                             <span class="typewriter-text" id="text2">健康管理专家。</span>
                             <span class="highlight typewriter-text" id="text3">数据驱动决策，</span>
                         </h1>
-                        <p class="hero-subtitle typewriter-text" id="text4">智慧守护健康，让人工智能成为您的私人健康顾问。</p>
+                        <p class="hero-subtitle typewriter-text" id="text4" style="color: #ffffff !important; opacity: 1 !important;">智慧守护健康，让人工智能成为您的私人健康顾问。</p>
                         <div class="hero-buttons" id="heroButtons" style="opacity: 0;">
                             <a href="#qa" class="btn hero-btn hero-btn-primary">健康问答</a>
                             <a href="#qa" class="btn hero-btn hero-btn-secondary">开始咨询</a>
@@ -1873,10 +1882,10 @@
                 </div>
                 <div class="col-lg-4 mb-4">
                     <h5>联系我们</h5>
-                    <p><i class="fas fa-map-marker-alt me-2"></i> 广东省广州市DeepRA 深算乡野村</p>
-                    <p><i class="fas fa-phone me-2"></i> 13398244764</p>
-                    <p><i class="fas fa-envelope me-2"></i> info@deepra.health.com</p>
-                    <p><i class="fas fa-clock me-2"></i> 周一至周日 9:00-18:00</p>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> ******</p>
+                    <p><i class="fas fa-phone me-2"></i> ******</p>
+                    <p><i class="fas fa-envelope me-2"></i> ******</p>
+                    <p><i class="fas fa-clock me-2"></i> ******</p>
                 </div>
             </div>
             <div class="copyright">
@@ -1891,6 +1900,88 @@
     
     <!-- DeepSeek健康问答集成 -->
     <script>
+        // 获取元素
+        const text1 = document.getElementById('text1');
+        const text2 = document.getElementById('text2');
+        const text3 = document.getElementById('text3');
+        const text4 = document.getElementById('text4');
+        const heroButtons = document.getElementById('heroButtons');
+            
+        // 设置初始状态
+        text1.style.opacity = 1;
+        text2.style.opacity = 1;
+        text3.style.opacity = 1;
+        text4.style.opacity = 1;
+            
+        // 全新的打字机效果实现
+        function startTyping(element, delay, callback) {
+            if (!element) return;
+            
+            // 保存原始文本
+            const originalText = element.textContent || element.innerText;
+            
+            // 清空文本内容
+            element.textContent = '';
+            
+            // 创建光标元素
+            const cursor = document.createElement('span');
+            cursor.className = 'typewriter-cursor';
+            element.appendChild(cursor);
+            
+            // 字符索引
+            let charIndex = 0;
+            
+            // 延迟后开始打字
+            setTimeout(() => {
+                // 创建打字间隔
+                const typingInterval = setInterval(() => {
+                    if (charIndex < originalText.length) {
+                        // 在光标前插入新字符
+                        element.insertBefore(
+                            document.createTextNode(originalText.charAt(charIndex)),
+                            cursor
+                        );
+                        charIndex++;
+                    } else {
+                        // 打字完成，清除间隔
+                        clearInterval(typingInterval);
+                        
+                        // 移除光标
+                        if (element.contains(cursor)) {
+                            element.removeChild(cursor);
+                        }
+                        
+                        // 执行回调
+                        if (callback) callback();
+                    }
+                }, 50); // 每个字符的打字速度
+            }, delay);
+        }
+
+        // 页面加载完成后启动打字动画
+        window.addEventListener('load', function() {
+            // 依次启动打字动画
+            startTyping(text1, 500, function() {
+                startTyping(text2, 100, function() {
+                    startTyping(text3, 100, function() {
+                        startTyping(text4, 100, function() {
+                            // 所有文本显示完后，显示按钮
+                            setTimeout(() => {
+                                heroButtons.style.opacity = 1;
+                                anime({
+                                    targets: heroButtons,
+                                    translateY: [-20, 0],
+                                    opacity: [0, 1],
+                                    easing: 'easeOutExpo',
+                                    duration: 800
+                                });
+                            }, 300);
+                        });
+                    });
+                });
+            });
+        });
+
         // 健康问答聊天功能
         document.addEventListener('DOMContentLoaded', function() {
             const chatMessages = document.getElementById('chatMessages');

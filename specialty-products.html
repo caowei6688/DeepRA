@@ -884,7 +884,7 @@
         /* IBM风格的英雄区域样式 */
         .ibm-hero {
             background-color: #000000;
-            min-height: 80vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             padding: 2rem 0;
@@ -899,10 +899,10 @@
         }
         
         .ibm-hero-text {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 700;
             line-height: 1.1;
-            margin-bottom: 2rem;
+            margin-bottom: 5rem;
             color: white;
             max-width: 80%;
         }
@@ -918,11 +918,11 @@
             color: #ffffff;
             margin-bottom: 2rem;
             max-width: 70%;
-            opacity: 0.9;
+            opacity: 1; /* 修改为完全不透明 */
         }
         
         .ibm-hero-buttons {
-            margin-top: 3rem;
+            margin-top: 5rem;
         }
         
         .ibm-btn {
@@ -1281,6 +1281,48 @@
             background-color: #198754;
             color: white;
         }
+        
+        .hero-decoration {
+            position: absolute;
+            bottom: 5%;
+            right: 10%;
+            width: 15%;
+            height: 15%;
+            border: 2px solid var(--primary-color);
+            opacity: 0.3;
+        }
+        
+        /* 添加ibm-hero-subtitle.typewriter-text样式，确保文本为纯白色 */
+        .ibm-hero-subtitle.typewriter-text {
+            font-weight: 400;
+            line-height: 1.5;
+            color: #ffffff !important; /* 确保颜色为纯白色 */
+            opacity: 1 !important; /* 确保完全不透明 */
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* 轻微阴影增强可读性 */
+        }
+        
+        .ibm-hero-arrow {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
     </style>
 </head>
 <body>
@@ -1382,7 +1424,7 @@
                             <span class="typewriter-text" id="text2">健康养生，</span>
                             <span class="highlight typewriter-text" id="text3">科技赋能。</span>
                         </h1>
-                        <p class="ibm-hero-subtitle typewriter-text" id="text4">精选来自大海的天然馈赠，结合DeepSeek AI技术分析您的健康数据，为您推荐最适合的海产品。</p>
+                        <p class="ibm-hero-subtitle typewriter-text" id="text4" style="color: #ffffff !important; opacity: 1 !important;">精选来自大海的天然馈赠，结合DeepSeek AI技术分析您的健康数据，为您推荐最适合的海产品。</p>
                         <div class="ibm-hero-buttons" id="heroButtons" style="opacity: 0;">
                             <a href="#products" class="btn ibm-btn ibm-btn-primary">探索产品</a>
                             <a href="#ai-recommend" class="btn ibm-btn ibm-btn-secondary">AI推荐</a>
@@ -1599,7 +1641,7 @@
                                         <li><i class="fas fa-check-circle"></i> 补充蛋白质</li>
                                         <li><i class="fas fa-check-circle"></i> 传统日晒工艺</li>
                                     </ul>
-                                    <div class="product-price">¥258.00 / 500g</div>
+                                    <div class="product-price">¥98.00 / 500g</div>
                                     <div class="product-footer">
                                         <span class="category-badge">海鲜干货</span>
                                         <button class="btn-cart">加入购物车</button>
@@ -1622,7 +1664,7 @@
                                         <li><i class="fas fa-check-circle"></i> 调节甲状腺</li>
                                         <li><i class="fas fa-check-circle"></i> 有机认证</li>
                                     </ul>
-                                    <div class="product-price">¥68.00 / 300g</div>
+                                    <div class="product-price">¥29.00 / 300g</div>
                                     <div class="product-footer">
                                         <span class="category-badge">海藻类</span>
                                         <button class="btn-cart">加入购物车</button>
@@ -1645,7 +1687,7 @@
                                         <li><i class="fas fa-check-circle"></i> 降低血脂</li>
                                         <li><i class="fas fa-check-circle"></i> 抗炎抗氧化</li>
                                     </ul>
-                                    <div class="product-price">¥198.00 / 60粒</div>
+                                    <div class="product-price">¥88.00 / 60粒</div>
                                     <div class="product-footer">
                                         <span class="category-badge">营养保健</span>
                                         <button class="btn-cart">加入购物车</button>
@@ -1668,7 +1710,7 @@
                                         <li><i class="fas fa-check-circle"></i> 抗氧化</li>
                                         <li><i class="fas fa-check-circle"></i> 舒缓肌肤</li>
                                     </ul>
-                                    <div class="product-price">¥128.00 / 5片</div>
+                                    <div class="product-price">¥58.00 / 5片</div>
                                     <div class="product-footer">
                                         <span class="category-badge">海洋护肤</span>
                                         <button class="btn-cart">加入购物车</button>
@@ -1691,7 +1733,7 @@
                                         <li><i class="fas fa-check-circle"></i> 抗氧化</li>
                                         <li><i class="fas fa-check-circle"></i> 改善胃肠功能</li>
                                     </ul>
-                                    <div class="product-price">¥168.00 / 200g</div>
+                                    <div class="product-price">¥68.00 / 200g</div>
                                     <div class="product-footer">
                                         <span class="category-badge">海藻类</span>
                                         <button class="btn-cart">加入购物车</button>
@@ -1714,7 +1756,7 @@
                                         <li><i class="fas fa-check-circle"></i> 增强活力</li>
                                         <li><i class="fas fa-check-circle"></i> 调节免疫系统</li>
                                     </ul>
-                                    <div class="product-price">¥288.00 / 200g</div>
+                                    <div class="product-price">¥118.00 / 200g</div>
                                     <div class="product-footer">
                                         <span class="category-badge">营养保健</span>
                                         <button class="btn-cart">加入购物车</button>
@@ -1916,57 +1958,37 @@
     </section>
     
     <!-- 页脚区域 -->
-    <footer class="footer py-5 bg-dark text-white">
+    <footer class="footer">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="col-lg-4 mb-4">
                     <h5>关于我们</h5>
-                    <p>DeepRA深算乡野致力于提供优质海滨特产，将大海的健康和活力带入您的生活。</p>
-                    <div class="social-icons mt-3">
-                        <a href="#" class="me-2"><i class="fab fa-weixin fa-lg"></i></a>
-                        <a href="#" class="me-2"><i class="fab fa-weibo fa-lg"></i></a>
-                        <a href="#" class="me-2"><i class="fab fa-tiktok fa-lg"></i></a>
-                        <a href="#" class="me-2"><i class="fab fa-youtube fa-lg"></i></a>
+                    <p>DeepRA 深算乡野智能养生平台，致力于通过先进技术为村民提供专业的健康管理服务。</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-2 mb-4 mb-lg-0">
+                <div class="col-lg-4 mb-4">
                     <h5>快速链接</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">首页</a></li>
-                        <li><a href="#" class="text-white">特产展示</a></li>
-                        <li><a href="#" class="text-white">健康分析</a></li>
-                        <li><a href="#" class="text-white">农家乐预订</a></li>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="health-data.html">健康数据</a></li>
+                        <li><a href="ai-analysis.html">AI分析</a></li>
+                        <li><a href="specialty-products.html">海滨特产</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 mb-4 mb-lg-0">
+                <div class="col-lg-4 mb-4">
                     <h5>联系我们</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-map-marker-alt me-2"></i> 浙江省宁波市滨海新区</li>
-                        <li><i class="fas fa-phone me-2"></i> 13398244764</li>
-                        <li><i class="fas fa-envelope me-2"></i> contact@deepra.com</li>
-                    </ul>
-                </div>
-                <div class="col-lg-3">
-                    <h5>订阅更新</h5>
-                    <p>订阅我们的电子邮件，获取最新特产信息和促销活动。</p>
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="您的邮箱地址" aria-label="您的邮箱地址">
-                        <button class="btn btn-success" type="button">订阅</button>
-            </div>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> ******</p>
+                    <p><i class="fas fa-phone me-2"></i> ******</p>
+                    <p><i class="fas fa-envelope me-2"></i> ******</p>
+                    <p><i class="fas fa-clock me-2"></i> ******</p>
                 </div>
             </div>
-            <hr class="my-4 bg-light">
-            <div class="row align-items-center">
-                <div class="col-md-6 text-center text-md-start">
-                    <p class="mb-0">© 2024 DeepRA深算乡野. 保留所有权利.</p>
-                </div>
-                <div class="col-md-6 text-center text-md-end">
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item"><a href="#" class="text-white">隐私政策</a></li>
-                        <li class="list-inline-item"><a href="#" class="text-white">使用条款</a></li>
-                        <li class="list-inline-item"><a href="#" class="text-white">Cookie政策</a></li>
-                    </ul>
-                </div>
+            <div class="copyright">
+                <p>&copy; 2024 DeepRA 深算乡野智能养生. 保留所有权利.</p>
             </div>
         </div>
     </footer>

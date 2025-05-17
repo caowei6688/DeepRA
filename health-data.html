@@ -350,7 +350,7 @@
             color: #ffffff;
             margin-bottom: 2rem;
             max-width: 70%;
-            opacity: 0.9;
+            opacity: 1; /* 修改为完全不透明 */
         }
         
         .hero-buttons {
@@ -411,6 +411,15 @@
             font-size: 2rem;
             animation: bounce 2s infinite;
             cursor: pointer;
+        }
+        
+        /* 添加hero-subtitle.typewriter-text样式，确保文本为纯白色 */
+        .hero-subtitle.typewriter-text {
+            font-weight: 400;
+            line-height: 1.5;
+            color: #ffffff !important; /* 确保颜色为纯白色 */
+            opacity: 1 !important; /* 确保完全不透明 */
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* 轻微阴影增强可读性 */
         }
         
         @keyframes bounce {
@@ -1022,7 +1031,7 @@
                             <span class="typewriter-text" id="text2">一目了然</span>
                             <span class="highlight typewriter-text" id="text3">让数据说话，</span>
                         </h1>
-                        <p class="hero-subtitle typewriter-text" id="text4">为健康护航，用科学方法读懂您的身体状况。</p>
+                        <p class="hero-subtitle typewriter-text" id="text4" style="color: #ffffff !important; opacity: 1 !important;">为健康护航，用科学方法读懂您的身体状况。</p>
                         <div class="hero-buttons" id="heroButtons" style="opacity: 0;">
                             <a href="#smart-band-intro" class="btn hero-btn hero-btn-primary">智能手环检测</a>
                             <a href="#data-overview" class="btn hero-btn hero-btn-secondary">查看数据概览</a>
@@ -1524,10 +1533,10 @@
                 </div>
                 <div class="col-lg-4 mb-4">
                     <h5>联系我们</h5>
-                    <p><i class="fas fa-map-marker-alt me-2"></i> 广东省广州市DeepRA 深算乡野村</p>
-                    <p><i class="fas fa-phone me-2"></i> 13398244764</p>
-                    <p><i class="fas fa-envelope me-2"></i> info@deepra.health.com</p>
-                    <p><i class="fas fa-clock me-2"></i> 周一至周日 9:00-18:00</p>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> ******</p>
+                    <p><i class="fas fa-phone me-2"></i> ******</p>
+                    <p><i class="fas fa-envelope me-2"></i> ******</p>
+                    <p><i class="fas fa-clock me-2"></i> ******</p>
                 </div>
             </div>
             <div class="copyright">

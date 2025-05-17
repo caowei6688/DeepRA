@@ -893,21 +893,92 @@
         .typewriter-text {
             display: inline-block;
             color: inherit; /* 确保继承父元素的颜色 */
+            text-rendering: optimizeLegibility; /* 优化字体渲染 */
+            -webkit-font-smoothing: antialiased; /* 平滑字体显示 */
+            -moz-osx-font-smoothing: grayscale; /* Firefox平滑字体 */
+            letter-spacing: 0.3px; /* 增加字间距提高可读性 */
+            font-weight: 500; /* 稍微加粗 */
+            position: relative; /* 为可能的效果添加定位 */
+            transition: color 0.3s ease; /* 添加颜色过渡效果 */
         }
         
         .typewriter-cursor {
             display: inline-block;
             width: 3px;
-            height: 1em;
+            height: 1.2em; /* 稍微调高光标 */
             background-color: var(--primary-color);
             margin-left: 2px;
             vertical-align: middle;
             animation: blink 0.8s infinite;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* 添加轻微发光效果 */
+            border-radius: 1px; /* 圆角光标 */
         }
         
         @keyframes blink {
             0%, 100% { opacity: 0; }
             50% { opacity: 1; }
+        }
+        
+        /* 为英雄区域的标题添加特殊效果 */
+        .hero-text .typewriter-text {
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* 添加文字阴影 */
+        }
+        
+        .hero-text .highlight.typewriter-text {
+            color: var(--primary-color);
+            font-weight: 700; /* 加粗高亮文本 */
+            text-shadow: 0 2px 10px rgba(76, 175, 80, 0.4); /* 特殊阴影效果 */
+        }
+        
+        .hero-subtitle.typewriter-text {
+            font-weight: 400;
+            line-height: 1.5;
+            color: #ffffff !important; /* 确保颜色为纯白色 */
+            opacity: 1 !important; /* 确保完全不透明 */
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* 轻微阴影增强可读性 */
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            max-width: 70%;
+            opacity: 1; /* 改为完全不透明 */
+        }
+        
+        /* 增加文字完成打字后的效果 */
+        .typewriter-text-completed {
+            animation: textGlow 1.5s ease-in-out forwards;
+        }
+        
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 8px rgba(76, 175, 80, 0.6), 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            100% {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+        }
+        
+        .hero-text .highlight.typewriter-text-completed {
+            animation: highlightGlow 2s ease-in-out forwards;
+        }
+        
+        @keyframes highlightGlow {
+            0% {
+                text-shadow: 0 2px 10px rgba(76, 175, 80, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 15px rgba(76, 175, 80, 0.8), 0 2px 5px rgba(76, 175, 80, 0.5);
+            }
+            100% {
+                text-shadow: 0 2px 10px rgba(76, 175, 80, 0.4);
+            }
         }
         
         /* 按钮淡入动画 */
@@ -1324,7 +1395,7 @@
             color: #ffffff;
             margin-bottom: 2rem;
             max-width: 70%;
-            opacity: 0.9;
+            opacity: 1; /* 改为完全不透明 */
         }
 
         /* IBM风格的装饰元素 */
@@ -1981,10 +2052,10 @@
                 </div>
                 <div class="col-lg-4 mb-4">
                     <h5>联系我们</h5>
-                    <p><i class="fas fa-map-marker-alt me-2"></i> 广东省广州市DeepRA 深算乡野村</p>
-                    <p><i class="fas fa-phone me-2"></i> 13398244764</p>
-                    <p><i class="fas fa-envelope me-2"></i> info@deepra.health.com</p>
-                    <p><i class="fas fa-clock me-2"></i> 周一至周日 9:00-18:00</p>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> ******</p>
+                    <p><i class="fas fa-phone me-2"></i> ******</p>
+                    <p><i class="fas fa-envelope me-2"></i> ******</p>
+                    <p><i class="fas fa-clock me-2"></i> ******</p>
                 </div>
             </div>
             <div class="copyright">
@@ -2085,9 +2156,19 @@
                 );
             }
             
-            // 全新的打字机效果实现
-            function startTyping(element, delay, callback) {
+            // 全新的优化打字机效果实现
+            function startTyping(element, delay, callback, options = {}) {
                 if (!element) return;
+                
+                // 默认选项与自定义选项合并
+                const config = {
+                    speed: options.speed || 50, // 打字速度
+                    speedVariation: options.speedVariation || true, // 随机变化速度使其更自然
+                    cursorStyle: options.cursorStyle || 'typewriter-cursor', // 光标样式
+                    addCursorAfterTyping: options.addCursorAfterTyping || false, // 打字完成后是否保留光标
+                    pauseOnComma: options.pauseOnComma || true, // 逗号处停顿
+                    pauseOnPeriod: options.pauseOnPeriod || true // 句号处停顿
+                };
                 
                 // 保存原始文本
                 const originalText = element.textContent || element.innerText;
@@ -2097,7 +2178,7 @@
                 
                 // 创建光标元素
                 const cursor = document.createElement('span');
-                cursor.className = 'typewriter-cursor';
+                cursor.className = config.cursorStyle;
                 element.appendChild(cursor);
                 
                 // 字符索引
@@ -2108,25 +2189,109 @@
                     // 创建打字间隔
                     const typingInterval = setInterval(() => {
                         if (charIndex < originalText.length) {
+                            // 当前字符
+                            const currentChar = originalText.charAt(charIndex);
+                            
                             // 在光标前插入新字符
                             element.insertBefore(
-                                document.createTextNode(originalText.charAt(charIndex)),
+                                document.createTextNode(currentChar),
                                 cursor
                             );
                             charIndex++;
+                            
+                            // 根据标点符号动态调整速度
+                            if (config.pauseOnComma && currentChar === ',') {
+                                clearInterval(typingInterval);
+                                setTimeout(() => {
+                                    startTypingFromIndex(charIndex);
+                                }, 200); // 逗号停顿
+                                return;
+                            } else if (config.pauseOnPeriod && (currentChar === '.' || currentChar === '。' || currentChar === '！' || currentChar === '？')) {
+                                clearInterval(typingInterval);
+                                setTimeout(() => {
+                                    startTypingFromIndex(charIndex);
+                                }, 350); // 句号停顿更长
+                                return;
+                            }
+                            
+                            // 如果启用了速度变化，每个字符的速度有微小随机变化
+                            if (config.speedVariation) {
+                                clearInterval(typingInterval);
+                                const randomSpeed = config.speed * (0.8 + Math.random() * 0.4); // 速度变化范围是基础速度的80%-120%
+                                setTimeout(() => {
+                                    startTypingFromIndex(charIndex);
+                                }, randomSpeed);
+                                return;
+                            }
                         } else {
                             // 打字完成，清除间隔
                             clearInterval(typingInterval);
                             
-                            // 移除光标
-                            if (element.contains(cursor)) {
+                            // 处理光标
+                            if (!config.addCursorAfterTyping && element.contains(cursor)) {
                                 element.removeChild(cursor);
                             }
+                            
+                            // 添加完成类，触发淡入效果
+                            element.classList.add('typewriter-text-completed');
                             
                             // 执行回调
                             if (callback) callback();
                         }
-                    }, 50); // 每个字符的打字速度
+                    }, config.speed); // 基础打字速度
+                    
+                    // 内部函数，从指定索引继续打字
+                    function startTypingFromIndex(index) {
+                        const continueTyping = setInterval(() => {
+                            if (index < originalText.length) {
+                                const currentChar = originalText.charAt(index);
+                                
+                                element.insertBefore(
+                                    document.createTextNode(currentChar),
+                                    cursor
+                                );
+                                index++;
+                                
+                                // 重复检查标点符号
+                                if (config.pauseOnComma && currentChar === ',') {
+                                    clearInterval(continueTyping);
+                                    setTimeout(() => {
+                                        startTypingFromIndex(index);
+                                    }, 200);
+                                    return;
+                                } else if (config.pauseOnPeriod && (currentChar === '.' || currentChar === '。' || currentChar === '！' || currentChar === '？')) {
+                                    clearInterval(continueTyping);
+                                    setTimeout(() => {
+                                        startTypingFromIndex(index);
+                                    }, 350);
+                                    return;
+                                }
+                                
+                                // 速度变化
+                                if (config.speedVariation) {
+                                    clearInterval(continueTyping);
+                                    const randomSpeed = config.speed * (0.8 + Math.random() * 0.4);
+                                    setTimeout(() => {
+                                        startTypingFromIndex(index);
+                                    }, randomSpeed);
+                                    return;
+                                }
+                            } else {
+                                clearInterval(continueTyping);
+                                
+                                // 处理光标
+                                if (!config.addCursorAfterTyping && element.contains(cursor)) {
+                                    element.removeChild(cursor);
+                                }
+                                
+                                // 添加完成类，触发淡入效果
+                                element.classList.add('typewriter-text-completed');
+                                
+                                // 执行回调
+                                if (callback) callback();
+                            }
+                        }, config.speed);
+                    }
                 }, delay);
             }
             
@@ -2146,10 +2311,10 @@
                                     duration: 800
                                 });
                             }, 300);
-                        });
-                    });
-                });
-            });
+                        }, {speed: 45}); // 为最后一段使用稍快的速度
+                    }, {speed: 55}); // 为强调部分使用稍慢的速度
+                }, {speed: 60});
+            }, {speed: 60}); // 为第一段使用稍慢的速度
             
             // ----- 地图相关代码 -----
             // 定义全局变量
